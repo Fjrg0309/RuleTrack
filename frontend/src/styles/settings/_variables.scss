@@ -1,0 +1,46 @@
+// ==========================================================================
+// Settings – Custom properties y variables globales
+// ==========================================================================
+
+:root {
+  // Colors
+  --button-color: #6352FF;
+  --text-button: #FFFFFF;
+  --text-title: #FFFFFF;
+  --button-hover: #212481;
+  --color-primary: #DBF1FF;
+  --color-secondary: #BAD2FE;
+  --color-accent: #8AD2FE;
+  --text-color: #333333;
+  --color-card: #F3FBFF;
+  --color-title: #7CBDE5;
+  --color-correct: #FF0000;
+  --color-correct-green: #98FF9D;
+  --color-warning: #FFF313;
+
+  // Shared
+  --border-radius: 8px;
+
+  // Shadows
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] {
+  --button-color: #B1B1B1;
+  --text-button: #383232;
+  --text-title: #FFFFFF;
+  --button-hover: #212481;
+  --color-primary: #39444B;
+  --color-secondary: #132A38;
+  --color-accent: #132A38;
+  --text-color: #D3C4C4;
+  --color-card: #1B2F3A;
+  --color-title: #7B7272;
+  --color-correct: #BA2C2C;
+  --color-correct-green: #4EBB55;
+  --color-warning: #FFF313;
+
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+}

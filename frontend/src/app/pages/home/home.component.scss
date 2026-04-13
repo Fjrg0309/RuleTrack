@@ -1,0 +1,54 @@
+.home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px 36px;
+}
+
+// ── Welcome banner ──
+.home__welcome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 36px 40px;
+  background-color: var(--color-accent);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  box-shadow: var(--shadow-md);
+}
+
+.home__welcome-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.home__welcome-info {
+  font-size: 0.875rem;
+  max-width: 240px;
+  text-align: right;
+  font-weight: 500;
+}
+
+// ── Recent section ──
+.home__recent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.home__recent-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-color);
+  background-color: var(--color-accent);
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-sm);
+}
+
+.home__cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}

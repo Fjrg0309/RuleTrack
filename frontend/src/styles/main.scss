@@ -1,0 +1,26 @@
+// ==========================================================================
+// Main – Punto de entrada ITCSS
+// ==========================================================================
+
+// 1. Settings – Variables y custom properties
+@use 'settings/variables';
+
+// 2. Tools – Mixins y funciones
+@use 'tools/mixins';
+
+// 3. Generic – Reset / Normalize
+@use 'generic/reset';
+
+// 4. Elements – Estilos base HTML
+@use 'elements/base';
+
+// 5. Objects – Layouts estructurales
+@use 'objects/layouts';
+
+// 6. Components – Componentes globales
+@use 'components/header';
+@use 'components/footer';
+@use 'components/buttons';
+
+// 7. Utilities – Helpers y overrides
+@use 'utilities/helpers';

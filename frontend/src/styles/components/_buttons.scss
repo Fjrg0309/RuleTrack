@@ -1,0 +1,23 @@
+// ==========================================================================
+// Components – Buttons (Simples y reutilizables)
+// ==========================================================================
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+
+  &--primary {
+    background-color: var(--button-color);
+    color: var(--text-button);
+
+    &:hover {
+      background-color: var(--button-hover);
+    }
+  }
+}

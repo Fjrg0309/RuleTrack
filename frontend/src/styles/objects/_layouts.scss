@@ -1,0 +1,40 @@
+// ==========================================================================
+// Objects – Layouts y patrones estructurales
+// ==========================================================================
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+}
+
+.sidebar {
+  flex-shrink: 0;
+  width: 170px;
+  background-color: var(--color-accent);
+  padding: 28px 20px;
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  .btn {
+    width: 100%;
+    font-size: 0.82rem;
+    padding: 10px 14px;
+  }
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-primary);
+}

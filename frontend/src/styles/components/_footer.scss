@@ -1,0 +1,43 @@
+// ==========================================================================
+// Components – Footer (Layout único)
+// ==========================================================================
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  padding: 18px 40px;
+  background-color: var(--color-card);
+
+  &__text {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+
+  &__social {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    transition: transform 0.2s;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}

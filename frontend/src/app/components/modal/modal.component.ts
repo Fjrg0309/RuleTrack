@@ -1,0 +1,10 @@
+import { Component, ViewEncapsulation } from '@angular/core';
+
+@Component({
+  selector: 'app-modal',
+  standalone: true,
+  templateUrl: './modal.component.html',
+  styleUrl: './modal.component.scss',
+  encapsulation: ViewEncapsulation.Emulated,
+})
+export class ModalComponent {}
