@@ -1,16 +1,26 @@
 <section class="home">
-  <div class="home__welcome">
-    <h1 class="home__welcome-title">¡Bienvenido a RuleTrack, Usuario!</h1>
+  <section class="home__welcome" aria-labelledby="welcome-title">
+    <h1 id="welcome-title" class="home__welcome-title">¡Bienvenido a RuleTrack, Usuario!</h1>
     <p class="home__welcome-info">¡Consulta las normas optimizadas por los organizadores que necesites!</p>
-  </div>
+  </section>
 
-  <div class="home__recent">
-    <h2 class="home__recent-title">Subidas recientes</h2>
-    <div class="home__cards-grid">
-      <app-card />
-      <app-card />
-      <app-card />
-      <app-card />
-    </div>
+  <div class="home__body">
+    <section class="home__options" aria-labelledby="options-title">
+      <h2 id="options-title" class="home__options-title">Opciones</h2>
+      <nav class="home__options-nav">
+        <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mi organización</a>
+        <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mis publicaciones</a>
+      </nav>
+    </section>
+
+    <section class="home__recent" aria-labelledby="recent-title">
+      <h2 id="recent-title" class="home__recent-title">Subidas recientes</h2>
+      <div class="home__cards-list" role="list">
+        <app-card />
+        <app-card />
+        <app-card />
+        <app-card />
+      </div>
+    </section>
   </div>
 </section>

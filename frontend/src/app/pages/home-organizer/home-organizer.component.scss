@@ -1,4 +1,4 @@
-.home {
+.home-org {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -7,7 +7,7 @@
 }
 
 // ── Welcome banner ──
-.home__welcome {
+.home-org__welcome {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -18,12 +18,12 @@
   box-shadow: var(--shadow-md);
 }
 
-.home__welcome-title {
+.home-org__welcome-title {
   font-size: 1.25rem;
   font-weight: 700;
 }
 
-.home__welcome-info {
+.home-org__welcome-info {
   font-size: 0.875rem;
   max-width: 240px;
   text-align: right;
@@ -31,21 +31,21 @@
 }
 
 // ── Body: two-column layout ──
-.home__body {
+.home-org__body {
   display: flex;
   gap: 24px;
   align-items: stretch;
 }
 
 // ── Options column ──
-.home__options {
+.home-org__options {
   display: flex;
   flex-direction: column;
   gap: 16px;
   min-width: 180px;
 }
 
-.home__options-title {
+.home-org__options-title {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-color);
@@ -56,29 +56,29 @@
   text-align: center;
 }
 
-.home__options-nav {
+.home-org__options-nav {
   display: flex;
   flex-direction: column;
   gap: 14px;
   flex: 1;
 }
 
-.home__option-btn {
+.home-org__option-btn {
   width: 100%;
   font-size: 0.9rem;
   white-space: nowrap;
   flex: 1;
 }
 
-// ── Recent section ──
-.home__recent {
+// ── Right column ──
+.home-org__right {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.home__recent-title {
+.home-org__recent-title {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--text-color);
@@ -88,9 +88,28 @@
   box-shadow: var(--shadow-sm);
 }
 
-.home__cards-list {
-  flex: 1;
+.home-org__cards-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+// ── Upload button ──
+.home-org__upload-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background-color: var(--button-color);
+  color: var(--text-button);
+  border-radius: var(--border-radius);
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-md);
+  text-decoration: none;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: var(--button-hover);
+  }
 }

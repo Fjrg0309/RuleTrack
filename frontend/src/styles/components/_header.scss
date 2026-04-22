@@ -9,6 +9,9 @@
   width: 100%;
   padding: 10px 40px;
   background-color: var(--color-card);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
 
   &__logo {
     display: flex;
@@ -16,8 +19,33 @@
   }
 
   &__logo-img {
-    height: 48px;
+    height: 64px;
     width: auto;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__login-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 20px;
+    border: 2px solid var(--button-color);
+    border-radius: var(--border-radius);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--button-color);
+    background: transparent;
+    transition: background-color 0.2s, color 0.2s;
+    text-decoration: none;
+
+    &:hover {
+      background-color: var(--button-color);
+      color: var(--text-button);
+    }
   }
 
   &__user {

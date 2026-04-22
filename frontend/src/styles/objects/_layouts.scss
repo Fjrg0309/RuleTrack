@@ -13,11 +13,19 @@
   display: flex;
 }
 
+app-sidebar {
+  display: flex;
+}
+
 .sidebar {
+  flex: 1;
   flex-shrink: 0;
   width: 170px;
   background-color: var(--color-accent);
   padding: 28px 20px;
+  box-shadow: 3px 0 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 5;
 }
 
 .sidebar__nav {
@@ -27,8 +35,9 @@
 
   .btn {
     width: 100%;
-    font-size: 0.82rem;
-    padding: 10px 14px;
+    font-size: 0.72rem;
+    padding: 10px 10px;
+    white-space: nowrap;
   }
 }
 

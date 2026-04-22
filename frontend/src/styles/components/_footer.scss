@@ -9,7 +9,9 @@
   gap: 24px;
   width: 100%;
   padding: 18px 40px;
-  background-color: var(--color-card);
+  background-color: var(--color-accent);
+  box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
 
   &__text {
     font-size: 0.95rem;

@@ -3,9 +3,9 @@ import { RouterLink } from '@angular/router';
 import { CardComponent } from '../../components/card/card.component';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-home-organizer',
   imports: [RouterLink, CardComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  templateUrl: './home-organizer.component.html',
+  styleUrl: './home-organizer.component.scss',
 })
-export class HomeComponent {}
+export class HomeOrganizerComponent {}

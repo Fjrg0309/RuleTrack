@@ -1,0 +1,133 @@
+.login {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background-color: var(--color-primary);
+}
+
+.login__card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--color-card);
+  border-radius: 2px;
+  border: 2px solid var(--color-accent);
+  box-shadow: var(--shadow-md);
+  padding: 40px 36px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// ── Brand ──
+.login__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+.login__logo {
+  height: 48px;
+  width: auto;
+}
+
+.login__brand-name {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--button-color);
+  letter-spacing: -0.5px;
+}
+
+.login__tagline {
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.75;
+  margin-top: -8px;
+}
+
+// ── Form ──
+.login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login__label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--button-color);
+}
+
+.login__input {
+  padding: 10px 14px;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+
+  &::placeholder {
+    color: var(--text-color);
+    opacity: 0.4;
+  }
+
+  &:focus {
+    border-color: var(--button-color);
+    box-shadow: 0 0 0 3px rgba(99, 82, 255, 0.15);
+  }
+}
+
+.login__error {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-correct);
+  padding: 8px 12px;
+  background-color: rgba(255, 0, 0, 0.08);
+  border-radius: var(--border-radius);
+  border-left: 3px solid var(--color-correct);
+}
+
+.login__submit {
+  margin-top: 4px;
+  padding: 12px;
+  background-color: var(--button-color);
+  color: var(--text-button);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow-sm);
+  transition: background-color 0.2s, transform 0.1s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--button-hover);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// ── Hint ──
+.login__hint {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-color);
+  opacity: 0.55;
+  margin-top: -4px;
+}

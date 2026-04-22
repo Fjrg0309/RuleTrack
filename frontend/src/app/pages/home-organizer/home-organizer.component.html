@@ -1,0 +1,25 @@
+<section class="home-org">
+  <section class="home-org__welcome" aria-labelledby="welcome-org-title">
+    <h1 id="welcome-org-title" class="home-org__welcome-title">¡Bienvenido a RuleTrack, Organizador!</h1>
+    <p class="home-org__welcome-info">Sube tus archivos y hazlos más óptimos para el mundo</p>
+  </section>
+
+  <div class="home-org__body">
+    <section class="home-org__options" aria-labelledby="options-org-title">
+      <h2 id="options-org-title" class="home-org__options-title">Opciones</h2>
+      <nav class="home-org__options-nav">
+        <a class="btn btn--primary home-org__option-btn" routerLink="/organizer">Mi organización</a>
+        <a class="btn btn--primary home-org__option-btn" routerLink="/organizer">Mis publicaciones</a>
+      </nav>
+    </section>
+
+    <section class="home-org__right" aria-labelledby="recent-org-title">
+      <h2 id="recent-org-title" class="home-org__recent-title">Subidas recientes</h2>
+      <div class="home-org__cards-list" role="list">
+        <app-card />
+        <app-card />
+      </div>
+      <a class="home-org__upload-btn" routerLink="/upload">Subir archivo</a>
+    </section>
+  </div>
+</section>
