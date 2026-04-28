@@ -1,0 +1,80 @@
+<section class="correcting">
+  <div class="correcting__banner">
+    @if (isLoading()) {
+      <h1 class="correcting__title">El agente está corrigiendo el documento...</h1>
+    } @else if (errorMessage()) {
+      <h1 class="correcting__title correcting__title--error">Error al conectar con el agente</h1>
+    } @else {
+      <h1 class="correcting__title">El agente está corrigiendo el documento...</h1>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="correcting__loading">
+      <div class="correcting__spinner"></div>
+      <p>Analizando el documento con IA (DeepSeek)...</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div class="correcting__error">
+      <p>{{ errorMessage() }}</p>
+      <button class="btn btn--primary" (click)="ignoreCorrections()">Volver</button>
+    </div>
+  } @else {
+    <div class="correcting__content">
+      @if (pendingCount === 0) {
+        <p class="correcting__no-corrections">No se encontraron correcciones necesarias.</p>
+      } @else {
+        <div class="correcting__text-wrapper">
+          @for (seg of segments(); track $index) {
+            @if (seg.type === 'text') {
+              <span class="correcting__text-plain">{{ seg.content }}</span>
+            } @else {
+              <span
+                class="correcting__highlight"
+                (click)="openModal(seg.correctionId!)"
+                title="Haz clic para ver la corrección"
+              >{{ seg.content }}</span>
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <div class="correcting__actions">
+      <button class="btn btn--cancel" (click)="ignoreCorrections()">Ignorar correcciones</button>
+      <button class="btn btn--primary" (click)="applyAllCorrections()">Aplicar correcciones</button>
+    </div>
+  }
+
+  @if (activeCorrection()) {
+    <div class="correcting__modal-backdrop" (click)="closeModal()">
+      <div class="correcting__modal" (click)="$event.stopPropagation()">
+        <button class="correcting__modal-close" (click)="closeModal()" aria-label="Cerrar">✕</button>
+        <button
+          class="correcting__modal-why"
+          (click)="showJustification = !showJustification"
+          [title]="showJustification ? 'Ocultar justificación' : 'Ver justificación de la IA'"
+          aria-label="Justificación"
+        >?</button>
+        <p class="correcting__modal-original">"{{ activeCorrection()!.item.original }}"</p>
+        <textarea
+          class="correcting__modal-input"
+          [(ngModel)]="modalSuggestion"
+          rows="3"
+          aria-label="Texto sugerido"
+        ></textarea>
+        @if (showJustification) {
+          <p class="correcting__modal-explanation">{{ activeCorrection()!.item.explanation }}</p>
+        }
+        <div class="correcting__modal-btns">
+          <button class="btn btn--primary" (click)="applyCorrection()">Aplicar</button>
+          <button class="btn btn--primary" (click)="rejectCorrection()">Borrar</button>
+        </div>
+        <label class="correcting__modal-no-more">
+          <input type="checkbox" [(ngModel)]="noCorrectMore" />
+          No corregir más
+        </label>
+      </div>
+    </div>
+  }
+</section>

@@ -1,0 +1,24 @@
+<section class="link-created">
+  <div class="link-created__banner">
+    <h1 class="link-created__title">¡El enlace ya está creado!</h1>
+  </div>
+
+  <div class="link-created__url-wrapper">
+    <input
+      class="link-created__url-input"
+      type="text"
+      [value]="documentUrl()"
+      readonly
+      aria-label="URL del documento"
+    />
+  </div>
+
+  <div class="link-created__actions">
+    <button class="btn btn--primary link-created__btn" (click)="ajustarAcceso()">
+      Ajustar acceso a enlace
+    </button>
+    <button class="btn btn--primary link-created__btn" (click)="volverInicio()">
+      Volver a la página principal
+    </button>
+  </div>
+</section>

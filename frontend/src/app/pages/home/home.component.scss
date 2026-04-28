@@ -4,6 +4,29 @@
   flex-direction: column;
   gap: 24px;
   padding: 28px 36px;
+  position: relative;
+}
+
+// ── Toast ──
+.home__toast {
+  position: fixed;
+  top: 80px;
+  right: 24px;
+  background-color: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+  max-width: 320px;
+  animation: toast-in 0.2s ease;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 // ── Welcome banner ──
@@ -32,6 +55,7 @@
 
 // ── Body: two-column layout ──
 .home__body {
+  flex: 1;
   display: flex;
   gap: 24px;
   align-items: stretch;
@@ -68,6 +92,14 @@
   font-size: 0.9rem;
   white-space: nowrap;
   flex: 1;
+}
+
+.home__options-hint {
+  font-size: 0.78rem;
+  color: var(--text-color);
+  opacity: 0.65;
+  text-align: center;
+  padding: 0 8px;
 }
 
 // ── Recent section ──

@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "RuletrackApplication",
+            "request": "launch",
+            "mainClass": "com.example.ruletrack.RuletrackApplication",
+            "projectName": "ruletrack",
+            "cwd": "${workspaceFolder}/backend",
+            "vmArgs": "-Dspring.profiles.active=default"
+        }
+    ]
+}

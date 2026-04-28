@@ -1,0 +1,5 @@
+# Secretos — NUNCA subir al repositorio
+.env
+
+# Docker
+docker-compose.override.yml

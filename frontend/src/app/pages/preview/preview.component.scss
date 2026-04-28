@@ -6,14 +6,17 @@
   padding: 28px 36px;
 }
 
+.preview__banner {
+  padding: 20px 32px;
+  background-color: var(--color-accent);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+}
+
 .preview__title {
   font-size: 1.2rem;
   font-weight: 700;
   color: var(--text-color);
-  padding: 16px 24px;
-  background-color: var(--color-accent);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
 }
 
 .preview__content {

@@ -32,6 +32,7 @@
 
 // ── Body: two-column layout ──
 .home-org__body {
+  flex: 1;
   display: flex;
   gap: 24px;
   align-items: stretch;
@@ -96,6 +97,7 @@
 
 // ── Upload button ──
 .home-org__upload-btn {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -1,5 +1,7 @@
 import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 import { FileUploadService } from '../../services/file-upload.service';
 
 @Component({
@@ -11,6 +13,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 export class ConvertingComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private fileUploadService = inject(FileUploadService);
+  private http = inject(HttpClient);
   private timerId: ReturnType<typeof setTimeout> | null = null;
 
   fileName = '';
@@ -45,18 +48,17 @@ export class ConvertingComponent implements OnInit, OnDestroy {
     });
 
     try {
-      let mdContent = '';
+      let mdContent: string;
 
-      if (ext === 'md' || ext === 'txt') {
-        // Plain text / already markdown — read as text
+      if (ext === 'pdf') {
+        // Convert via backend (Apache PDFBox) – works in all environments including Docker
+        mdContent = await this.convertViaBackend(file!);
+      } else if (ext === 'md') {
         mdContent = await this.readAsText(file!);
-      } else if (ext === 'pdf') {
-        const rawText = await this.extractPdfText(file!);
-        mdContent = this.formatAsMarkdown(rawText, baseName);
       } else {
-        // Generic text fallback
-        mdContent = await this.readAsText(file!);
-        mdContent = this.formatAsMarkdown(mdContent, baseName);
+        // txt or other text formats
+        const text = await this.readAsText(file!);
+        mdContent = this.formatAsMarkdown(text, baseName);
       }
 
       await minDelay;
@@ -68,6 +70,14 @@ export class ConvertingComponent implements OnInit, OnDestroy {
     }
   }
 
+  private convertViaBackend(file: File): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return firstValueFrom(
+      this.http.post('/api/documents/convert', formData, { responseType: 'text' })
+    );
+  }
+
   private readAsText(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -75,30 +85,6 @@ export class ConvertingComponent implements OnInit, OnDestroy {
       reader.onerror = () => reject(reader.error);
       reader.readAsText(file, 'UTF-8');
     });
-  }
-
-  private async extractPdfText(file: File): Promise<string> {
-    const pdfjsLib = await import('pdfjs-dist');
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
-
-    const arrayBuffer = await file.arrayBuffer();
-    const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
-    const pdf = await loadingTask.promise;
-
-    const pages: string[] = [];
-    for (let p = 1; p <= pdf.numPages; p++) {
-      const page = await pdf.getPage(p);
-      const textContent = await page.getTextContent();
-      const pageLines = textContent.items
-        .map((item: any) => ('str' in item ? item.str : ''))
-        .join(' ')
-        .replace(/\s{2,}/g, ' ')
-        .trim();
-      if (pageLines) pages.push(pageLines);
-    }
-
-    return pages.join('\n\n');
   }
 
   private formatAsMarkdown(text: string, title: string): string {

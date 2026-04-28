@@ -8,12 +8,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  // Default: logged in as organizer for testing
-  readonly currentUser = signal<User | null>({
-    username: 'organizador',
-    role: 'organizer',
-    displayName: 'Organizador',
-  });
+  readonly currentUser = signal<User | null>(null);
 
   login(username: string, password: string): boolean {
     if (username === 'organizador' && password === '1234') {

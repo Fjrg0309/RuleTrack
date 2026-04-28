@@ -1,0 +1,25 @@
+<section class="corrected">
+  <div class="corrected__banner">
+    <h1 class="corrected__title">¡El archivo ya está corregido!</h1>
+  </div>
+
+  <div class="corrected__meta">
+    <div class="corrected__field">
+      <label class="corrected__label" for="docName">Nombre:</label>
+      <input id="docName" class="corrected__input" type="text" [(ngModel)]="documentName" />
+    </div>
+    <div class="corrected__field">
+      <label class="corrected__label" for="docVersion">Versión:</label>
+      <input id="docVersion" class="corrected__input corrected__input--short" type="text" [(ngModel)]="documentVersion" />
+    </div>
+  </div>
+
+  <div class="corrected__actions">
+    <button class="btn btn--primary corrected__btn" (click)="consultarDocumento()">
+      Consultar documento corregido
+    </button>
+    <button class="btn btn--primary corrected__btn" (click)="crearEnlace()">
+      Crear enlace
+    </button>
+  </div>
+</section>

@@ -1,12 +1,18 @@
 <section class="preview">
-  <h1 class="preview__title">El archivo {{ fileName }} está listo para corregirse</h1>
+  <div class="preview__banner">
+    <h1 class="preview__title">{{ fileName }}</h1>
+  </div>
 
   <div class="preview__content">
     <pre class="preview__text">{{ fileContent }}</pre>
   </div>
 
   <div class="preview__actions">
-    <button class="btn btn--primary" (click)="sendToAgent()">Enviar al agente</button>
     <button class="btn btn--cancel" (click)="cancel()">Cancelar</button>
+    @if (isAfterCorrection) {
+      <button class="btn btn--primary" (click)="correctDocument()">Corregir de nuevo</button>
+    } @else {
+      <button class="btn btn--primary" (click)="correctDocument()">Corregir documento</button>
+    }
   </div>
 </section>

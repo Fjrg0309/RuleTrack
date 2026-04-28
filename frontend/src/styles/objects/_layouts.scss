@@ -47,3 +47,11 @@ app-sidebar {
   flex-direction: column;
   background-color: var(--color-primary);
 }
+
+// Every routed page component fills the content column
+// (router-outlet is excluded because it is an empty structural element)
+.app-content > *:not(router-outlet) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}

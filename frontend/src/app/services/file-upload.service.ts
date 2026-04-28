@@ -5,6 +5,9 @@ export class FileUploadService {
   readonly fileName = signal<string>('');
   readonly fileContent = signal<string>('');
   readonly rawFile = signal<File | null>(null);
+  readonly correctedContent = signal<string>('');
+  readonly documentName = signal<string>('');
+  readonly documentVersion = signal<string>('1.0');
 
   setFile(name: string, content: string): void {
     this.fileName.set(name);
@@ -17,9 +20,21 @@ export class FileUploadService {
     this.fileContent.set('');
   }
 
+  setCorrectedContent(content: string): void {
+    this.correctedContent.set(content);
+  }
+
+  setDocumentMeta(name: string, version: string): void {
+    this.documentName.set(name);
+    this.documentVersion.set(version);
+  }
+
   clear(): void {
     this.fileName.set('');
     this.fileContent.set('');
     this.rawFile.set(null);
+    this.correctedContent.set('');
+    this.documentName.set('');
+    this.documentVersion.set('1.0');
   }
 }

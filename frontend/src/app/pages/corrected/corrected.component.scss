@@ -1,0 +1,99 @@
+.corrected {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  padding: 28px 36px;
+
+  &__banner {
+    padding: 28px 32px;
+    background-color: var(--color-accent);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+  }
+
+  &__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-color);
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  &__field {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--text-color);
+    background-color: var(--color-accent);
+    padding: 6px 14px;
+    border-radius: var(--border-radius);
+    white-space: nowrap;
+  }
+
+  &__input {
+    padding: 6px 14px;
+    border: 2px solid var(--color-secondary);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    color: var(--text-color);
+    background: var(--color-card);
+    font-family: inherit;
+    min-width: 200px;
+
+    &:focus {
+      outline: none;
+      border-color: var(--button-color);
+    }
+
+    &--short {
+      min-width: 60px;
+      width: 80px;
+      text-align: center;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    flex: 1;
+    min-width: 200px;
+    padding: 20px 24px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    border: none;
+
+    &--secondary {
+      background-color: var(--color-accent);
+      color: var(--text-color);
+
+      &:hover {
+        background-color: var(--color-secondary);
+      }
+    }
+  }
+}

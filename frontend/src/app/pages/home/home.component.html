@@ -1,15 +1,36 @@
 <section class="home">
+  @if (toastMessage()) {
+    <div class="home__toast" role="alert" aria-live="assertive">
+      <span>{{ toastMessage() }}</span>
+    </div>
+  }
+
   <section class="home__welcome" aria-labelledby="welcome-title">
-    <h1 id="welcome-title" class="home__welcome-title">¡Bienvenido a RuleTrack, Usuario!</h1>
-    <p class="home__welcome-info">¡Consulta las normas optimizadas por los organizadores que necesites!</p>
+    @if (auth.currentUser()) {
+      <h1 id="welcome-title" class="home__welcome-title">¡Bienvenido a RuleTrack, {{ auth.currentUser()!.displayName }}!</h1>
+      <p class="home__welcome-info">¡Consulta las normas optimizadas por los organizadores que necesites!</p>
+    } @else {
+      <h1 id="welcome-title" class="home__welcome-title">Bienvenido a RuleTrack</h1>
+      <p class="home__welcome-info">⚠ Inicia sesión para acceder a todas las funciones. Sin sesión solo podrás consultar y descargar documentos públicos.</p>
+    }
   </section>
 
   <div class="home__body">
     <section class="home__options" aria-labelledby="options-title">
       <h2 id="options-title" class="home__options-title">Opciones</h2>
       <nav class="home__options-nav">
-        <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mi organización</a>
-        <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mis publicaciones</a>
+        @if (auth.currentUser()?.role === 'organizer') {
+          <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mi organización</a>
+          <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mis publicaciones</a>
+        } @else if (auth.currentUser()) {
+          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Esta sección es solo para organizadores')">Mi organización</button>
+          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Esta sección es solo para organizadores')">Mis publicaciones</button>
+          <p class="home__options-hint">Solo los organizadores pueden gestionar documentos</p>
+        } @else {
+          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Inicia sesión para acceder a tu organización')">Mi organización</button>
+          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Inicia sesión para ver tus publicaciones')">Mis publicaciones</button>
+          <p class="home__options-hint">Inicia sesión para usar todas las opciones</p>
+        }
       </nav>
     </section>
 

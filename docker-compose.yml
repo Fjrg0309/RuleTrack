@@ -1,0 +1,67 @@
+services:
+
+  # ── PostgreSQL ───────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: ruletrack-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ruletrack
+      POSTGRES_USER: ${DB_USERNAME:-ruletrack}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-ruletrack}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-ruletrack} -d ruletrack"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ruletrack-net
+
+  # ── Backend (Spring Boot) ────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ruletrack-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ruletrack
+      DB_USERNAME: ${DB_USERNAME:-ruletrack}
+      DB_PASSWORD: ${DB_PASSWORD:-ruletrack}
+      JWT_SECRET: ${JWT_SECRET:-c2VjcmV0LWtleS1mb3ItcnVsZXRyYWNrLWNoYW5nZS1pbi1wcm9kdWN0aW9u}
+      LLM_API_URL: ${LLM_API_URL:-https://api.deepseek.com/v1}
+      LLM_API_KEY: ${LLM_API_KEY:-sk-605da05d460f4ad6a3df00f6de725bc1}
+      LLM_MODEL: ${LLM_MODEL:-deepseek-chat}
+      CORS_ALLOWED_ORIGINS: http://localhost:4200
+    ports:
+      - "8000:8080"
+    networks:
+      - ruletrack-net
+
+  # ── Frontend (Angular + Nginx) ───────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ruletrack-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+    networks:
+      - ruletrack-net
+
+volumes:
+  postgres_data:
+
+networks:
+  ruletrack-net:
+    driver: bridge
