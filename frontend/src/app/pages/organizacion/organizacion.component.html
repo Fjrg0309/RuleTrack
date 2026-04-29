@@ -1,0 +1,41 @@
+<section class="org">
+  <div class="org__banner">
+    <h1 class="org__title">Organización de {{ auth.currentUser()?.displayName }}</h1>
+  </div>
+
+  <div class="org__card">
+    <div class="org__grid">
+      <div class="org__cell org__cell--header">
+        <span class="org__label">Nombre</span>
+      </div>
+      <div class="org__cell org__cell--header">
+        <span class="org__label">Fecha de fundación</span>
+      </div>
+
+      <div class="org__cell">
+        <span class="org__value">{{ org.name }}</span>
+      </div>
+      <div class="org__cell">
+        <span class="org__value">{{ org.founded }}</span>
+      </div>
+
+      <div class="org__cell org__cell--header">
+        <span class="org__label">NºOrganizadores</span>
+      </div>
+      <div class="org__cell org__cell--header">
+        <span class="org__label">NºMiembros</span>
+      </div>
+
+      <div class="org__cell">
+        <span class="org__value">{{ org.organizers }}</span>
+      </div>
+      <div class="org__cell">
+        <span class="org__value">{{ org.members }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="org__footer">
+    <button class="btn btn--outline-dark" (click)="goToPublications()">Publicaciones</button>
+  </div>
+</section>

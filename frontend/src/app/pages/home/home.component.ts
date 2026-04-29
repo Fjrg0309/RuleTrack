@@ -1,5 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { CardComponent } from '../../components/card/card.component';
 import { AuthService } from '../../services/auth.service';
 
@@ -9,10 +9,17 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   protected auth = inject(AuthService);
+  private router = inject(Router);
   protected toastMessage = signal('');
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+  ngOnInit(): void {
+    if (this.auth.currentUser()?.role === 'organizer') {
+      this.router.navigate(['/organizer'], { replaceUrl: true });
+    }
+  }
 
   protected showLoginToast(message: string): void {
     if (this.toastTimer) clearTimeout(this.toastTimer);

@@ -92,20 +92,19 @@
 .home-org__cards-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 // ── Upload button ──
 .home-org__upload-btn {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 28px;
+  padding: 14px 24px;
   background-color: var(--button-color);
   color: var(--text-button);
   border-radius: var(--border-radius);
-  font-size: 1.1rem;
+  font-size: 0.9rem;
   font-weight: 700;
   box-shadow: var(--shadow-md);
   text-decoration: none;

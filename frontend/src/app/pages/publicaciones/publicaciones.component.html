@@ -1,0 +1,55 @@
+<section class="publications">
+  <div class="publications__banner">
+    @if (auth.currentUser()?.role === 'organizer') {
+      <h1 class="publications__title">Tus publicaciones con su última versión</h1>
+    } @else {
+      <h1 class="publications__title">Publicaciones</h1>
+    }
+  </div>
+
+  <div class="publications__table-wrapper">
+    <div class="publications__header-row">
+      <span class="publications__col-label">Nombre</span>
+      <span class="publications__col-label publications__col-label--sm">Versión</span>
+      <span class="publications__col-label publications__col-label--sm">Estado</span>
+      <span class="publications__col-label publications__col-label--lg">URL</span>
+      <span class="publications__col-label publications__col-label--sm">Acciones</span>
+    </div>
+
+    @for (pub of publications; track pub.id) {
+      <div class="publications__row">
+        <span class="publications__name">{{ pub.name }}</span>
+        <span class="publications__version">{{ pub.version }}</span>
+        <span class="publications__status"
+              [class.publications__status--public]="pub.status === 'public'"
+              [class.publications__status--members]="pub.status === 'members'">
+          {{ pub.status === 'public' ? 'Público' : 'Solo para miembros' }}
+        </span>
+        <input class="publications__url" type="text" [value]="pub.url" readonly aria-label="URL de la publicación" />
+        <div class="publications__actions">
+          <button
+            class="publications__action-btn"
+            [class.publications__action-btn--copied]="copiedId === pub.id"
+            (click)="copyUrl(pub)"
+            title="Copiar URL"
+            aria-label="Copiar URL">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+          </button>
+          @if (auth.currentUser()?.role === 'organizer') {
+            <button
+              class="publications__action-btn"
+              (click)="editPublication(pub)"
+              title="Ver ajustes"
+              aria-label="Ver ajustes de publicación">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</section>

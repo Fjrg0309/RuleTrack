@@ -20,11 +20,11 @@
       <h2 id="options-title" class="home__options-title">Opciones</h2>
       <nav class="home__options-nav">
         @if (auth.currentUser()?.role === 'organizer') {
-          <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mi organización</a>
-          <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mis publicaciones</a>
+          <a class="btn btn--primary home__option-btn" routerLink="/organizacion">Mi organización</a>
+          <a class="btn btn--primary home__option-btn" routerLink="/publicaciones">Mis publicaciones</a>
         } @else if (auth.currentUser()) {
-          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Esta sección es solo para organizadores')">Mi organización</button>
-          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Esta sección es solo para organizadores')">Mis publicaciones</button>
+          <a class="btn btn--primary home__option-btn" routerLink="/organizacion">Mi organización</a>
+          <a class="btn btn--primary home__option-btn" routerLink="/publicaciones">Mis publicaciones</a>
           <p class="home__options-hint">Solo los organizadores pueden gestionar documentos</p>
         } @else {
           <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Inicia sesión para acceder a tu organización')">Mi organización</button>
@@ -41,6 +41,13 @@
         <app-card />
         <app-card />
         <app-card />
+      </div>
+      <div class="home__filler" aria-hidden="true">
+        @if (auth.currentUser()?.role === 'organizer') {
+          <p class="home__filler-text">¡Sube más archivos para que tus usuarios puedan consultarlos!</p>
+        } @else {
+          <p class="home__filler-text">Cuando un organizador publique archivos, aparecerán aquí.</p>
+        }
       </div>
     </section>
   </div>

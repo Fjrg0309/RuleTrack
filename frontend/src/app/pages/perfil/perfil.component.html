@@ -1,0 +1,73 @@
+<section class="profile">
+  <div class="profile__banner">
+    <h1 class="profile__title">Perfil</h1>
+  </div>
+
+  <div class="profile__card">
+    @if (auth.currentUser()?.role === 'organizer') {
+      <div class="profile__grid">
+        <div class="profile__cell">
+          <span class="profile__label">Nombre</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__label">Fecha de nacimiento</span>
+        </div>
+
+        <div class="profile__cell">
+          <span class="profile__value">{{ organizerProfile.name }}</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__value">{{ organizerProfile.birthDate }}</span>
+        </div>
+
+        <div class="profile__cell">
+          <span class="profile__label">NºOrganizadores</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__label">NºMiembros</span>
+        </div>
+
+        <div class="profile__cell">
+          <span class="profile__value">{{ organizerProfile.organizers }}</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__value">{{ organizerProfile.members }}</span>
+        </div>
+      </div>
+    } @else {
+      <div class="profile__grid">
+        <div class="profile__cell">
+          <span class="profile__label">Nombre</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__label">Fecha de nacimiento</span>
+        </div>
+
+        <div class="profile__cell">
+          <span class="profile__value">{{ userProfile.name }}</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__value">{{ userProfile.birthDate }}</span>
+        </div>
+
+        <div class="profile__cell">
+          <span class="profile__label">Pertenece a</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__label">Nick</span>
+        </div>
+
+        <div class="profile__cell">
+          <span class="profile__value">{{ userProfile.organization }}</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__value">{{ userProfile.nick }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="profile__footer">
+    <button class="btn btn--profile-outline" (click)="goToPublications()">Publicaciones</button>
+  </div>
+</section>

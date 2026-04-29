@@ -1,0 +1,78 @@
+<section class="pub-settings">
+  <div class="pub-settings__banner">
+    <h1 class="pub-settings__title">Ajustes de publicación</h1>
+  </div>
+
+  <!-- URL + actions row -->
+  <div class="pub-settings__top-row">
+    <input
+      class="pub-settings__url-input"
+      type="text"
+      [value]="url()"
+      readonly
+      aria-label="URL de la publicación"
+    />
+    <button class="btn btn--primary pub-settings__action-btn">Actualizar versión</button>
+    <button class="btn btn--primary pub-settings__action-btn" (click)="confirmDelete()">Borrar publicación</button>
+  </div>
+
+  <!-- Settings + description -->
+  <div class="pub-settings__body">
+    <div class="pub-settings__fields">
+      <div class="pub-settings__field">
+        <span class="pub-settings__field-label">Estado</span>
+        <div class="pub-settings__select-wrapper">
+          <select class="pub-settings__select">
+            <option>Público</option>
+            <option>Solo para miembros</option>
+            <option>Privado</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pub-settings__field">
+        <span class="pub-settings__field-label">Fecha de publicación</span>
+        <span class="pub-settings__field-value">{{ fecha() }}</span>
+      </div>
+
+      <div class="pub-settings__field">
+        <span class="pub-settings__field-label">Versión</span>
+        <div class="pub-settings__select-wrapper">
+          <select class="pub-settings__select">
+            <option>2.1</option>
+            <option>2.0</option>
+            <option>1.5</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn--primary pub-settings__save-btn" (click)="saveChanges()">Guardar cambios</button>
+    </div>
+
+    <div class="pub-settings__description-wrapper">
+      <span class="pub-settings__field-label">Descripción</span>
+      <textarea
+        class="pub-settings__textarea"
+        [value]="descripcion()"
+        (input)="descripcion.set($any($event.target).value)"
+        rows="10"
+        aria-label="Descripción"
+      ></textarea>
+    </div>
+  </div>
+
+  <!-- Delete confirm modal -->
+  @if (showDeleteConfirm()) {
+    <div class="pub-settings__overlay" role="dialog" aria-modal="true" aria-labelledby="delete-pub-title">
+      <div class="pub-settings__modal">
+        <div class="pub-settings__modal-banner">
+          <p id="delete-pub-title" class="pub-settings__modal-question">¿Estás seguro de que quieres borrar la publicación?</p>
+        </div>
+        <div class="pub-settings__modal-actions">
+          <button class="btn btn--primary" (click)="deletePublication()">Sí</button>
+          <button class="btn btn--primary" (click)="cancelDelete()">No</button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

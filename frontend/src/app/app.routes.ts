@@ -8,6 +8,11 @@ import { CorrectingComponent } from './pages/correcting/correcting.component';
 import { CorrectedComponent } from './pages/corrected/corrected.component';
 import { LinkCreatedComponent } from './pages/link-created/link-created.component';
 import { LoginComponent } from './pages/login/login.component';
+import { PublicacionesComponent } from './pages/publicaciones/publicaciones.component';
+import { AjustesComponent } from './pages/ajustes/ajustes.component';
+import { OrganizacionComponent } from './pages/organizacion/organizacion.component';
+import { PerfilComponent } from './pages/perfil/perfil.component';
+import { AjustesPublicacionComponent } from './pages/ajustes-publicacion/ajustes-publicacion.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,4 +24,10 @@ export const routes: Routes = [
   { path: 'corrected', component: CorrectedComponent },
   { path: 'link-created', component: LinkCreatedComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'publicaciones', component: PublicacionesComponent },
+  { path: 'ajustes', component: AjustesComponent },
+  { path: 'organizacion', component: OrganizacionComponent },
+  { path: 'perfil', component: PerfilComponent },
+  { path: 'ajustes-publicacion', component: AjustesPublicacionComponent },
 ];
+

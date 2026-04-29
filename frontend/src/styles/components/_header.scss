@@ -48,6 +48,19 @@
     }
   }
 
+  &__settings-link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   &__user {
     display: flex;
     align-items: center;

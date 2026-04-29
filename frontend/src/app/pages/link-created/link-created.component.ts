@@ -25,7 +25,7 @@ export class LinkCreatedComponent implements OnInit {
   }
 
   ajustarAcceso(): void {
-    // TODO: navigate to access settings page
+    this.router.navigate(['/ajustes-publicacion']);
   }
 
   volverInicio(): void {

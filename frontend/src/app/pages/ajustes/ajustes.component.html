@@ -1,0 +1,91 @@
+<section class="settings">
+  <div class="settings__banner">
+    <h1 class="settings__title">Ajustes</h1>
+  </div>
+
+  <!-- Personal info -->
+  <div class="settings__card">
+    <span class="settings__card-label">Información personal</span>
+    <div class="settings__personal-grid">
+      <div class="settings__field">
+        <label class="settings__field-label" for="fullname">Nombre completo</label>
+        <input id="fullname" class="settings__input" type="text" [placeholder]="auth.currentUser()?.displayName ?? ''" />
+      </div>
+      <div class="settings__field">
+        <label class="settings__field-label" for="email">Email</label>
+        <input id="email" class="settings__input" type="email" placeholder="correo@ejemplo.com" />
+      </div>
+      <button class="btn btn--outline settings__update-btn">Actualizar perfil</button>
+    </div>
+  </div>
+
+  <!-- Preferences + Notifications -->
+  <div class="settings__row">
+    <div class="settings__card settings__card--half">
+      <span class="settings__card-label">Preferencias</span>
+      <div class="settings__prefs-grid">
+        <div class="settings__field">
+          <label class="settings__field-label" for="lang">Lengua</label>
+          <div class="settings__select-wrapper">
+            <select id="lang" class="settings__select">
+              <option>Español</option>
+              <option>English</option>
+            </select>
+          </div>
+        </div>
+        <div class="settings__field">
+          <label class="settings__field-label">Tema</label>
+          <div class="settings__toggle-row">
+            <button
+              class="settings__toggle"
+              [class.settings__toggle--active]="darkMode()"
+              (click)="toggleDarkMode()"
+              [attr.aria-pressed]="darkMode()"
+              aria-label="Modo oscuro">
+              <span class="settings__toggle-knob"></span>
+            </button>
+            <span class="settings__toggle-label">Modo oscuro</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings__card settings__card--half">
+      <span class="settings__card-label">Notificaciones</span>
+      <div class="settings__checks">
+        <label class="settings__check-row">
+          <input type="checkbox" [checked]="notifNews()" (change)="toggleNotifNews()" />
+          <span>Novedades</span>
+        </label>
+        <label class="settings__check-row">
+          <input type="checkbox" [checked]="notifEmails()" (change)="toggleNotifEmails()" />
+          <span>Emails</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Danger zone -->
+  <div class="settings__card settings__card--danger">
+    <span class="settings__card-label settings__card-label--danger">⚠ Zona peligrosa</span>
+    <div class="settings__danger-actions">
+      <button class="btn btn--outline" (click)="logout()">Cerrar sesión</button>
+      <button class="btn btn--danger" (click)="confirmDelete()">Borrar cuenta</button>
+    </div>
+  </div>
+
+  <!-- Delete confirm modal -->
+  @if (showDeleteConfirm()) {
+    <div class="settings__overlay" role="dialog" aria-modal="true" aria-labelledby="delete-confirm-title">
+      <div class="settings__modal">
+        <div class="settings__modal-banner">
+          <p id="delete-confirm-title" class="settings__modal-question">¿Estás seguro de que quieres borrar tu cuenta?</p>
+        </div>
+        <div class="settings__modal-actions">
+          <button class="btn btn--primary" (click)="deleteAccount()">Sí</button>
+          <button class="btn btn--primary" (click)="cancelDelete()">No</button>
+        </div>
+      </div>
+    </div>
+  }
+</section>

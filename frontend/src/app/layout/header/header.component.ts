@@ -1,5 +1,5 @@
 import { Component, inject, ViewEncapsulation } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -11,8 +11,15 @@ import { AuthService } from '../../services/auth.service';
 })
 export class HeaderComponent {
   protected auth = inject(AuthService);
+  private router = inject(Router);
+
+  navigateHome(): void {
+    const route = this.auth.currentUser()?.role === 'organizer' ? '/organizer' : '/';
+    this.router.navigate([route]);
+  }
 
   logout(): void {
     this.auth.logout();
+    this.router.navigate(['/']);
   }
 }

@@ -14,10 +14,10 @@
   justify-content: center;
   gap: 20px;
   padding: 48px 40px;
-  background-color: var(--color-accent);
+  background-color: var(--color-card);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
-  border: 3px dashed transparent;
+  border: 2px solid var(--color-secondary);
   transition: border-color 0.2s, background-color 0.2s;
   cursor: pointer;
   min-height: 280px;
@@ -47,7 +47,12 @@
 
 .upload__actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: stretch;
+
+  .btn {
+    flex: 1;
+    padding: 12px 24px;
+  }
 }
 
 .upload__file-input {
