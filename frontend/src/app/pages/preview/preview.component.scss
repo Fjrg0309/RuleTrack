@@ -58,3 +58,23 @@
   }
 }
 
+@media (max-width: 767px) {
+  .preview {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .preview__actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .preview__content {
+    max-height: 300px;
+    padding: 16px;
+  }
+}
+

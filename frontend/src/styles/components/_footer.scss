@@ -43,3 +43,16 @@
     }
   }
 }
+
+@media (max-width: 767px) {
+  .footer {
+    flex-direction: column;
+    padding: 14px 16px;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .footer__social {
+    justify-content: center;
+  }
+}

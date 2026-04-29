@@ -58,7 +58,7 @@ export class CorrectingComponent implements OnInit {
       const status = (err instanceof HttpErrorResponse) ? err.status : 0;
       if (status === 503) {
         this.errorMessage.set(
-          'El agente de IA no está configurado. Añade la variable LLM_API_KEY con tu clave de OpenAI y reinicia el servidor.'
+          'El agente de IA no está configurado. Configura la variable LLM_API_KEY con tu clave y reinicia el servidor.'
         );
       } else if (status === 0) {
         this.errorMessage.set(

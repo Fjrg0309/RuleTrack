@@ -8,7 +8,7 @@
   justify-content: space-between;
   width: 100%;
   padding: 10px 40px;
-  background-color: var(--color-card);
+  background-color: var(--color-accent);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
   position: relative;
   z-index: 10;
@@ -53,7 +53,7 @@
     font-weight: 600;
     color: var(--text-color);
     text-decoration: none;
-    opacity: 0.8;
+    opacity: 0.9;
     transition: opacity 0.2s;
 
     &:hover {
@@ -72,5 +72,28 @@
     width: 40px;
     height: 40px;
     color: var(--text-color);
+  }
+}
+
+@media (max-width: 767px) {
+  .header {
+    padding: 8px 16px;
+  }
+
+  .header__logo-img {
+    height: 44px;
+  }
+
+  .header__actions {
+    gap: 8px;
+  }
+
+  .header__settings-link {
+    font-size: 0.8rem;
+  }
+
+  .header__user-icon {
+    width: 34px;
+    height: 34px;
   }
 }

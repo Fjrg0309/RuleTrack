@@ -233,3 +233,29 @@
     color: var(--text-button);
   }
 }
+
+@media (max-width: 767px) {
+  .correcting {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .correcting__actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+
+  .correcting__meta {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .correcting__content {
+    max-height: 280px;
+    padding: 14px;
+    font-size: 0.85rem;
+  }
+}

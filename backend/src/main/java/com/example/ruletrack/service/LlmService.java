@@ -169,10 +169,9 @@ public class LlmService {
             Map<?, ?> message = (Map<?, ?>) firstChoice.get("message");
             return (String) message.get("content");
 
-        } catch (RuntimeException e) {
-            throw e;
         } catch (Exception e) {
-            log.error("Error al llamar al LLM: {}", e.getMessage());
+            log.error("Error al llamar al LLM ({}): {}", e.getClass().getSimpleName(), e.getMessage());
+            if (e instanceof RuntimeException re) throw re;
             throw new RuntimeException("Error al conectar con el modelo de lenguaje: " + e.getMessage(), e);
         }
     }

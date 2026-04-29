@@ -92,7 +92,7 @@
 .home-org__cards-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
 // ── Upload button ──
@@ -100,11 +100,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 24px;
+  padding: 28px 24px;
+  min-height: 80px;
+  max-height: 140px;
   background-color: var(--button-color);
   color: var(--text-button);
   border-radius: var(--border-radius);
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 700;
   box-shadow: var(--shadow-md);
   text-decoration: none;
@@ -112,5 +114,49 @@
 
   &:hover {
     background-color: var(--button-hover);
+  }
+}
+
+// ── Responsive ──
+@media (max-width: 767px) {
+  .home-org {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .home-org__welcome {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 16px;
+    gap: 8px;
+  }
+
+  .home-org__welcome-info {
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .home-org__body {
+    flex-direction: column;
+  }
+
+  .home-org__options {
+    min-width: auto;
+  }
+
+  .home-org__options-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .home-org__option-btn {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .home-org__upload-btn {
+    font-size: 1rem;
+    padding: 20px 16px;
   }
 }

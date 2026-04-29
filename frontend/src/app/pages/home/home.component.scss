@@ -142,3 +142,49 @@
   max-width: 320px;
   font-style: italic;
 }
+
+// ── Responsive ──
+@media (max-width: 767px) {
+  .home {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .home__welcome {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 16px;
+    gap: 8px;
+  }
+
+  .home__welcome-info {
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .home__body {
+    flex-direction: column;
+  }
+
+  .home__options {
+    min-width: auto;
+  }
+
+  .home__options-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .home__option-btn {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .home__toast {
+    top: 60px;
+    right: 12px;
+    left: 12px;
+    max-width: none;
+  }
+}
