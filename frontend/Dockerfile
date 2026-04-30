@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Cache de dependencias
 COPY package.json package-lock.json ./
-RUN npm ci --prefer-offline
+RUN npm install --prefer-offline
 
 # Copia el resto y compila en modo producción
 COPY . .

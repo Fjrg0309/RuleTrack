@@ -97,6 +97,14 @@
     }
   }
 
+  &__applied {
+    color: #1a5c1e;
+    font-weight: 600;
+    background-color: rgba(152, 255, 157, 0.35);
+    border-radius: 2px;
+    padding: 0 2px;
+  }
+
   &__actions {
     display: flex;
     justify-content: flex-end;

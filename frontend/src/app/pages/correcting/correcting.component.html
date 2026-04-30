@@ -28,6 +28,8 @@
           @for (seg of segments(); track $index) {
             @if (seg.type === 'text') {
               <span class="correcting__text-plain">{{ seg.content }}</span>
+            } @else if (seg.type === 'applied') {
+              <span class="correcting__applied">{{ seg.content }}</span>
             } @else {
               <span
                 class="correcting__highlight"

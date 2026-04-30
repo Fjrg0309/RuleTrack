@@ -50,8 +50,8 @@ export class ConvertingComponent implements OnInit, OnDestroy {
     try {
       let mdContent: string;
 
-      if (ext === 'pdf') {
-        // Convert via backend (Apache PDFBox) – works in all environments including Docker
+      if (ext === 'pdf' || ext === 'docx') {
+        // Convert via backend: PDFBox for PDF, Apache POI for DOCX
         mdContent = await this.convertViaBackend(file!);
       } else if (ext === 'md') {
         mdContent = await this.readAsText(file!);
@@ -64,9 +64,10 @@ export class ConvertingComponent implements OnInit, OnDestroy {
       await minDelay;
       this.fileUploadService.setFile(mdName, mdContent);
       this.router.navigate(['/preview']);
-    } catch {
+    } catch (err) {
       await minDelay;
-      this.conversionError.set('No se pudo leer el archivo. Prueba con un PDF de texto o un archivo .md / .txt.');
+      const msg = err instanceof Error ? err.message : String(err);
+      this.conversionError.set(`No se pudo convertir el archivo: ${msg}`);
     }
   }
 
@@ -88,23 +89,36 @@ export class ConvertingComponent implements OnInit, OnDestroy {
   }
 
   private formatAsMarkdown(text: string, title: string): string {
-    const lines = text
-      .split(/\r?\n/)
-      .map(l => l.trim())
-      .filter(l => l.length > 0);
+    // Split into blocks separated by one or more blank lines
+    const blocks = text
+      .split(/\r?\n(?:\s*\r?\n)+/)
+      .map(block =>
+        block.split(/\r?\n/)
+          .map(l => l.trim())
+          .filter(l => l.length > 0)
+          .join(' ')
+      )
+      .filter(b => b.length > 0);
 
     const mdLines: string[] = [`# ${title}`, ''];
 
-    for (const line of lines) {
-      if (line.length < 80 && /^[A-ZÁÉÍÓÚÑ\d]/.test(line) && !line.endsWith(',')) {
-        // Looks like a heading
-        mdLines.push(`## ${line}`, '');
+    for (const block of blocks) {
+      if (this.isHeading(block)) {
+        mdLines.push(`## ${block}`, '');
       } else {
-        mdLines.push(line, '');
+        mdLines.push(block, '');
       }
     }
 
     return mdLines.join('\n');
+  }
+
+  private isHeading(line: string): boolean {
+    if (line.length > 80) return false;
+    if (/^(Art[ií]culo|Cap[ií]tulo|Secci[oó]n|T[ií]tulo|Anexo|Parte)\b/i.test(line)) return true;
+    if (line === line.toUpperCase() && line.length > 2 && /[A-ZÁÉÍÓÚÑ]/.test(line)) return true;
+    if (line.length < 50 && !line.endsWith('.') && !line.endsWith(',') && !line.endsWith(';')) return true;
+    return false;
   }
 }
 

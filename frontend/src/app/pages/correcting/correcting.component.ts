@@ -6,7 +6,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { CorrectionService, CorrectionItem } from '../../services/correction.service';
 
 export interface TextSegment {
-  type: 'text' | 'correction';
+  type: 'text' | 'correction' | 'applied';
   content: string;
   correctionId?: string;
 }
@@ -76,15 +76,21 @@ export class CorrectingComponent implements OnInit {
 
   private buildSegments(states: CorrectionState[]): void {
     const text = this.fileContent;
-    const activeStates = states.filter(s => s.status === 'pending');
+    const activeStates = states.filter(s => s.status === 'pending' || s.status === 'applied');
 
-    interface Match { start: number; end: number; correctionId: string; }
+    interface Match { start: number; end: number; correctionId: string; status: 'pending' | 'applied'; suggestion: string; }
     const matches: Match[] = [];
 
     for (const state of activeStates) {
       const idx = text.indexOf(state.item.original);
       if (idx !== -1) {
-        matches.push({ start: idx, end: idx + state.item.original.length, correctionId: state.item.id });
+        matches.push({
+          start: idx,
+          end: idx + state.item.original.length,
+          correctionId: state.item.id,
+          status: state.status as 'pending' | 'applied',
+          suggestion: state.item.suggestion,
+        });
       }
     }
 
@@ -99,8 +105,8 @@ export class CorrectingComponent implements OnInit {
         segments.push({ type: 'text', content: text.substring(cursor, match.start) });
       }
       segments.push({
-        type: 'correction',
-        content: text.substring(match.start, match.end),
+        type: match.status === 'applied' ? 'applied' : 'correction',
+        content: match.status === 'applied' ? match.suggestion : text.substring(match.start, match.end),
         correctionId: match.correctionId,
       });
       cursor = match.end;
