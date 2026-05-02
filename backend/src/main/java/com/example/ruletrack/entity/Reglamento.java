@@ -30,6 +30,11 @@ public class Reglamento {
     @Column(columnDefinition = "TEXT")
     private String descripcion;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
+    private VisibilidadReglamento visibilidad = VisibilidadReglamento.PUBLICO;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -41,6 +46,16 @@ public class Reglamento {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creado_por_id", nullable = false)
     private Usuario creadoPor;
+
+    // Usuarios explícitamente autorizados (solo para PRIVADO)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "reglamento_usuarios_permitidos",
+        joinColumns = @JoinColumn(name = "reglamento_id"),
+        inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    @Builder.Default
+    private List<Usuario> usuariosPermitidos = new ArrayList<>();
 
     @OneToMany(mappedBy = "reglamento", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default

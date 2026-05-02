@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +27,26 @@ public class Usuario {
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
+    @Column(nullable = false, length = 80)
+    private String nombre;
+
+    @Column(nullable = false, length = 120)
+    private String apellidos;
+
+    @Column(name = "fecha_nacimiento", nullable = false)
+    private LocalDate fechaNacimiento;
+
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @Column(nullable = false, unique = true, length = 20)
+    private String dni;
+
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "organizacion_nombre", length = 200)
+    private String organizacionNombre;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
