@@ -17,7 +17,7 @@
           [(ngModel)]="username"
           name="username"
           autocomplete="username"
-          placeholder="organizador"
+          placeholder="tu_usuario"
         />
       </div>
 
@@ -30,7 +30,7 @@
           [(ngModel)]="password"
           name="password"
           autocomplete="current-password"
-          placeholder="••••"
+          placeholder="••••••••"
         />
       </div>
 
@@ -38,11 +38,13 @@
         <p class="login__error" role="alert">{{ error() }}</p>
       }
 
-      <button class="login__submit" type="submit">Entrar</button>
+      <button class="login__submit" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Entrando...' : 'Entrar' }}
+      </button>
     </form>
 
     <p class="login__hint">
-      Credenciales de prueba: <strong>organizador&nbsp;/&nbsp;1234</strong>
+      ¿No tienes cuenta? <a class="login__register-link" routerLink="/registro">Regístrate aquí</a>
     </p>
   </div>
 </section>

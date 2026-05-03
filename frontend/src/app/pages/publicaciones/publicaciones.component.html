@@ -1,6 +1,6 @@
 <section class="publications">
   <div class="publications__banner">
-    @if (auth.currentUser()?.role === 'organizer') {
+    @if (auth.currentUser()?.rol === 'ORGANIZADOR') {
       <h1 class="publications__title">Tus publicaciones con su última versión</h1>
     } @else {
       <h1 class="publications__title">Publicaciones</h1>
@@ -16,16 +16,16 @@
       <span class="publications__col-label publications__col-label--sm">Acciones</span>
     </div>
 
-    @for (pub of publications; track pub.id) {
+    @for (pub of publications(); track pub.id) {
       <div class="publications__row">
-        <span class="publications__name">{{ pub.name }}</span>
-        <span class="publications__version">{{ pub.version }}</span>
+        <span class="publications__name">{{ pub.titulo }}</span>
+        <span class="publications__version">{{ pub.ultimaVersion }}</span>
         <span class="publications__status"
-              [class.publications__status--public]="pub.status === 'public'"
-              [class.publications__status--members]="pub.status === 'members'">
-          {{ pub.status === 'public' ? 'Público' : 'Solo para miembros' }}
+              [class.publications__status--public]="pub.visibilidad === 'PUBLICO'"
+              [class.publications__status--members]="pub.visibilidad === 'SOLO_MIEMBROS'">
+          {{ pub.visibilidad === 'PUBLICO' ? 'Público' : pub.visibilidad === 'SOLO_MIEMBROS' ? 'Solo miembros' : 'Privado' }}
         </span>
-        <input class="publications__url" type="text" [value]="pub.url" readonly aria-label="URL de la publicación" />
+        <span class="publications__url">{{ pub.organizacionNombre }}</span>
         <div class="publications__actions">
           <button
             class="publications__action-btn"
@@ -37,7 +37,7 @@
               <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
             </svg>
           </button>
-          @if (auth.currentUser()?.role === 'organizer') {
+          @if (auth.currentUser()?.rol === 'ORGANIZADOR') {
             <button
               class="publications__action-btn"
               (click)="editPublication(pub)"
@@ -50,6 +50,8 @@
           }
         </div>
       </div>
+    } @empty {
+      <p class="publications__empty">No hay publicaciones disponibles.</p>
     }
   </div>
 </section>

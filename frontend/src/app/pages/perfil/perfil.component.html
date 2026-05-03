@@ -4,34 +4,34 @@
   </div>
 
   <div class="profile__card">
-    @if (auth.currentUser()?.role === 'organizer') {
+    @if (auth.currentUser()?.rol === 'ORGANIZADOR') {
       <div class="profile__grid">
         <div class="profile__cell">
           <span class="profile__label">Nombre</span>
         </div>
         <div class="profile__cell">
-          <span class="profile__label">Fecha de nacimiento</span>
+          <span class="profile__label">Apellidos</span>
         </div>
 
         <div class="profile__cell">
-          <span class="profile__value">{{ organizerProfile.name }}</span>
+          <span class="profile__value">{{ auth.currentUser()?.nombre }}</span>
         </div>
         <div class="profile__cell">
-          <span class="profile__value">{{ organizerProfile.birthDate }}</span>
-        </div>
-
-        <div class="profile__cell">
-          <span class="profile__label">NºOrganizadores</span>
-        </div>
-        <div class="profile__cell">
-          <span class="profile__label">NºMiembros</span>
+          <span class="profile__value">{{ auth.currentUser()?.apellidos }}</span>
         </div>
 
         <div class="profile__cell">
-          <span class="profile__value">{{ organizerProfile.organizers }}</span>
+          <span class="profile__label">Usuario</span>
         </div>
         <div class="profile__cell">
-          <span class="profile__value">{{ organizerProfile.members }}</span>
+          <span class="profile__label">Organización</span>
+        </div>
+
+        <div class="profile__cell">
+          <span class="profile__value">{{ auth.currentUser()?.username }}</span>
+        </div>
+        <div class="profile__cell">
+          <span class="profile__value">{{ auth.currentUser()?.organizacionNombre }}</span>
         </div>
       </div>
     } @else {
@@ -40,14 +40,14 @@
           <span class="profile__label">Nombre</span>
         </div>
         <div class="profile__cell">
-          <span class="profile__label">Fecha de nacimiento</span>
+          <span class="profile__label">Apellidos</span>
         </div>
 
         <div class="profile__cell">
-          <span class="profile__value">{{ userProfile.name }}</span>
+          <span class="profile__value">{{ auth.currentUser()?.nombre }}</span>
         </div>
         <div class="profile__cell">
-          <span class="profile__value">{{ userProfile.birthDate }}</span>
+          <span class="profile__value">{{ auth.currentUser()?.apellidos }}</span>
         </div>
 
         <div class="profile__cell">
@@ -58,10 +58,10 @@
         </div>
 
         <div class="profile__cell">
-          <span class="profile__value">{{ userProfile.organization }}</span>
+          <span class="profile__value">{{ auth.currentUser()?.organizacionNombre }}</span>
         </div>
         <div class="profile__cell">
-          <span class="profile__value">{{ userProfile.nick }}</span>
+          <span class="profile__value">{{ auth.currentUser()?.username }}</span>
         </div>
       </div>
     }
