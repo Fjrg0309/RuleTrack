@@ -1,0 +1,156 @@
+<section class="registro">
+  <div class="registro__card">
+    <div class="registro__brand">
+      <img src="logo.png" alt="RuleTrack" class="registro__logo" />
+      <h1 class="registro__brand-name">RuleTrack</h1>
+    </div>
+
+    <p class="registro__tagline">Crea tu cuenta en RuleTrack</p>
+
+    <form class="registro__form" (ngSubmit)="submit()" novalidate>
+
+      <!-- Nombre y Apellidos -->
+      <div class="registro__row">
+        <div class="registro__field">
+          <label class="registro__label" for="reg-nombre">Nombre</label>
+          <input id="reg-nombre"
+                 [class]="'registro__input' + (fieldErrors()['nombre'] ? ' registro__input--error' : '')"
+                 type="text" [(ngModel)]="form.nombre" name="nombre" placeholder="Juan" />
+          @if (fieldErrors()['nombre']) {
+            <span class="registro__field-error">{{ fieldErrors()['nombre'] }}</span>
+          }
+        </div>
+        <div class="registro__field">
+          <label class="registro__label" for="reg-apellidos">Apellidos</label>
+          <input id="reg-apellidos"
+                 [class]="'registro__input' + (fieldErrors()['apellidos'] ? ' registro__input--error' : '')"
+                 type="text" [(ngModel)]="form.apellidos" name="apellidos" placeholder="García López" />
+          @if (fieldErrors()['apellidos']) {
+            <span class="registro__field-error">{{ fieldErrors()['apellidos'] }}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Fecha de nacimiento y DNI -->
+      <div class="registro__row">
+        <div class="registro__field">
+          <label class="registro__label" for="reg-fecha">Fecha de nacimiento</label>
+          <input id="reg-fecha"
+                 [class]="'registro__input' + (fieldErrors()['fechaNacimiento'] ? ' registro__input--error' : '')"
+                 type="date" [(ngModel)]="form.fechaNacimiento" name="fechaNacimiento" />
+          @if (fieldErrors()['fechaNacimiento']) {
+            <span class="registro__field-error">{{ fieldErrors()['fechaNacimiento'] }}</span>
+          }
+        </div>
+        <div class="registro__field">
+          <label class="registro__label" for="reg-dni">DNI</label>
+          <input id="reg-dni"
+                 [class]="'registro__input' + (fieldErrors()['dni'] ? ' registro__input--error' : '')"
+                 type="text" [(ngModel)]="form.dni" name="dni"
+                 placeholder="12345678A" maxlength="9" />
+          @if (fieldErrors()['dni']) {
+            <span class="registro__field-error">{{ fieldErrors()['dni'] }}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Username y Email -->
+      <div class="registro__row">
+        <div class="registro__field">
+          <label class="registro__label" for="reg-user">Nombre de usuario</label>
+          <input id="reg-user"
+                 [class]="'registro__input' + (fieldErrors()['username'] ? ' registro__input--error' : '')"
+                 type="text" [(ngModel)]="form.username" name="username"
+                 autocomplete="username" placeholder="juan_garcia" />
+          @if (fieldErrors()['username']) {
+            <span class="registro__field-error">{{ fieldErrors()['username'] }}</span>
+          }
+        </div>
+        <div class="registro__field">
+          <label class="registro__label" for="reg-email">Correo electrónico</label>
+          <input id="reg-email"
+                 [class]="'registro__input' + (fieldErrors()['email'] ? ' registro__input--error' : '')"
+                 type="email" [(ngModel)]="form.email" name="email"
+                 autocomplete="email" placeholder="juan@ejemplo.com" />
+          @if (fieldErrors()['email']) {
+            <span class="registro__field-error">{{ fieldErrors()['email'] }}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Contraseña -->
+      <div class="registro__field">
+        <label class="registro__label" for="reg-pass">Contraseña</label>
+        <input id="reg-pass"
+               [class]="'registro__input' + (fieldErrors()['password'] ? ' registro__input--error' : '')"
+               type="password" [(ngModel)]="form.password" name="password"
+               autocomplete="new-password" placeholder="Mínimo 8 caracteres, con letras y números" />
+        @if (fieldErrors()['password']) {
+          <span class="registro__field-error">{{ fieldErrors()['password'] }}</span>
+        }
+      </div>
+
+      <!-- Tipo de cuenta -->
+      <div class="registro__field">
+        <label class="registro__label">Tipo de cuenta</label>
+        <div class="registro__radio-group">
+          <label class="registro__radio-label">
+            <input type="radio" name="rol" value="USUARIO" [(ngModel)]="form.rol" />
+            <span>Usuario</span>
+          </label>
+          <label class="registro__radio-label">
+            <input type="radio" name="rol" value="ORGANIZADOR" [(ngModel)]="form.rol" />
+            <span>Organizador</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Organización -->
+      <div class="registro__field">
+        <label class="registro__label" for="reg-org">
+          {{ form.rol === 'ORGANIZADOR' ? 'Nombre de tu organización' : 'Organización a la que perteneces' }}
+        </label>
+        <input id="reg-org"
+               [class]="'registro__input'
+                 + (orgMode() === 'crear' ? ' registro__input--crear' : '')
+                 + (fieldErrors()['organizacionNombre'] ? ' registro__input--error' : '')"
+               type="text" [(ngModel)]="form.organizacionNombre" name="organizacionNombre"
+               placeholder="Federación Deportiva de Cádiz"
+               (blur)="onOrgBlur()" />
+
+        @if (checkingOrg()) {
+          <span class="registro__field-hint">Verificando organización...</span>
+        } @else if (orgExiste() === true && orgMode() === 'unirse') {
+          <span class="registro__field-ok">✓ Organización encontrada</span>
+        } @else if (fieldErrors()['organizacionNombre']) {
+          <span class="registro__field-error">{{ fieldErrors()['organizacionNombre'] }}</span>
+        }
+
+        @if (orgMode() === 'unirse') {
+          <button type="button" class="registro__org-toggle"
+                  (click)="setOrgMode('crear', $event)">
+            ¿Tu organización no está registrada? Créala aquí
+          </button>
+        } @else {
+          <span class="registro__org-crear-badge">Creando organización nueva</span>
+          <button type="button" class="registro__org-toggle registro__org-toggle--back"
+                  (click)="setOrgMode('unirse', $event)">
+            ¿Ya existe tu organización? Únete a ella
+          </button>
+        }
+      </div>
+
+      @if (error()) {
+        <p class="registro__error" role="alert">{{ error() }}</p>
+      }
+
+      <button class="registro__submit" type="submit" [disabled]="loading() || checkingOrg()">
+        {{ loading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+      </button>
+    </form>
+
+    <p class="registro__hint">
+      ¿Ya tienes cuenta? <a class="registro__login-link" routerLink="/login">Inicia sesión</a>
+    </p>
+  </div>
+</section>
