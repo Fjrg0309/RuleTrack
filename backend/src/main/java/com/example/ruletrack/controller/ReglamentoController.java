@@ -18,6 +18,18 @@ public class ReglamentoController {
 
     private final ReglamentoService reglamentoService;
 
+    /** Endpoint público: solo reglamentos PUBLICO */
+    @GetMapping("/publicos")
+    public ResponseEntity<List<ReglamentoResponseDTO>> findPublicos() {
+        return ResponseEntity.ok(reglamentoService.findPublicos());
+    }
+
+    /** Endpoint autenticado: reglamentos visibles según el usuario actual */
+    @GetMapping("/visibles")
+    public ResponseEntity<List<ReglamentoResponseDTO>> findVisibles() {
+        return ResponseEntity.ok(reglamentoService.findVisiblesParaUsuarioActual());
+    }
+
     @GetMapping
     public ResponseEntity<List<ReglamentoResponseDTO>> findAll() {
         return ResponseEntity.ok(reglamentoService.findAll());
@@ -45,3 +57,4 @@ public class ReglamentoController {
         return ResponseEntity.noContent().build();
     }
 }
+
