@@ -1,7 +1,10 @@
 package com.example.ruletrack.exception;
 
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,6 +41,42 @@ public class GlobalExceptionHandler {
                         fe -> fe.getDefaultMessage() != null ? fe.getDefaultMessage() : "Inválido"
                 ));
         return buildResponse(HttpStatus.BAD_REQUEST, "Error de validación", fieldErrors);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseDTO> handleNotReadable(HttpMessageNotReadableException ex) {
+        String msg = "El formato del cuerpo de la petición no es válido";
+        if (ex.getMessage() != null && ex.getMessage().contains("LocalDate")) {
+            msg = "El formato de la fecha no es válido. Usa el formato YYYY-MM-DD";
+        }
+        return buildResponse(HttpStatus.BAD_REQUEST, msg, null);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleDataIntegrity(DataIntegrityViolationException ex) {
+        String msg = "Ya existe un registro con esos datos";
+        String cause = ex.getMostSpecificCause().getMessage();
+        if (cause != null) {
+            String causeLower = cause.toLowerCase();
+            if (causeLower.contains("email")) msg = "El email ya está registrado";
+            else if (causeLower.contains("username")) msg = "El nombre de usuario ya está en uso";
+            else if (causeLower.contains("dni")) msg = "El DNI ya está registrado";
+            else if (causeLower.contains("not-null") || causeLower.contains("not null")) {
+                msg = "Faltan datos obligatorios. Comprueba que todos los campos están completos.";
+            }
+        }
+        return buildResponse(HttpStatus.CONFLICT, msg, null);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleConstraintViolation(ConstraintViolationException ex) {
+        Map<String, String> errors = ex.getConstraintViolations().stream()
+                .collect(java.util.stream.Collectors.toMap(
+                        v -> v.getPropertyPath().toString(),
+                        v -> v.getMessage(),
+                        (a, b) -> a
+                ));
+        return buildResponse(HttpStatus.BAD_REQUEST, "Error de validación", errors);
     }
 
     @ExceptionHandler(Exception.class)
