@@ -14,7 +14,7 @@ export class HeaderComponent {
   private router = inject(Router);
 
   navigateHome(): void {
-    const route = this.auth.currentUser()?.role === 'organizer' ? '/organizer' : '/';
+    const route = this.auth.currentUser()?.rol === 'ORGANIZADOR' ? '/organizer' : '/';
     this.router.navigate([route]);
   }
 

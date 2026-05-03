@@ -10,8 +10,18 @@
   border-radius: var(--border-radius);
   font-size: 0.875rem;
   font-weight: 700;
-  box-shadow: var(--shadow-sm);
-  transition: background-color 0.2s;
+  box-shadow: var(--shadow-btn);
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.1s;
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--shadow-sm);
+  }
 
   &--primary {
     background-color: var(--button-color);
