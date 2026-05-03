@@ -13,6 +13,7 @@ import { AjustesComponent } from './pages/ajustes/ajustes.component';
 import { OrganizacionComponent } from './pages/organizacion/organizacion.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { AjustesPublicacionComponent } from './pages/ajustes-publicacion/ajustes-publicacion.component';
+import { RegistroComponent } from './pages/registro/registro.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'corrected', component: CorrectedComponent },
   { path: 'link-created', component: LinkCreatedComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistroComponent },
   { path: 'publicaciones', component: PublicacionesComponent },
   { path: 'ajustes', component: AjustesComponent },
   { path: 'organizacion', component: OrganizacionComponent },
