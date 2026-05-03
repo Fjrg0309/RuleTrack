@@ -19,7 +19,7 @@
     <section class="home__options" aria-labelledby="options-title">
       <h2 id="options-title" class="home__options-title">Opciones</h2>
       <nav class="home__options-nav">
-        @if (auth.currentUser()?.role === 'organizer') {
+        @if (auth.currentUser()?.rol === 'ORGANIZADOR') {
           <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mi organización</a>
           <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mis publicaciones</a>
         } @else if (auth.currentUser()) {
@@ -37,10 +37,11 @@
     <section class="home__recent" aria-labelledby="recent-title">
       <h2 id="recent-title" class="home__recent-title">Subidas recientes</h2>
       <div class="home__cards-list" role="list">
-        <app-card />
-        <app-card />
-        <app-card />
-        <app-card />
+        @for (pub of publicaciones(); track pub.id) {
+          <app-card [pub]="pub" />
+        } @empty {
+          <p class="home__empty">No hay publicaciones disponibles.</p>
+        }
       </div>
     </section>
   </div>

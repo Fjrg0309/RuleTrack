@@ -1,4 +1,17 @@
 <div class="card__row">
-  <h3 class="card__name">Campeonato de verano 2026</h3>
-  <button class="btn btn--primary">Descargar</button>
+  <div class="card__info">
+    <h3 class="card__name">{{ titulo }}</h3>
+    @if (organizacion) {
+      <span class="card__org">{{ organizacion }}</span>
+    }
+    @if (version) {
+      <span class="card__version">v{{ version }}</span>
+    }
+  </div>
+  <div class="card__actions">
+    @if (visibilidad) {
+      <span class="card__badge">{{ visibilidad }}</span>
+    }
+    <button class="btn btn--primary">Descargar</button>
+  </div>
 </div>
