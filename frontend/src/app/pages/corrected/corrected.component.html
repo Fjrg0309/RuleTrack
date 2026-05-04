@@ -8,9 +8,29 @@
       <label class="corrected__label" for="docName">Nombre:</label>
       <input id="docName" class="corrected__input" type="text" [(ngModel)]="documentName" />
     </div>
+
+    @if (!isUpdateMode) {
+      <div class="corrected__field">
+        <label class="corrected__label" for="docDesc">Descripción:</label>
+        <input id="docDesc" class="corrected__input" type="text" [(ngModel)]="documentDescripcion" />
+      </div>
+
+      <div class="corrected__field">
+        <label class="corrected__label" for="docVis">Visibilidad:</label>
+        <select id="docVis" class="corrected__input" [(ngModel)]="documentVisibilidad">
+          <option value="PUBLICO">Público</option>
+          <option value="SOLO_MIEMBROS">Solo miembros</option>
+          <option value="PRIVADO">Privado</option>
+        </select>
+      </div>
+    }
+
     <div class="corrected__field">
       <label class="corrected__label" for="docVersion">Versión:</label>
       <input id="docVersion" class="corrected__input corrected__input--short" type="text" [(ngModel)]="documentVersion" />
+      @if (versionError()) {
+        <span class="corrected__error">{{ versionError() }}</span>
+      }
     </div>
   </div>
 
@@ -18,8 +38,8 @@
     <button class="btn btn--primary corrected__btn" (click)="consultarDocumento()">
       Consultar documento corregido
     </button>
-    <button class="btn btn--primary corrected__btn" (click)="crearEnlace()">
-      Crear enlace
+    <button class="btn btn--primary corrected__btn" (click)="crearEnlace()" [disabled]="isSubmitting()">
+      {{ isSubmitting() ? 'Guardando...' : 'Crear enlace' }}
     </button>
   </div>
 </section>
