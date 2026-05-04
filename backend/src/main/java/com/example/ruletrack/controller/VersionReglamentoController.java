@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -22,6 +23,12 @@ public class VersionReglamentoController {
     @GetMapping("/reglamentos/{reglamentoId}/versiones")
     public ResponseEntity<List<VersionReglamentoResponseDTO>> findByReglamento(@PathVariable Long reglamentoId) {
         return ResponseEntity.ok(versionService.findByReglamento(reglamentoId));
+    }
+
+    @GetMapping("/reglamentos/{reglamentoId}/versiones/siguiente-etiqueta")
+    public ResponseEntity<Map<String, String>> getSiguienteEtiqueta(@PathVariable Long reglamentoId) {
+        String siguiente = versionService.getSiguienteVersionPorDefecto(reglamentoId);
+        return ResponseEntity.ok(Map.of("versionEtiqueta", siguiente));
     }
 
     @GetMapping("/versiones/{id}")
@@ -39,5 +46,11 @@ public class VersionReglamentoController {
     public ResponseEntity<VersionReglamentoResponseDTO> cambiarEstado(@PathVariable Long id,
                                                                        @RequestParam EstadoVersion estado) {
         return ResponseEntity.ok(versionService.cambiarEstado(id, estado));
+    }
+
+    /** Activa una versión (la pone como PUBLICADO y archiva el resto). */
+    @PatchMapping("/versiones/{id}/activar")
+    public ResponseEntity<VersionReglamentoResponseDTO> activar(@PathVariable Long id) {
+        return ResponseEntity.ok(versionService.activar(id));
     }
 }
