@@ -1,26 +1,108 @@
-import { Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, signal, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { PublicacionesService, VersionDTO } from '../../services/publicaciones.service';
+import { FileUploadService } from '../../services/file-upload.service';
 
 @Component({
   selector: 'app-ajustes-publicacion',
+  imports: [FormsModule],
   templateUrl: './ajustes-publicacion.component.html',
   styleUrl: './ajustes-publicacion.component.scss',
 })
-export class AjustesPublicacionComponent {
+export class AjustesPublicacionComponent implements OnInit {
   protected auth = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private pubService = inject(PublicacionesService);
+  private fileUploadService = inject(FileUploadService);
 
-  protected url = signal('https://FederacionDeCadiz/reglamento.md');
-  protected estado = signal('Público');
-  protected fecha = signal('22/03/2026');
-  protected version = signal('2.1');
-  protected descripcion = signal('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum varius vehicula. Aenean dapibus, orci et convallis rhoncus, risus eros varius eros, non pharetra metus augue eu dolor. Aliquam ut lobortis metus. Morbi pellentesque accumsan mi sed tempus. Integer imperdiet condimentum arcu, vitae malesuada elit lacinia vel. Sed lobortis vel sapien laoreet imperdiet.');
+  protected reglamentoId: number | null = null;
+
+  protected titulo = signal('');
+  protected descripcion = signal('');
+  protected visibilidad = signal<'PUBLICO' | 'SOLO_MIEMBROS' | 'PRIVADO'>('PUBLICO');
+  protected url = signal('');
+  protected versiones = signal<VersionDTO[]>([]);
+  protected selectedVersionId = signal<number | null>(null);
 
   protected showDeleteConfirm = signal(false);
+  protected errorMsg = signal('');
+  protected successMsg = signal('');
+
+  /** La versión actualmente seleccionada en el dropdown */
+  protected get selectedVersion(): VersionDTO | undefined {
+    return this.versiones().find(v => v.id === this.selectedVersionId());
+  }
+
+  /** Solo se puede actualizar si la versión seleccionada es PUBLICADO */
+  protected get canUpdate(): boolean {
+    return this.selectedVersion?.estado === 'PUBLICADO';
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const id = params['id'] ? Number(params['id']) : null;
+      this.reglamentoId = id;
+      if (id) {
+        this.url.set(`${window.location.origin}/publicaciones`);
+        this.loadData(id);
+      }
+    });
+  }
+
+  private loadData(id: number): void {
+    this.pubService.getById(id).subscribe(pub => {
+      this.titulo.set(pub.titulo);
+      this.descripcion.set(pub.descripcion ?? '');
+      this.visibilidad.set(pub.visibilidad);
+    });
+
+    this.pubService.getVersiones(id).subscribe(versions => {
+      this.versiones.set(versions);
+      const active = versions.find(v => v.estado === 'PUBLICADO');
+      if (active) this.selectedVersionId.set(active.id);
+      else if (versions.length > 0) this.selectedVersionId.set(versions[versions.length - 1].id);
+    });
+  }
+
+  protected onVersionChange(versionId: number): void {
+    this.selectedVersionId.set(versionId);
+    // Activar si no es PUBLICADO
+    const v = this.versiones().find(ver => ver.id === versionId);
+    if (v && v.estado !== 'PUBLICADO' && this.reglamentoId) {
+      this.pubService.activarVersion(versionId).subscribe({
+        next: () => {
+          // Recargar versiones
+          this.pubService.getVersiones(this.reglamentoId!).subscribe(versions => {
+            this.versiones.set(versions);
+          });
+        },
+        error: (err) => this.errorMsg.set(err?.error?.message ?? 'Error al activar versión.')
+      });
+    }
+  }
 
   protected saveChanges(): void {
-    // TODO: call backend
+    if (!this.reglamentoId) return;
+    this.pubService.update(this.reglamentoId, {
+      titulo: this.titulo(),
+      descripcion: this.descripcion(),
+      visibilidad: this.visibilidad()
+    }).subscribe({
+      next: () => this.successMsg.set('Cambios guardados.'),
+      error: (err) => this.errorMsg.set(err?.error?.message ?? 'Error al guardar cambios.')
+    });
+  }
+
+  protected actualizarVersion(): void {
+    if (!this.canUpdate || !this.reglamentoId) return;
+    const version = this.selectedVersion;
+    if (!version?.contenido) return;
+    this.fileUploadService.setPublicacionId(this.reglamentoId);
+    this.fileUploadService.setFile(this.titulo(), version.contenido);
+    this.router.navigate(['/preview']);
   }
 
   protected confirmDelete(): void {
@@ -32,7 +114,21 @@ export class AjustesPublicacionComponent {
   }
 
   protected deletePublication(): void {
-    this.showDeleteConfirm.set(false);
-    this.router.navigate(['/publicaciones']);
+    if (!this.reglamentoId) {
+      this.router.navigate(['/publicaciones']);
+      return;
+    }
+    this.pubService.delete(this.reglamentoId).subscribe({
+      next: () => {
+        this.fileUploadService.setPublicacionId(null);
+        this.showDeleteConfirm.set(false);
+        this.router.navigate(['/publicaciones']);
+      },
+      error: (err) => {
+        this.showDeleteConfirm.set(false);
+        this.errorMsg.set(err?.error?.message ?? 'Error al borrar la publicación.');
+      }
+    });
   }
 }
+
