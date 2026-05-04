@@ -23,16 +23,19 @@ public class VersionReglamentoService {
     private final UsuarioRepository usuarioRepository;
     private final HistorialCambiosService historialService;
 
+    @Transactional(readOnly = true)
     public List<VersionReglamentoResponseDTO> findByReglamento(Long reglamentoId) {
         return versionRepository.findByReglamentoIdOrderByNumeroVersionDesc(reglamentoId)
                 .stream().map(this::toDTO).toList();
     }
 
+    @Transactional(readOnly = true)
     public VersionReglamentoResponseDTO findById(Long id) {
         return toDTO(getVersionOrThrow(id));
     }
 
     /** Calcula la siguiente etiqueta de versión por defecto (+0.1 sobre la mayor existente). */
+    @Transactional(readOnly = true)
     public String getSiguienteVersionPorDefecto(Long reglamentoId) {
         return versionRepository.findByReglamentoIdOrderByNumeroVersionDesc(reglamentoId)
                 .stream()

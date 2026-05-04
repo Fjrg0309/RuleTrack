@@ -46,7 +46,7 @@ export class AjustesPublicacionComponent implements OnInit {
       const id = params['id'] ? Number(params['id']) : null;
       this.reglamentoId = id;
       if (id) {
-        this.url.set(`${window.location.origin}/publicaciones`);
+        this.url.set(`${window.location.origin}/view/${id}`);
         this.loadData(id);
       }
     });

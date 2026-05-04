@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/corrections/**").permitAll()
                 .requestMatchers("/api/documents/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/reglamentos/publicos").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/reglamentos/publico/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/reglamentos/**").authenticated()
                 .requestMatchers("/api/reglamentos/**").hasRole("ORGANIZADOR")
                 .requestMatchers("/api/versiones/**").hasRole("ORGANIZADOR")

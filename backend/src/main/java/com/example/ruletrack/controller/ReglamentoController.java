@@ -1,5 +1,6 @@
 package com.example.ruletrack.controller;
 
+import com.example.ruletrack.dto.PublicoViewDTO;
 import com.example.ruletrack.dto.ReglamentoRequestDTO;
 import com.example.ruletrack.dto.ReglamentoResponseDTO;
 import com.example.ruletrack.service.ReglamentoService;
@@ -22,6 +23,12 @@ public class ReglamentoController {
     @GetMapping("/publicos")
     public ResponseEntity<List<ReglamentoResponseDTO>> findPublicos() {
         return ResponseEntity.ok(reglamentoService.findPublicos());
+    }
+
+    /** Endpoint público: vista de un reglamento PUBLICO (sin autenticación) */
+    @GetMapping("/publico/{id}")
+    public ResponseEntity<PublicoViewDTO> getPublicoView(@PathVariable Long id) {
+        return ResponseEntity.ok(reglamentoService.getPublicoView(id));
     }
 
     /** Endpoint autenticado: reglamentos visibles según el usuario actual */

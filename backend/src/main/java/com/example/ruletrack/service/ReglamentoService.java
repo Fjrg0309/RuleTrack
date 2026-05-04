@@ -1,5 +1,6 @@
 package com.example.ruletrack.service;
 
+import com.example.ruletrack.dto.PublicoViewDTO;
 import com.example.ruletrack.dto.ReglamentoRequestDTO;
 import com.example.ruletrack.dto.ReglamentoResponseDTO;
 import com.example.ruletrack.entity.*;
@@ -25,6 +26,7 @@ public class ReglamentoService {
     private final HistorialCambiosService historialService;
 
     /** Todos los reglamentos (uso interno / admin) */
+    @Transactional(readOnly = true)
     public List<ReglamentoResponseDTO> findAll() {
         return reglamentoRepository.findAll().stream()
                 .map(this::toDTO)
@@ -32,12 +34,14 @@ public class ReglamentoService {
     }
 
     /** Reglamentos públicos (sin autenticación) */
+    @Transactional(readOnly = true)
     public List<ReglamentoResponseDTO> findPublicos() {
         return reglamentoRepository.findByVisibilidad(VisibilidadReglamento.PUBLICO)
                 .stream().map(this::toDTO).toList();
     }
 
     /** Reglamentos visibles para el usuario autenticado */
+    @Transactional(readOnly = true)
     public List<ReglamentoResponseDTO> findVisiblesParaUsuarioActual() {
         Usuario usuario = getCurrentUser();
         return reglamentoRepository.findVisiblesParaUsuario(
@@ -46,8 +50,23 @@ public class ReglamentoService {
         ).stream().map(this::toDTO).toList();
     }
 
+    @Transactional(readOnly = true)
     public ReglamentoResponseDTO findById(Long id) {
         return toDTO(getReglamentoOrThrow(id));
+    }
+
+    @Transactional(readOnly = true)
+    public PublicoViewDTO getPublicoView(Long id) {
+        Reglamento r = getReglamentoOrThrow(id);
+        if (r.getVisibilidad() != VisibilidadReglamento.PUBLICO) {
+            throw new ResourceNotFoundException("Reglamento", id);
+        }
+        String contenido = r.getVersiones().stream()
+                .filter(v -> v.getEstado() == EstadoVersion.PUBLICADO)
+                .findFirst()
+                .map(VersionReglamento::getContenido)
+                .orElse("");
+        return new PublicoViewDTO(r.getTitulo(), contenido);
     }
 
     @Transactional

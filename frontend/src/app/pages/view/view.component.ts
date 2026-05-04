@@ -25,23 +25,14 @@ export class ViewComponent implements OnInit {
       return;
     }
 
-    this.pubService.getById(id).subscribe({
-      next: (pub) => {
-        this.titulo = pub.titulo;
-        this.pubService.getVersiones(id).subscribe({
-          next: (versions) => {
-            const v = versions.find(ver => ver.estado === 'PUBLICADO') ?? versions[versions.length - 1];
-            this.contenido = v?.contenido ?? '';
-            this.isLoading = false;
-          },
-          error: () => {
-            this.errorMsg = 'No se pudo cargar el contenido del documento.';
-            this.isLoading = false;
-          }
-        });
+    this.pubService.getPublicoView(id).subscribe({
+      next: (data) => {
+        this.titulo = data.titulo;
+        this.contenido = data.contenido;
+        this.isLoading = false;
       },
       error: () => {
-        this.errorMsg = 'Documento no encontrado.';
+        this.errorMsg = 'Documento no encontrado o no disponible públicamente.';
         this.isLoading = false;
       }
     });

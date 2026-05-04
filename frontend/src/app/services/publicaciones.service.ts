@@ -38,6 +38,11 @@ export interface VersionCreateDTO {
   versionEtiqueta?: string;
 }
 
+export interface PublicoViewDTO {
+  titulo: string;
+  contenido: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class PublicacionesService {
   private http = inject(HttpClient);
@@ -56,6 +61,10 @@ export class PublicacionesService {
 
   getById(id: number): Observable<ReglamentoDTO> {
     return this.http.get<ReglamentoDTO>(`/api/reglamentos/${id}`);
+  }
+
+  getPublicoView(id: number): Observable<PublicoViewDTO> {
+    return this.http.get<PublicoViewDTO>(`/api/reglamentos/publico/${id}`);
   }
 
   create(data: ReglamentoCreateDTO): Observable<ReglamentoDTO> {
