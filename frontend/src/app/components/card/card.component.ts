@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ReglamentoDTO } from '../../services/publicaciones.service';
 
 @Component({
@@ -8,6 +8,7 @@ import { ReglamentoDTO } from '../../services/publicaciones.service';
 })
 export class CardComponent {
   @Input() pub?: ReglamentoDTO;
+  @Output() downloadClicked = new EventEmitter<ReglamentoDTO>();
 
   get titulo(): string { return this.pub?.titulo ?? 'Sin título'; }
   get version(): string { return this.pub?.ultimaVersion ?? '—'; }
@@ -19,5 +20,9 @@ export class CardComponent {
       case 'PRIVADO': return 'Privado';
       default: return '';
     }
+  }
+
+  onDownload(): void {
+    if (this.pub) this.downloadClicked.emit(this.pub);
   }
 }

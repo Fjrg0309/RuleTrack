@@ -1,17 +1,11 @@
 <div class="card__row">
   <div class="card__info">
     <h3 class="card__name">{{ titulo }}</h3>
-    @if (organizacion) {
-      <span class="card__org">{{ organizacion }}</span>
-    }
-    @if (version) {
-      <span class="card__version">v{{ version }}</span>
-    }
   </div>
   <div class="card__actions">
     @if (visibilidad) {
       <span class="card__badge">{{ visibilidad }}</span>
     }
-    <button class="btn btn--primary">Descargar</button>
+    <button class="btn btn--primary" (click)="onDownload()">Descargar</button>
   </div>
 </div>
