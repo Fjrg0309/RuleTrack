@@ -155,26 +155,60 @@ export class CorrectingComponent implements OnInit {
     this.closeModal();
   }
 
-  applyAllCorrections(): void {
-    let correctedText = this.fileContent;
-    const toApply = this.corrections().filter(s => s.status === 'pending' || s.status === 'applied');
+  /**
+   * Construye el texto resultado aplicando solo las correcciones con los estados indicados.
+   * Usa reemplazos basados en posición (no en `.replace()` de JS) para manejar correctamente
+   * palabras repetidas y solapamientos.
+   */
+  private buildReplacedText(statusesToApply: Array<'pending' | 'applied'>): string {
+    const text = this.fileContent;
+    const toApply = this.corrections()
+      .filter(s => statusesToApply.includes(s.status as 'pending' | 'applied'));
 
-    // Apply in reverse order by position to preserve indices
-    const sorted = [...toApply].sort((a, b) => {
-      const posA = correctedText.lastIndexOf(a.item.original);
-      const posB = correctedText.lastIndexOf(b.item.original);
-      return posB - posA;
-    });
+    const replacements: Array<{ start: number; end: number; replacement: string }> = [];
 
-    for (const state of sorted) {
-      correctedText = correctedText.replace(state.item.original, state.item.suggestion);
+    for (const state of toApply) {
+      let searchFrom = 0;
+      let idx: number;
+      while ((idx = text.indexOf(state.item.original, searchFrom)) !== -1) {
+        const end = idx + state.item.original.length;
+        const hasOverlap = replacements.some(r => r.start < end && r.end > idx);
+        if (!hasOverlap) {
+          replacements.push({ start: idx, end, replacement: state.item.suggestion });
+        }
+        searchFrom = idx + 1;
+      }
     }
 
-    this.fileUploadService.setCorrectedContent(correctedText);
+    replacements.sort((a, b) => a.start - b.start);
+
+    let result = '';
+    let cursor = 0;
+    for (const r of replacements) {
+      if (r.start >= cursor) {
+        result += text.substring(cursor, r.start) + r.replacement;
+        cursor = r.end;
+      }
+    }
+    result += text.substring(cursor);
+    return result;
+  }
+
+  /** Aplica TODAS las correcciones (rojas + verdes) y navega a /corrected. */
+  acceptAllCorrections(): void {
+    const correctedText = this.buildReplacedText(['pending', 'applied']);
+    this.fileUploadService.setCorrectedContent(correctedText || this.fileContent);
     this.router.navigate(['/corrected']);
   }
 
+  /**
+   * Ignora las correcciones ROJAS (pending), pero mantiene las VERDES (applied).
+   * El texto resultante se guarda y se navega a /corrected para publicar.
+   */
   ignoreCorrections(): void {
-    this.router.navigate(['/preview']);
+    const correctedText = this.buildReplacedText(['applied']);
+    // Si no hay correcciones verdes, correctedText == fileContent (sin cambios)
+    this.fileUploadService.setCorrectedContent(correctedText || this.fileContent);
+    this.router.navigate(['/corrected']);
   }
 }
