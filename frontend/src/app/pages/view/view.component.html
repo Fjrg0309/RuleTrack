@@ -1,0 +1,26 @@
+<section class="view">
+  @if (isLoading) {
+    <div class="view__loading">
+      <div class="view__spinner"></div>
+      <p>Cargando documento...</p>
+    </div>
+  } @else if (errorMsg) {
+    <div class="view__error">
+      <p>{{ errorMsg }}</p>
+      <button class="btn btn--primary" (click)="goBack()">Volver al inicio</button>
+    </div>
+  } @else {
+    <div class="view__banner">
+      <h1 class="view__title">{{ titulo }}</h1>
+    </div>
+
+    <div class="view__content">
+      <pre class="view__text">{{ contenido }}</pre>
+    </div>
+
+    <div class="view__actions">
+      <button class="btn btn--cancel" (click)="goBack()">Volver</button>
+      <button class="btn btn--primary" (click)="download()">Descargar</button>
+    </div>
+  }
+</section>
