@@ -16,21 +16,33 @@ export class LinkCreatedComponent implements OnInit {
   documentUrl = signal('');
 
   ngOnInit(): void {
-    const name = this.fileUploadService.documentName() || this.fileUploadService.fileName();
-    const slug = name
-      .replace(/\.[^.]+$/, '')
-      .replace(/\s+/g, '-')
-      .toLowerCase();
-    this.documentUrl.set(`https://ruletrack.app/docs/${slug}`);
+    const id = this.fileUploadService.publicacionId();
+    if (id) {
+      this.documentUrl.set(`${window.location.origin}/view/${id}`);
+    } else {
+      this.documentUrl.set(`${window.location.origin}/publicaciones`);
+    }
+  }
+
+  verDocumento(): void {
+    const id = this.fileUploadService.publicacionId();
+    if (id) {
+      this.router.navigate(['/view', id]);
+    }
   }
 
   ajustarAcceso(): void {
-    this.router.navigate(['/ajustes-publicacion']);
+    const id = this.fileUploadService.publicacionId();
+    if (id) {
+      this.router.navigate(['/ajustes-publicacion'], { queryParams: { id } });
+    } else {
+      this.router.navigate(['/ajustes-publicacion']);
+    }
   }
 
   volverInicio(): void {
     this.fileUploadService.clear();
-    const home = this.auth.currentUser()?.role === 'organizer' ? '/organizer' : '/';
+    const home = this.auth.currentUser()?.rol === 'ORGANIZADOR' ? '/organizer' : '/';
     this.router.navigate([home]);
   }
 }
