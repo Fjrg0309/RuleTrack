@@ -86,3 +86,10 @@
   color: var(--text-color);
   text-align: center;
 }
+
+.converting__error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}

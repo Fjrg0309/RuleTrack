@@ -41,7 +41,10 @@
   } @else {
     <div class="converting__error">
       <p>{{ conversionError() }}</p>
-      <a class="btn btn--primary" routerLink="/upload">Volver</a>
+      <div class="converting__error-actions">
+        <button class="btn btn--primary" (click)="retry()">Reintentar</button>
+        <a class="btn btn--secondary" routerLink="/upload">Volver</a>
+      </div>
     </div>
   }
 </section>

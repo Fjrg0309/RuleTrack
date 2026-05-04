@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 import { FileUploadService } from '../../services/file-upload.service';
 
 @Component({
@@ -64,18 +64,45 @@ export class ConvertingComponent implements OnInit, OnDestroy {
       await minDelay;
       this.fileUploadService.setFile(mdName, mdContent);
       this.router.navigate(['/preview']);
-    } catch (err) {
+    } catch (err: unknown) {
       await minDelay;
-      const msg = err instanceof Error ? err.message : String(err);
+      let msg = 'Error desconocido al convertir el archivo.';
+      if (err instanceof Error) {
+        msg = err.message;
+      } else if (typeof err === 'object' && err !== null) {
+        const httpErr = err as { error?: unknown; status?: number; message?: string };
+        if (httpErr.status === 413) {
+          msg = 'El archivo es demasiado grande para el servidor.';
+        } else if (httpErr.status === 502 || httpErr.status === 503 || httpErr.status === 504) {
+          msg = 'El servidor no está disponible en este momento. Por favor, inténtalo de nuevo en unos segundos.';
+        } else if (httpErr.status === 401 || httpErr.status === 403) {
+          msg = 'No tienes permiso para realizar esta acción. Inicia sesión e inténtalo de nuevo.';
+        } else if (httpErr.status === 500) {
+          msg = 'Error interno del servidor al procesar el archivo. Asegúrate de que el archivo no está dañado.';
+        } else if (typeof httpErr.error === 'string' && !httpErr.error.trim().startsWith('<')) {
+          msg = httpErr.error;
+        } else if (httpErr.message) {
+          msg = httpErr.message;
+        } else {
+          msg = `Error del servidor (código ${httpErr.status ?? 'desconocido'})`;
+        }
+      }
       this.conversionError.set(`No se pudo convertir el archivo: ${msg}`);
     }
+  }
+
+  retry(): void {
+    this.conversionError.set('');
+    this.convert();
   }
 
   private convertViaBackend(file: File): Promise<string> {
     const formData = new FormData();
     formData.append('file', file);
     return firstValueFrom(
-      this.http.post('/api/documents/convert', formData, { responseType: 'text' })
+      this.http.post('/api/documents/convert', formData, { responseType: 'text' }).pipe(
+        timeout(300_000) // 5 minutos máximo
+      )
     );
   }
 
