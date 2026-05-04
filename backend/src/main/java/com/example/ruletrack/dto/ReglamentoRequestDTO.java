@@ -20,5 +20,11 @@ public class ReglamentoRequestDTO {
 
     // IDs de usuarios permitidos, solo relevante si visibilidad == PRIVADO
     private List<Long> usuariosPermitidosIds;
+
+    /** Contenido markdown de la primera/nueva versión. */
+    private String contenido;
+
+    /** Etiqueta de versión (ej. "1.0"). Si no se envía, el servicio calcula la siguiente. */
+    private String versionEtiqueta;
 }
 

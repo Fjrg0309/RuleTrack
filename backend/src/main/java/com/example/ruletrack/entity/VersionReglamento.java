@@ -30,6 +30,10 @@ public class VersionReglamento {
     @Column(name = "numero_version", nullable = false)
     private Integer numeroVersion;
 
+    /** Etiqueta semántica de versión: "1.0", "1.1", "2.0"… */
+    @Column(name = "version_etiqueta", length = 20)
+    private String versionEtiqueta;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String contenido;
 

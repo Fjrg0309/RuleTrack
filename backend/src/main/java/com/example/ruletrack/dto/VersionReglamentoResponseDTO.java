@@ -14,6 +14,7 @@ public class VersionReglamentoResponseDTO {
     private Long reglamentoId;
     private String reglamentoTitulo;
     private Integer numeroVersion;
+    private String versionEtiqueta;
     private String contenido;
     private EstadoVersion estado;
     private LocalDateTime fechaCreacion;
