@@ -15,6 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -32,23 +34,46 @@ public class AuthService {
         if (usuarioRepository.existsByEmail(request.getEmail())) {
             throw new IllegalArgumentException("El email ya está registrado");
         }
+        if (usuarioRepository.existsByDni(request.getDni())) {
+            throw new IllegalArgumentException("El DNI ya está registrado");
+        }
+
+        if (request.getRol() == Rol.ORGANIZADOR) {
+            LocalDate hace18 = LocalDate.now().minusYears(18);
+            if (request.getFechaNacimiento().isAfter(hace18)) {
+                throw new IllegalArgumentException("Los organizadores deben ser mayores de 18 años");
+            }
+        }
+
+        String orgNombre = request.getOrganizacionNombre().trim();
+        if (request.isCrearOrganizacion()) {
+            // Modo CREAR: la organización NO debe existir ya
+            if (usuarioRepository.existsByOrganizacionNombre(orgNombre)) {
+                throw new IllegalArgumentException("Ya existe una organización con ese nombre. Únete a ella en lugar de crearla.");
+            }
+        } else {
+            // Modo UNIRSE: la organización DEBE existir
+            if (!usuarioRepository.existsByOrganizacionNombre(orgNombre)) {
+                throw new IllegalArgumentException("No existe ninguna organización con ese nombre.");
+            }
+        }
 
         Usuario usuario = Usuario.builder()
                 .username(request.getUsername())
+                .nombre(request.getNombre())
+                .apellidos(request.getApellidos())
+                .fechaNacimiento(request.getFechaNacimiento())
                 .email(request.getEmail())
+                .dni(request.getDni().toUpperCase())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .rol(Rol.VIEWER)
+                .rol(request.getRol())
+                .organizacionNombre(request.getOrganizacionNombre())
                 .build();
 
         usuarioRepository.save(usuario);
 
         String token = tokenProvider.generateToken(usuario.getUsername());
-        return AuthResponseDTO.builder()
-                .token(token)
-                .username(usuario.getUsername())
-                .email(usuario.getEmail())
-                .rol(usuario.getRol().name())
-                .build();
+        return toResponse(token, usuario);
     }
 
     public AuthResponseDTO login(LoginRequestDTO request) {
@@ -59,11 +84,23 @@ public class AuthService {
         String token = tokenProvider.generateToken(auth);
         Usuario usuario = usuarioRepository.findByUsername(request.getUsername()).orElseThrow();
 
+        return toResponse(token, usuario);
+    }
+
+    public boolean existeOrganizacion(String nombre) {
+        return usuarioRepository.existsByOrganizacionNombre(nombre.trim());
+    }
+
+    private AuthResponseDTO toResponse(String token, Usuario usuario) {
         return AuthResponseDTO.builder()
                 .token(token)
                 .username(usuario.getUsername())
+                .nombre(usuario.getNombre())
+                .apellidos(usuario.getApellidos())
                 .email(usuario.getEmail())
                 .rol(usuario.getRol().name())
+                .organizacionNombre(usuario.getOrganizacionNombre())
                 .build();
     }
 }
+
