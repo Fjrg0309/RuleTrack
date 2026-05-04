@@ -24,4 +24,4 @@ COPY --from=builder /app/target/*.jar app.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-XX:TieredStopAtLevel=1", "-Xms256m", "-Xmx512m", "-XX:+UseSerialGC", "-Dspring.jpa.open-in-view=false", "-jar", "app.jar"]
