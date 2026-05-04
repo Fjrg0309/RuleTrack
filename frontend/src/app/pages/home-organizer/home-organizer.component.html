@@ -17,7 +17,7 @@
       <h2 id="recent-org-title" class="home-org__recent-title">Subidas recientes</h2>
       <div class="home-org__cards-list" role="list">
         @for (pub of publicaciones(); track pub.id) {
-          <app-card [pub]="pub" />
+          <app-card [pub]="pub" (downloadClicked)="downloadDoc($event)" />
         } @empty {
           <p class="home-org__empty">No hay publicaciones disponibles.</p>
         }

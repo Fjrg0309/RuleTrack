@@ -22,4 +22,8 @@ export class HomeOrganizerComponent implements OnInit {
       error: () => {}
     });
   }
+
+  protected downloadDoc(pub: ReglamentoDTO): void {
+    this.pubService.downloadAsMarkdown(pub);
+  }
 }

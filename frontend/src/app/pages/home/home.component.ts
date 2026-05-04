@@ -34,4 +34,8 @@ export class HomeComponent implements OnInit {
     this.toastMessage.set(message);
     this.toastTimer = setTimeout(() => this.toastMessage.set(''), 3000);
   }
+
+  protected downloadDoc(pub: ReglamentoDTO): void {
+    this.pubService.downloadAsMarkdown(pub);
+  }
 }
