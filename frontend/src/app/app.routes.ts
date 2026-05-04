@@ -14,6 +14,7 @@ import { OrganizacionComponent } from './pages/organizacion/organizacion.compone
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { AjustesPublicacionComponent } from './pages/ajustes-publicacion/ajustes-publicacion.component';
 import { RegistroComponent } from './pages/registro/registro.component';
+import { ViewComponent } from './pages/view/view.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -31,5 +32,6 @@ export const routes: Routes = [
   { path: 'organizacion', component: OrganizacionComponent },
   { path: 'perfil', component: PerfilComponent },
   { path: 'ajustes-publicacion', component: AjustesPublicacionComponent },
+  { path: 'view/:id', component: ViewComponent },
 ];
 
