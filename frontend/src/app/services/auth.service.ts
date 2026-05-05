@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-
 export interface User {
   username: string;
   nombre: string;
@@ -9,6 +8,7 @@ export interface User {
   email: string;
   rol: 'ORGANIZADOR' | 'USUARIO';
   organizacionNombre: string;
+  fechaNacimiento?: string;
   /** @deprecated use rol */
   role: 'organizer' | 'user';
   displayName: string;
@@ -22,6 +22,7 @@ interface AuthResponse {
   email: string;
   rol: string;
   organizacionNombre: string;
+  fechaNacimiento?: string;
 }
 
 export interface RegisterRequest {
@@ -35,6 +36,13 @@ export interface RegisterRequest {
   rol: 'ORGANIZADOR' | 'USUARIO';
   organizacionNombre: string;
   crearOrganizacion: boolean;
+}
+
+export interface OrganizacionInfo {
+  nombre: string;
+  anioFundacion: number;
+  numOrganizadores: number;
+  numMiembros: number;
 }
 
 const TOKEN_KEY = 'rt_token';
@@ -78,6 +86,22 @@ export class AuthService {
     this.currentUser.set(null);
   }
 
+  getOrganizacionInfo(nombre: string): Observable<OrganizacionInfo> {
+    return this.http.get<OrganizacionInfo>(`${this.apiBase}/organizacion/info`, { params: { nombre } });
+  }
+
+  updateProfile(nombre: string, email: string): Observable<AuthResponse> {
+    return this.http.put<AuthResponse>(`${this.apiBase}/me`, { nombre, email }).pipe(
+      tap(res => this.persistSession(res))
+    );
+  }
+
+  refreshMe(): Observable<AuthResponse> {
+    return this.http.get<AuthResponse>(`${this.apiBase}/me`).pipe(
+      tap(res => this.persistSession(res))
+    );
+  }
+
   private persistSession(res: AuthResponse): void {
     localStorage.setItem(TOKEN_KEY, res.token);
     const rol = res.rol as 'ORGANIZADOR' | 'USUARIO';
@@ -88,6 +112,7 @@ export class AuthService {
       email: res.email,
       rol,
       organizacionNombre: res.organizacionNombre,
+      fechaNacimiento: res.fechaNacimiento,
       role: rol === 'ORGANIZADOR' ? 'organizer' : 'user',
       displayName: res.nombre,
     };
