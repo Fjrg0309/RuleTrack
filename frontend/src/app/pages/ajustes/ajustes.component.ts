@@ -17,6 +17,11 @@ export class AjustesComponent {
   protected notifEmails = signal(true);
   protected showDeleteConfirm = signal(false);
 
+  protected nombre = signal(this.auth.currentUser()?.nombre ?? '');
+  protected email = signal(this.auth.currentUser()?.email ?? '');
+  protected updateError = signal('');
+  protected updateSuccess = signal(false);
+
   protected toggleDarkMode(): void {
     this.darkMode.update(v => !v);
     document.documentElement.setAttribute('data-theme', this.darkMode() ? 'dark' : '');
@@ -28,6 +33,15 @@ export class AjustesComponent {
 
   protected toggleNotifEmails(): void {
     this.notifEmails.update(v => !v);
+  }
+
+  protected saveProfile(): void {
+    this.updateError.set('');
+    this.updateSuccess.set(false);
+    this.auth.updateProfile(this.nombre(), this.email()).subscribe({
+      next: () => this.updateSuccess.set(true),
+      error: (err) => this.updateError.set(err?.error?.message ?? 'Error al actualizar')
+    });
   }
 
   protected logout(): void {

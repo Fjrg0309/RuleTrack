@@ -118,6 +118,15 @@
   align-self: flex-end;
 }
 
+.settings__feedback {
+  margin-top: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  &--ok  { color: #1a5c1e; }
+  &--err { color: #7a1010; }
+}
+
 // ── Select ──
 .settings__select-wrapper {
   position: relative;

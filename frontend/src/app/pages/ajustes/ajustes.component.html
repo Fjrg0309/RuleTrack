@@ -9,14 +9,20 @@
     <div class="settings__personal-grid">
       <div class="settings__field">
         <label class="settings__field-label" for="fullname">Nombre completo</label>
-        <input id="fullname" class="settings__input" type="text" [placeholder]="auth.currentUser()?.displayName ?? ''" />
+        <input id="fullname" class="settings__input" type="text" [value]="nombre()" (input)="nombre.set($any($event.target).value)" />
       </div>
       <div class="settings__field">
         <label class="settings__field-label" for="email">Email</label>
-        <input id="email" class="settings__input" type="email" placeholder="correo@ejemplo.com" />
+        <input id="email" class="settings__input" type="email" [value]="email()" (input)="email.set($any($event.target).value)" />
       </div>
-      <button class="btn btn--outline settings__update-btn">Actualizar perfil</button>
+      <button class="btn btn--outline settings__update-btn" (click)="saveProfile()">Actualizar perfil</button>
     </div>
+    @if (updateSuccess()) {
+      <p class="settings__feedback settings__feedback--ok">Perfil actualizado correctamente.</p>
+    }
+    @if (updateError()) {
+      <p class="settings__feedback settings__feedback--err">{{ updateError() }}</p>
+    }
   </div>
 
   <!-- Preferences + Notifications -->
