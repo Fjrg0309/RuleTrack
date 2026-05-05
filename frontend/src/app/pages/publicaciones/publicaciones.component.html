@@ -22,10 +22,11 @@
         <span class="publications__version">{{ pub.ultimaVersion }}</span>
         <span class="publications__status"
               [class.publications__status--public]="pub.visibilidad === 'PUBLICO'"
-              [class.publications__status--members]="pub.visibilidad === 'SOLO_MIEMBROS'">
+              [class.publications__status--members]="pub.visibilidad === 'SOLO_MIEMBROS'"
+              [class.publications__status--private]="pub.visibilidad === 'PRIVADO'">
           {{ pub.visibilidad === 'PUBLICO' ? 'Público' : pub.visibilidad === 'SOLO_MIEMBROS' ? 'Solo miembros' : 'Privado' }}
         </span>
-        <span class="publications__url">{{ pub.organizacionNombre }}</span>
+        <a class="publications__url" [href]="getUrl(pub)" target="_blank" rel="noopener">{{ getUrl(pub) }}</a>
         <div class="publications__actions">
           <button
             class="publications__action-btn"

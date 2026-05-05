@@ -23,12 +23,12 @@
 .publications__table-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0;
   background-color: var(--color-accent);
-  border-radius: var(--border-radius);
+  border-radius: 8px;
   box-shadow: var(--shadow-md);
-  padding: 20px;
-  gap: 12px;
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
 }
 
 // Column widths
@@ -42,20 +42,18 @@ $col-actions: 100px;
   grid-template-columns: $col-name $col-sm $col-sm $col-lg $col-actions;
   gap: 12px;
   align-items: center;
+  background-color: var(--color-title);
+  padding: 10px 16px;
 }
 
 .publications__col-label {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 14px;
-  background-color: var(--color-title);
-  color: var(--text-title);
-  border-radius: var(--border-radius);
   font-size: 0.8125rem;
   font-weight: 700;
+  color: var(--text-title);
   text-align: center;
-  box-shadow: var(--shadow-sm);
 }
 
 // ── Data rows ──
@@ -64,8 +62,17 @@ $col-actions: 100px;
   grid-template-columns: $col-name $col-sm $col-sm $col-lg $col-actions;
   gap: 12px;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--color-secondary);
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+  transition: background-color 0.15s;
+
+  &:nth-child(even) {
+    background-color: rgba(255,255,255,0.25);
+  }
+
+  &:hover {
+    background-color: rgba(255,255,255,0.5);
+  }
 
   &:last-child {
     border-bottom: none;
@@ -73,14 +80,16 @@ $col-actions: 100px;
 }
 
 .publications__name {
-  padding: 6px 12px;
-  background-color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: var(--border-radius);
+  padding: 8px 14px;
+  background-color: rgba(255,255,255,0.85);
+  border-radius: 2px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #000000;
-  box-shadow: var(--shadow-sm);
+  color: #222;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .publications__version {
@@ -88,26 +97,26 @@ $col-actions: 100px;
   align-items: center;
   justify-content: center;
   padding: 6px 10px;
-  background-color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: var(--border-radius);
+  background-color: rgba(255,255,255,0.85);
+  border-radius: 2px;
   font-size: 0.8125rem;
-  font-weight: 600;
-  color: #000000;
-  box-shadow: var(--shadow-sm);
+  font-weight: 700;
+  color: #222;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
   text-align: center;
 }
 
 .publications__status {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;
-  border-radius: var(--border-radius);
-  font-size: 0.8125rem;
+  padding: 5px 10px;
+  border-radius: 2px;
+  font-size: 0.75rem;
   font-weight: 700;
   text-align: center;
-  box-shadow: var(--shadow-sm);
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 
   &--public {
     background-color: var(--color-correct-green);
@@ -118,19 +127,34 @@ $col-actions: 100px;
     background-color: var(--color-warning);
     color: #5c4a00;
   }
+
+  &--private {
+    background-color: #ffb3b3;
+    color: #7a1010;
+  }
 }
 
 .publications__url {
   width: 100%;
-  padding: 6px 10px;
-  border: 1px solid #000000;
-  border-radius: var(--border-radius);
-  font-size: 0.75rem;
-  color: var(--text-color);
-  background-color: var(--color-card);
+  padding: 7px 12px;
+  border: 1.5px solid rgba(0,0,0,0.08);
+  border-radius: 2px;
+  font-size: 0.72rem;
+  color: #3a5a8a;
+  background-color: rgba(255,255,255,0.9);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  text-decoration: none;
+  display: block;
+  transition: background-color 0.18s, color 0.18s, border-color 0.18s;
+
+  &:hover {
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+    color: #ffffff;
+  }
 }
 
 .publications__actions {
@@ -144,26 +168,33 @@ $col-actions: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background-color: var(--button-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-sm);
-  transition: background-color 0.2s;
+  border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(99,82,255,0.25);
+  transition: background-color 0.2s, transform 0.15s, box-shadow 0.15s;
   color: var(--text-button);
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     fill: currentColor;
   }
 
   &:hover {
     background-color: var(--button-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(99,82,255,0.35);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(99,82,255,0.2);
   }
 
   &--copied {
-    background-color: var(--button-color);
-    color: var(--text-button);
+    background-color: var(--color-correct-green);
+    color: #1a5c1e;
   }
 }

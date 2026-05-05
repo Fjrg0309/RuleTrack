@@ -24,10 +24,14 @@ export class PublicacionesComponent implements OnInit {
   }
 
   protected copyUrl(pub: ReglamentoDTO): void {
-    const url = `${window.location.origin}/api/reglamentos/${pub.id}/descargar`;
+    const url = `${window.location.origin}/view/${pub.id}`;
     navigator.clipboard.writeText(url).catch(() => {});
     this.copiedId = pub.id;
     setTimeout(() => (this.copiedId = null), 1500);
+  }
+
+  protected getUrl(pub: ReglamentoDTO): string {
+    return `${window.location.origin}/view/${pub.id}`;
   }
 
   protected editPublication(pub: ReglamentoDTO): void {
