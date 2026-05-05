@@ -33,7 +33,7 @@ public class LlmService {
         }
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(10_000);  // 10s conexión
-        factory.setReadTimeout(50_000);     // 50s lectura (bajo el límite de 60s de DO)
+        factory.setReadTimeout(25_000);     // 25s lectura (bajo el límite de 30s del proxy de DO)
         this.restClient = RestClient.builder()
                 .baseUrl(apiUrl)
                 .requestFactory(factory)

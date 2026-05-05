@@ -28,6 +28,8 @@ services:
       dockerfile: Dockerfile
     container_name: ruletrack-frontend
     restart: unless-stopped
+    environment:
+      BACKEND_URL: ${BACKEND_URL:-http://ruletrack-backend:8080}
     depends_on:
       - backend
     ports:
