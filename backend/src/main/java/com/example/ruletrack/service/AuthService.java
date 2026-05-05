@@ -1,8 +1,10 @@
 package com.example.ruletrack.service;
 
+import com.example.ruletrack.dto.OrganizacionInfoDTO;
 import com.example.ruletrack.dto.auth.AuthResponseDTO;
 import com.example.ruletrack.dto.auth.LoginRequestDTO;
 import com.example.ruletrack.dto.auth.RegisterRequestDTO;
+import com.example.ruletrack.dto.auth.UpdateProfileRequestDTO;
 import com.example.ruletrack.entity.Rol;
 import com.example.ruletrack.entity.Usuario;
 import com.example.ruletrack.repository.UsuarioRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -91,6 +94,44 @@ public class AuthService {
         return usuarioRepository.existsByOrganizacionNombre(nombre.trim());
     }
 
+    @Transactional
+    public AuthResponseDTO updateProfile(String username, UpdateProfileRequestDTO request) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        if (!usuario.getEmail().equals(request.getEmail())) {
+            if (usuarioRepository.existsByEmail(request.getEmail())) {
+                throw new IllegalArgumentException("El email ya está en uso");
+            }
+            usuario.setEmail(request.getEmail());
+        }
+        usuario.setNombre(request.getNombre());
+        usuarioRepository.save(usuario);
+        String token = tokenProvider.generateToken(usuario.getUsername());
+        return toResponse(token, usuario);
+    }
+
+    public AuthResponseDTO getMe(String username) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        String token = tokenProvider.generateToken(usuario.getUsername());
+        return toResponse(token, usuario);
+    }
+
+    public OrganizacionInfoDTO getOrganizacionInfo(String nombre) {
+        List<Usuario> miembros = usuarioRepository.findByOrganizacionNombre(nombre.trim());
+        int anio = miembros.stream()
+                .map(u -> u.getCreatedAt() != null ? u.getCreatedAt().getYear() : LocalDate.now().getYear())
+                .min(Integer::compareTo)
+                .orElse(LocalDate.now().getYear());
+        long numOrg = miembros.stream().filter(u -> u.getRol() == Rol.ORGANIZADOR).count();
+        return OrganizacionInfoDTO.builder()
+                .nombre(nombre.trim())
+                .anioFundacion(anio)
+                .numOrganizadores(numOrg)
+                .numMiembros(miembros.size())
+                .build();
+    }
+
     private AuthResponseDTO toResponse(String token, Usuario usuario) {
         return AuthResponseDTO.builder()
                 .token(token)
@@ -100,6 +141,7 @@ public class AuthService {
                 .email(usuario.getEmail())
                 .rol(usuario.getRol().name())
                 .organizacionNombre(usuario.getOrganizacionNombre())
+                .fechaNacimiento(usuario.getFechaNacimiento())
                 .build();
     }
 }

@@ -1,13 +1,17 @@
 package com.example.ruletrack.controller;
 
+import com.example.ruletrack.dto.OrganizacionInfoDTO;
 import com.example.ruletrack.dto.auth.AuthResponseDTO;
 import com.example.ruletrack.dto.auth.LoginRequestDTO;
 import com.example.ruletrack.dto.auth.RegisterRequestDTO;
+import com.example.ruletrack.dto.auth.UpdateProfileRequestDTO;
 import com.example.ruletrack.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -32,5 +36,22 @@ public class AuthController {
     @GetMapping("/organizacion/existe")
     public ResponseEntity<Map<String, Boolean>> checkOrganizacion(@RequestParam String nombre) {
         return ResponseEntity.ok(Map.of("existe", authService.existeOrganizacion(nombre)));
+    }
+
+    @GetMapping("/organizacion/info")
+    public ResponseEntity<OrganizacionInfoDTO> getOrganizacionInfo(@RequestParam String nombre) {
+        return ResponseEntity.ok(authService.getOrganizacionInfo(nombre));
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<AuthResponseDTO> updateProfile(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody UpdateProfileRequestDTO request) {
+        return ResponseEntity.ok(authService.updateProfile(userDetails.getUsername(), request));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<AuthResponseDTO> getMe(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(authService.getMe(userDetails.getUsername()));
     }
 }
