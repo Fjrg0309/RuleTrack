@@ -18,8 +18,8 @@ FROM nginx:1.27-alpine
 # Elimina la config por defecto de Nginx
 RUN rm -rf /etc/nginx/conf.d/default.conf
 
-# Copia la config personalizada
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copia la config como template — envsubst reemplaza ${BACKEND_URL} en arranque
+COPY nginx.conf /etc/nginx/templates/default.conf.template
 
 # Copia los archivos compilados de Angular
 # El nuevo @angular/build:application genera la salida en dist/<project>/browser
