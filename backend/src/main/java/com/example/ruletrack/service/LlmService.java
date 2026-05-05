@@ -47,45 +47,36 @@ public class LlmService {
     }
 
     public List<CorrectionItemDTO> analizarCorrecciones(String contenido) {
+        // Truncar a 3000 caracteres para garantizar respuesta rápida (<30s en Groq)
+        String contenidoTruncado = contenido.length() > 3000
+                ? contenido.substring(0, 3000) + "\n...[documento truncado]"
+                : contenido;
+
         String systemPrompt = """
                 Eres un corrector profesional de documentos oficiales en español. \
                 Tu única función es devolver un array JSON de correcciones. \
-                SIEMPRE encuentras correcciones: cualquier documento tiene margen de mejora. \
-                NUNCA devuelves un array vacío salvo que el documento sea literalmente perfecto. \
                 NUNCA envuelvas la respuesta en bloques markdown ni añadas texto fuera del array JSON. \
                 Tu respuesta DEBE comenzar con [ y terminar con ].
                 """;
 
         String userPrompt = """
-                Analiza el siguiente documento oficial y devuelve TODAS las correcciones posibles. \
-                Sé EXHAUSTIVO y ESTRICTO. Busca mínimo 5-10 correcciones por documento. \
-                Categorías obligatorias a revisar:
-                1. ORTOGRAFÍA: tildes, mayúsculas, signos de puntuación, errores tipográficos.
-                2. GRAMÁTICA: concordancia de género/número, verbos incorrectos, pronombres.
-                3. FORMALIDAD: sustituye expresiones coloquiales por lenguaje formal y técnico. \
-                   Ej: "hacer"→"ejecutar/realizar", "poner"→"establecer/disponer", "hay que"→"deberá", \
-                   "cosa"→sustantivo técnico, frases telegráficas→frases completas.
-                4. ESTILO Y PRECISIÓN: reescribe frases ambiguas con mayor rigor.
-                5. COHERENCIA: referencias inconsistentes, numeración errónea, contradicciones.
-                6. VERBOSIDAD: resume párrafos redundantes conservando el significado completo.
-                7. CLARIDAD: reformula normas confusas de forma inequívoca.
+                Analiza el siguiente documento y devuelve entre 5 y 8 correcciones importantes. \
+                Sé conciso en las explicaciones. \
+                Categorías: ORTOGRAFÍA, GRAMÁTICA, FORMALIDAD, ESTILO.
 
-                Para CADA corrección el campo "explanation" DEBE incluir la categoría y justificación. \
-                Ejemplo: "FORMALIDAD – 'hay que poner' es coloquial; se sustituye por 'deberá establecerse'."
-
-                Devuelve ÚNICAMENTE el array JSON (sin markdown, sin texto adicional):
+                Devuelve ÚNICAMENTE el array JSON:
                 [
                   {
                     "id": "c1",
-                    "original": "texto exacto del documento",
+                    "original": "texto exacto",
                     "suggestion": "texto corregido",
-                    "explanation": "CATEGORÍA – justificación detallada"
+                    "explanation": "CATEGORÍA – justificación breve"
                   }
                 ]
 
                 Documento:
                 %s
-                """.formatted(contenido);
+                """.formatted(contenidoTruncado);
 
         String response = completar(systemPrompt, userPrompt);
         log.debug("Respuesta raw del LLM: {}", response);
@@ -156,7 +147,7 @@ public class LlmService {
         requestBody.put("model", model);
         requestBody.put("messages", messages);
         requestBody.put("temperature", 0.1);
-        requestBody.put("max_tokens", 2048);
+        requestBody.put("max_tokens", 1024);
 
         try {
             Map<?, ?> response = restClient.post()
