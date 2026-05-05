@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 
 export interface CorrectionItem {
   id: string;
@@ -20,7 +20,9 @@ export class CorrectionService {
 
   analyzeDocument(content: string): Promise<CorrectionItem[]> {
     return firstValueFrom(
-      this.http.post<CorrectionResponse>(`${this.apiUrl}/analyze`, { content })
+      this.http.post<CorrectionResponse>(`${this.apiUrl}/analyze`, { content }).pipe(
+        timeout(20_000)
+      )
     ).then(r => r.corrections);
   }
 }

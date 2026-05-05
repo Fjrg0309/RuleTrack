@@ -33,7 +33,7 @@ public class LlmService {
         }
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(10_000);  // 10s conexión
-        factory.setReadTimeout(25_000);     // 25s lectura (bajo el límite de 30s del proxy de DO)
+        factory.setReadTimeout(15_000);     // 15s lectura — margen holgado bajo el límite de 30s de DO App Platform
         this.restClient = RestClient.builder()
                 .baseUrl(apiUrl)
                 .requestFactory(factory)
@@ -47,9 +47,9 @@ public class LlmService {
     }
 
     public List<CorrectionItemDTO> analizarCorrecciones(String contenido) {
-        // Truncar a 3000 caracteres para garantizar respuesta rápida (<30s en Groq)
-        String contenidoTruncado = contenido.length() > 3000
-                ? contenido.substring(0, 3000) + "\n...[documento truncado]"
+        // Truncar a 1500 caracteres para garantizar respuesta rápida (<15s en Groq)
+        String contenidoTruncado = contenido.length() > 1500
+                ? contenido.substring(0, 1500) + "\n...[documento truncado]"
                 : contenido;
 
         String systemPrompt = """
@@ -147,7 +147,7 @@ public class LlmService {
         requestBody.put("model", model);
         requestBody.put("messages", messages);
         requestBody.put("temperature", 0.1);
-        requestBody.put("max_tokens", 1024);
+        requestBody.put("max_tokens", 512);
 
         try {
             Map<?, ?> response = restClient.post()
