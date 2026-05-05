@@ -4,38 +4,25 @@
   </div>
 
   <div class="org__card">
-    <div class="org__grid">
-      <div class="org__cell org__cell--header">
-        <span class="org__label">Nombre</span>
-      </div>
-      <div class="org__cell org__cell--header">
-        <span class="org__label">Fecha de fundación</span>
-      </div>
-
-      <div class="org__cell">
-        <span class="org__value">{{ org.name }}</span>
-      </div>
-      <div class="org__cell">
-        <span class="org__value">{{ org.founded }}</span>
-      </div>
-
-      <div class="org__cell org__cell--header">
-        <span class="org__label">NºOrganizadores</span>
-      </div>
-      <div class="org__cell org__cell--header">
-        <span class="org__label">NºMiembros</span>
-      </div>
-
-      <div class="org__cell">
-        <span class="org__value">{{ org.organizers }}</span>
-      </div>
-      <div class="org__cell">
-        <span class="org__value">{{ org.members }}</span>
-      </div>
+    <div class="org__row org__row--header">
+      <span class="org__label">Nombre</span>
+      <span class="org__label">Fecha de fundación</span>
+    </div>
+    <div class="org__row">
+      <span class="org__value">{{ org()?.nombre }}</span>
+      <span class="org__value">{{ org()?.anioFundacion }}</span>
+    </div>
+    <div class="org__row org__row--header">
+      <span class="org__label">NºOrganizadores</span>
+      <span class="org__label">NºMiembros</span>
+    </div>
+    <div class="org__row">
+      <span class="org__value">{{ org()?.numOrganizadores }}</span>
+      <span class="org__value">{{ org()?.numMiembros }}</span>
     </div>
   </div>
 
   <div class="org__footer">
-    <button class="btn btn--outline-dark" (click)="goToPublications()">Publicaciones</button>
+    <button class="btn btn--primary" (click)="goToPublications()">Publicaciones</button>
   </div>
 </section>
