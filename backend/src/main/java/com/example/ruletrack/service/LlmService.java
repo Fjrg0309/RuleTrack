@@ -47,9 +47,9 @@ public class LlmService {
     }
 
     public List<CorrectionItemDTO> analizarCorrecciones(String contenido) {
-        // Truncar a 1500 caracteres para garantizar respuesta rápida (<15s en Groq)
-        String contenidoTruncado = contenido.length() > 1500
-                ? contenido.substring(0, 1500) + "\n...[documento truncado]"
+        // Truncar a 2500 caracteres para tener contexto suficiente sin exceder el timeout
+        String contenidoTruncado = contenido.length() > 2500
+                ? contenido.substring(0, 2500) + "\n...[documento truncado]"
                 : contenido;
 
         String systemPrompt = """
@@ -147,7 +147,7 @@ public class LlmService {
         requestBody.put("model", model);
         requestBody.put("messages", messages);
         requestBody.put("temperature", 0.1);
-        requestBody.put("max_tokens", 512);
+        requestBody.put("max_tokens", 900);
 
         try {
             Map<?, ?> response = restClient.post()
