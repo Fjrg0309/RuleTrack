@@ -9,12 +9,14 @@ import com.example.ruletrack.repository.ReglamentoRepository;
 import com.example.ruletrack.repository.UsuarioRepository;
 import com.example.ruletrack.repository.VersionReglamentoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,9 +60,22 @@ public class ReglamentoService {
     @Transactional(readOnly = true)
     public PublicoViewDTO getPublicoView(Long id) {
         Reglamento r = getReglamentoOrThrow(id);
-        if (r.getVisibilidad() != VisibilidadReglamento.PUBLICO) {
+        Optional<Usuario> currentUser = getCurrentUserOptional();
+
+        boolean canAccess = switch (r.getVisibilidad()) {
+            case PUBLICO -> true;
+            case SOLO_MIEMBROS -> currentUser.isPresent() && (
+                r.getCreadoPor().getOrganizacionNombre().equals(currentUser.get().getOrganizacionNombre())
+                || r.getCreadoPor().getId().equals(currentUser.get().getId())
+            );
+            case PRIVADO -> currentUser.isPresent()
+                && r.getCreadoPor().getId().equals(currentUser.get().getId());
+        };
+
+        if (!canAccess) {
             throw new ResourceNotFoundException("Reglamento", id);
         }
+
         String contenido = r.getVersiones().stream()
                 .filter(v -> v.getEstado() == EstadoVersion.PUBLICADO)
                 .findFirst()
@@ -136,6 +151,14 @@ public class ReglamentoService {
     private Reglamento getReglamentoOrThrow(Long id) {
         return reglamentoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Reglamento", id));
+    }
+
+    private Optional<Usuario> getCurrentUserOptional() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
+            return Optional.empty();
+        }
+        return usuarioRepository.findByUsername(auth.getName());
     }
 
     private Usuario getCurrentUser() {

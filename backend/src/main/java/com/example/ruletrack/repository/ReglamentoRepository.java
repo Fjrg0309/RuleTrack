@@ -20,16 +20,15 @@ public interface ReglamentoRepository extends JpaRepository<Reglamento, Long> {
      * Devuelve publicaciones visibles para un usuario dado:
      * - PUBLICO: siempre visible
      * - SOLO_MIEMBROS: visible si el usuario pertenece a la misma organización que el creador
-     * - PRIVADO: visible si el usuario está en la lista de permitidos
+     * - PRIVADO: visible solo al creador
      */
     @Query("""
         SELECT DISTINCT r FROM Reglamento r
-        LEFT JOIN r.usuariosPermitidos up
         LEFT JOIN r.creadoPor creador
         WHERE r.visibilidad = 'PUBLICO'
            OR (r.visibilidad = 'SOLO_MIEMBROS'
                AND creador.organizacionNombre = :orgNombre)
-           OR (r.visibilidad = 'PRIVADO' AND up.id = :userId)
+           OR (r.visibilidad = 'PRIVADO' AND creador.id = :userId)
         ORDER BY r.createdAt DESC
         """)
     List<Reglamento> findVisiblesParaUsuario(
