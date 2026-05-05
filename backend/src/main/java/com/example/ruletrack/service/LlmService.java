@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -30,8 +31,12 @@ public class LlmService {
         if (!this.apiKeyConfigured) {
             log.warn("LLM API key is not configured (app.llm.api-key). Corrections endpoint will be unavailable.");
         }
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10_000);  // 10s conexión
+        factory.setReadTimeout(50_000);     // 50s lectura (bajo el límite de 60s de DO)
         this.restClient = RestClient.builder()
                 .baseUrl(apiUrl)
+                .requestFactory(factory)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
@@ -151,7 +156,7 @@ public class LlmService {
         requestBody.put("model", model);
         requestBody.put("messages", messages);
         requestBody.put("temperature", 0.1);
-        requestBody.put("max_tokens", 4096);
+        requestBody.put("max_tokens", 2048);
 
         try {
             Map<?, ?> response = restClient.post()
