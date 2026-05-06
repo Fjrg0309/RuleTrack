@@ -202,13 +202,13 @@ export class CorrectingComponent implements OnInit {
   }
 
   /**
-   * Ignora las correcciones ROJAS (pending), pero mantiene las VERDES (applied).
-   * El texto resultante se guarda y se navega a /corrected para publicar.
+   * Ignora las correcciones ROJAS (pending) — las elimina del texto y se queda en la página.
+   * Las correcciones VERDES (applied) se mantienen intactas.
    */
   ignoreCorrections(): void {
-    const correctedText = this.buildReplacedText(['applied']);
-    // Si no hay correcciones verdes, correctedText == fileContent (sin cambios)
-    this.fileUploadService.setCorrectedContent(correctedText || this.fileContent);
-    this.router.navigate(['/corrected']);
+    this.corrections.update(list =>
+      list.map(s => s.status === 'pending' ? { ...s, status: 'rejected' as const } : s)
+    );
+    this.buildSegments(this.corrections());
   }
 }
