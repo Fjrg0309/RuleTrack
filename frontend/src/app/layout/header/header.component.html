@@ -5,14 +5,38 @@
 
   <div class="header__actions">
     @if (auth.currentUser()) {
-      <a class="header__settings-link" routerLink="/ajustes">Ajustes</a>
-      <button class="header__user" aria-label="Ir al perfil" routerLink="/perfil" title="Mi perfil">
-        <svg class="header__user-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-        </svg>
-      </button>
+      <div class="header__user-wrapper" (click)="$event.stopPropagation()">
+        <button class="header__user" aria-label="Menú de usuario" (click)="toggleDropdown($event)" title="Opciones de usuario">
+          <svg class="header__user-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 110">
+            <defs>
+              <linearGradient id="u-body" x1="30%" y1="0%" x2="70%" y2="100%">
+                <stop offset="0%" stop-color="#4A9DC4"/>
+                <stop offset="100%" stop-color="#1B4E7A"/>
+              </linearGradient>
+              <linearGradient id="u-face" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#D6EEF8"/>
+                <stop offset="100%" stop-color="#A8D8EC"/>
+              </linearGradient>
+            </defs>
+            <!-- Head back / hair -->
+            <ellipse cx="50" cy="36" rx="24" ry="26" fill="url(#u-body)"/>
+            <!-- Face -->
+            <ellipse cx="50" cy="37" rx="18" ry="20" fill="url(#u-face)"/>
+            <!-- Neck -->
+            <path d="M44 54 Q44 64 50 64 Q56 64 56 54 Z" fill="url(#u-face)"/>
+            <!-- Shoulders -->
+            <path d="M5 110 C5 80 18 70 34 66 Q42 72 50 72 Q58 72 66 66 C82 70 95 80 95 110 Z" fill="url(#u-body)"/>
+          </svg>
+        </button>
+        @if (dropdownOpen()) {
+          <div class="header__dropdown">
+            <a class="header__dropdown-item" routerLink="/perfil" (click)="closeDropdown()">Mi perfil</a>
+            <a class="header__dropdown-item" routerLink="/ajustes" (click)="closeDropdown()">Ajustes</a>
+          </div>
+        }
+      </div>
     } @else {
-      <a class="header__login-btn" routerLink="/login">Iniciar sesión</a>
+      <button class="header__login-btn" (click)="authModal.open('login')">Iniciar sesión</button>
     }
   </div>
 </header>
