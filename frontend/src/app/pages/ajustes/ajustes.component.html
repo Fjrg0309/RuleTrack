@@ -17,9 +17,6 @@
       </div>
       <button class="btn btn--outline settings__update-btn" (click)="saveProfile()">Actualizar perfil</button>
     </div>
-    @if (updateSuccess()) {
-      <p class="settings__feedback settings__feedback--ok">Perfil actualizado correctamente.</p>
-    }
     @if (updateError()) {
       <p class="settings__feedback settings__feedback--err">{{ updateError() }}</p>
     }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { PublicacionesService, VersionDTO } from '../../services/publicaciones.service';
 import { FileUploadService } from '../../services/file-upload.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-ajustes-publicacion',
@@ -17,6 +18,7 @@ export class AjustesPublicacionComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private pubService = inject(PublicacionesService);
   private fileUploadService = inject(FileUploadService);
+  private toast = inject(ToastService);
 
   protected reglamentoId: number | null = null;
 
@@ -29,7 +31,6 @@ export class AjustesPublicacionComponent implements OnInit {
 
   protected showDeleteConfirm = signal(false);
   protected errorMsg = signal('');
-  protected successMsg = signal('');
 
   /** La versión actualmente seleccionada en el dropdown */
   protected get selectedVersion(): VersionDTO | undefined {
@@ -91,7 +92,7 @@ export class AjustesPublicacionComponent implements OnInit {
       descripcion: this.descripcion(),
       visibilidad: this.visibilidad()
     }).subscribe({
-      next: () => this.successMsg.set('Cambios guardados.'),
+      next: () => this.toast.show('Cambios guardados correctamente.', 'info'),
       error: (err) => this.errorMsg.set(err?.error?.message ?? 'Error al guardar cambios.')
     });
   }

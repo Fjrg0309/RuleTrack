@@ -7,16 +7,31 @@
 }
 
 .settings__banner {
+  position: relative;
   padding: 28px 32px;
-  background-color: var(--color-accent);
+  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
+  overflow: hidden;
+  color: #fff;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    pointer-events: none;
+  }
 }
 
 .settings__title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-color);
+  color: #fff;
 }
 
 // ── Card sections ──
@@ -133,18 +148,6 @@
 }
 
 .settings__select {
-  padding: 7px 32px 7px 12px;
-  border: 2px solid var(--text-color);
-  border-radius: var(--border-radius);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-color);
-  background-color: var(--color-card);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  appearance: none;
-  cursor: pointer;
   min-width: 140px;
 }
 

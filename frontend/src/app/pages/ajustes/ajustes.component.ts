@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-ajustes',
@@ -10,6 +11,7 @@ import { AuthService } from '../../services/auth.service';
 export class AjustesComponent {
   protected auth = inject(AuthService);
   private router = inject(Router);
+  private toast = inject(ToastService);
 
   protected darkMode = signal(false);
   protected language = signal('Español');
@@ -20,7 +22,6 @@ export class AjustesComponent {
   protected nombre = signal(this.auth.currentUser()?.nombre ?? '');
   protected email = signal(this.auth.currentUser()?.email ?? '');
   protected updateError = signal('');
-  protected updateSuccess = signal(false);
 
   protected toggleDarkMode(): void {
     this.darkMode.update(v => !v);
@@ -37,9 +38,8 @@ export class AjustesComponent {
 
   protected saveProfile(): void {
     this.updateError.set('');
-    this.updateSuccess.set(false);
     this.auth.updateProfile(this.nombre(), this.email()).subscribe({
-      next: () => this.updateSuccess.set(true),
+      next: () => this.toast.show('Perfil actualizado correctamente.', 'info'),
       error: (err) => this.updateError.set(err?.error?.message ?? 'Error al actualizar')
     });
   }
