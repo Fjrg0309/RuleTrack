@@ -1,0 +1,234 @@
+.org-members {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 28px 36px;
+}
+
+// ── Banner ──
+.org-members__banner {
+  position: relative;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  color: #fff;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+}
+
+.org-members__banner-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 0 4px;
+  color: #fff;
+}
+
+.org-members__banner-sub {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin: 0;
+}
+
+// ── Loading / error ──
+.org-members__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 48px;
+  color: var(--text-color);
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+
+.org-members__spinner {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-secondary);
+  border-top-color: var(--button-color);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.org-members__error {
+  padding: 14px 18px;
+  background: rgba(224, 82, 82, 0.08);
+  border-left: 3px solid #e05252;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e05252;
+}
+
+// ── Grid layout ──
+.org-members__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Group card ──
+.org-members__group {
+  background: var(--color-card);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--color-secondary);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.org-members__group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--button-color);
+  border-bottom: none;
+}
+
+.org-members__group-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #fff;
+
+  &--org {}
+  &--user {}
+}
+
+.org-members__group-count {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--button-color);
+  background: #fff;
+  padding: 2px 10px;
+  border-radius: 20px;
+  line-height: 1.6;
+}
+
+// ── List ──
+.org-members__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.org-members__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--color-secondary);
+  transition: background 0.15s;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background: rgba(91, 141, 239, 0.06);
+  }
+}
+
+// ── Avatar ──
+.org-members__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  flex-shrink: 0;
+
+  &--org {
+    background: var(--button-color);
+    color: #fff;
+  }
+
+  &--user {
+    background: #1a3a6e;
+    color: #fff;
+  }
+}
+
+// ── Info ──
+.org-members__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.org-members__nick {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.org-members__fullname {
+  font-size: 0.75rem;
+  color: var(--text-color);
+  opacity: 0.6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Role tag ──
+.org-members__role-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 9px;
+  border-radius: 2px;
+  flex-shrink: 0;
+
+  &--org {
+    background: var(--button-color);
+    color: #fff;
+  }
+
+  &--user {
+    background: #1a3a6e;
+    color: #fff;
+  }
+}
+
+// ── Empty state ──
+.org-members__empty {
+  padding: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-color);
+  opacity: 0.5;
+}

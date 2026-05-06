@@ -1,0 +1,82 @@
+<section class="org-members">
+
+  <div class="org-members__banner">
+    <h1 class="org-members__banner-title">
+      {{ auth.currentUser()?.organizacionNombre ?? 'Mi organización' }}
+    </h1>
+    <p class="org-members__banner-sub">Miembros de la organización</p>
+  </div>
+
+  @if (loading()) {
+    <div class="org-members__loading">
+      <span class="org-members__spinner"></span>
+      <p>Cargando miembros...</p>
+    </div>
+  } @else if (error()) {
+    <p class="org-members__error" role="alert">{{ error() }}</p>
+  } @else {
+
+    <div class="org-members__grid">
+
+      <!-- Organizadores -->
+      <section class="org-members__group" aria-labelledby="org-title">
+        <div class="org-members__group-header">
+          <span class="org-members__group-badge org-members__group-badge--org">
+            Organizadores
+          </span>
+          <span class="org-members__group-count">{{ organizadores.length }}</span>
+        </div>
+
+        @if (organizadores.length === 0) {
+          <p class="org-members__empty">Sin organizadores registrados.</p>
+        } @else {
+          <ul class="org-members__list" role="list">
+            @for (m of organizadores; track m.username) {
+              <li class="org-members__item">
+                <span class="org-members__avatar org-members__avatar--org">
+                  {{ m.username.charAt(0).toUpperCase() }}
+                </span>
+                <div class="org-members__info">
+                  <span class="org-members__nick">{{ m.username }}</span>
+                  <span class="org-members__fullname">{{ m.nombre }} {{ m.apellidos }}</span>
+                </div>
+                <span class="org-members__role-tag org-members__role-tag--org">Organizador</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <!-- Usuarios -->
+      <section class="org-members__group" aria-labelledby="user-title">
+        <div class="org-members__group-header">
+          <span class="org-members__group-badge org-members__group-badge--user">
+            Usuarios
+          </span>
+          <span class="org-members__group-count">{{ usuarios.length }}</span>
+        </div>
+
+        @if (usuarios.length === 0) {
+          <p class="org-members__empty">Sin usuarios registrados.</p>
+        } @else {
+          <ul class="org-members__list" role="list">
+            @for (m of usuarios; track m.username) {
+              <li class="org-members__item">
+                <span class="org-members__avatar org-members__avatar--user">
+                  {{ m.username.charAt(0).toUpperCase() }}
+                </span>
+                <div class="org-members__info">
+                  <span class="org-members__nick">{{ m.username }}</span>
+                  <span class="org-members__fullname">{{ m.nombre }} {{ m.apellidos }}</span>
+                </div>
+                <span class="org-members__role-tag org-members__role-tag--user">Usuario</span>
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+    </div>
+  }
+
+</section>

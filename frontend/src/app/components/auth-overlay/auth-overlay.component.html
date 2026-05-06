@@ -1,0 +1,159 @@
+@if (authModal.visible()) {
+  <div class="auth-overlay" (click)="onOverlayClick($event)" role="dialog" aria-modal="true">
+    <div class="auth-overlay__card" #card>
+
+      <!-- Header de la card -->
+      <div class="auth-overlay__brand">
+        <img src="logo.png" alt="RuleTrack" class="auth-overlay__logo" />
+        <span class="auth-overlay__brand-name">RuleTrack</span>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-overlay__tabs" role="tablist">
+        <button class="auth-overlay__tab"
+                [class.auth-overlay__tab--active]="authModal.view() === 'login'"
+                (click)="authModal.switchTo('login')"
+                role="tab">
+          Iniciar sesión
+        </button>
+        <button class="auth-overlay__tab"
+                [class.auth-overlay__tab--active]="authModal.view() === 'registro'"
+                (click)="authModal.switchTo('registro')"
+                role="tab">
+          Crear cuenta
+        </button>
+      </div>
+
+      <!-- LOGIN -->
+      @if (authModal.view() === 'login') {
+        <form class="auth-overlay__form" (ngSubmit)="submitLogin()" novalidate>
+          <div class="auth-overlay__field">
+            <label class="auth-overlay__label" for="ov-user">Usuario</label>
+            <input id="ov-user" class="auth-overlay__input" type="text"
+                   [(ngModel)]="loginForm.username" name="username"
+                   autocomplete="username" placeholder="tu_usuario" />
+          </div>
+          <div class="auth-overlay__field">
+            <label class="auth-overlay__label" for="ov-pass">Contraseña</label>
+            <input id="ov-pass" class="auth-overlay__input" type="password"
+                   [(ngModel)]="loginForm.password" name="password"
+                   autocomplete="current-password" placeholder="••••••••" />
+          </div>
+          @if (loginError()) {
+            <p class="auth-overlay__error" role="alert">{{ loginError() }}</p>
+          }
+          <button class="auth-overlay__submit" type="submit" [disabled]="loginLoading()">
+            {{ loginLoading() ? 'Entrando...' : 'Entrar' }}
+          </button>
+        </form>
+      }
+
+      <!-- REGISTRO -->
+      @if (authModal.view() === 'registro') {
+        <form class="auth-overlay__form auth-overlay__form--registro" (ngSubmit)="submitRegistro()" novalidate>
+          <div class="auth-overlay__row">
+            <div class="auth-overlay__field">
+              <label class="auth-overlay__label" for="ov-nombre">Nombre</label>
+              <input id="ov-nombre" [class]="inputClass('nombre')" type="text"
+                     [(ngModel)]="regForm.nombre" name="nombre" placeholder="Juan" />
+              @if (regErrors()['nombre']) { <span class="auth-overlay__field-error">{{ regErrors()['nombre'] }}</span> }
+            </div>
+            <div class="auth-overlay__field">
+              <label class="auth-overlay__label" for="ov-apellidos">Apellidos</label>
+              <input id="ov-apellidos" [class]="inputClass('apellidos')" type="text"
+                     [(ngModel)]="regForm.apellidos" name="apellidos" placeholder="García López" />
+              @if (regErrors()['apellidos']) { <span class="auth-overlay__field-error">{{ regErrors()['apellidos'] }}</span> }
+            </div>
+          </div>
+
+          <div class="auth-overlay__row">
+            <div class="auth-overlay__field">
+              <label class="auth-overlay__label" for="ov-fecha">Fecha de nacimiento</label>
+              <input id="ov-fecha" [class]="inputClass('fechaNacimiento')" type="date"
+                     [(ngModel)]="regForm.fechaNacimiento" name="fechaNacimiento" />
+              @if (regErrors()['fechaNacimiento']) { <span class="auth-overlay__field-error">{{ regErrors()['fechaNacimiento'] }}</span> }
+            </div>
+            <div class="auth-overlay__field">
+              <label class="auth-overlay__label" for="ov-dni">DNI</label>
+              <input id="ov-dni" [class]="inputClass('dni')" type="text"
+                     [(ngModel)]="regForm.dni" name="dni" placeholder="12345678A" maxlength="9" />
+              @if (regErrors()['dni']) { <span class="auth-overlay__field-error">{{ regErrors()['dni'] }}</span> }
+            </div>
+          </div>
+
+          <div class="auth-overlay__row">
+            <div class="auth-overlay__field">
+              <label class="auth-overlay__label" for="ov-reguser">Usuario</label>
+              <input id="ov-reguser" [class]="inputClass('username')" type="text"
+                     [(ngModel)]="regForm.username" name="username"
+                     autocomplete="username" placeholder="juan_garcia" />
+              @if (regErrors()['username']) { <span class="auth-overlay__field-error">{{ regErrors()['username'] }}</span> }
+            </div>
+            <div class="auth-overlay__field">
+              <label class="auth-overlay__label" for="ov-email">Email</label>
+              <input id="ov-email" [class]="inputClass('email')" type="email"
+                     [(ngModel)]="regForm.email" name="email"
+                     autocomplete="email" placeholder="juan@ejemplo.com" />
+              @if (regErrors()['email']) { <span class="auth-overlay__field-error">{{ regErrors()['email'] }}</span> }
+            </div>
+          </div>
+
+          <div class="auth-overlay__field">
+            <label class="auth-overlay__label" for="ov-regpass">Contraseña</label>
+            <input id="ov-regpass" [class]="inputClass('password')" type="password"
+                   [(ngModel)]="regForm.password" name="password"
+                   autocomplete="new-password" placeholder="Mínimo 8 caracteres, con letras y números" />
+            @if (regErrors()['password']) { <span class="auth-overlay__field-error">{{ regErrors()['password'] }}</span> }
+          </div>
+
+          <div class="auth-overlay__field">
+            <label class="auth-overlay__label">Tipo de cuenta</label>
+            <div class="auth-overlay__radio-group">
+              <label class="auth-overlay__radio-label">
+                <input type="radio" name="rol" value="USUARIO" [(ngModel)]="regForm.rol" /> Usuario
+              </label>
+              <label class="auth-overlay__radio-label">
+                <input type="radio" name="rol" value="ORGANIZADOR" [(ngModel)]="regForm.rol" /> Organizador
+              </label>
+            </div>
+          </div>
+
+          <div class="auth-overlay__field">
+            <label class="auth-overlay__label" for="ov-org">
+              {{ regForm.rol === 'ORGANIZADOR' ? 'Nombre de tu organización' : 'Organización a la que perteneces' }}
+            </label>
+            <input id="ov-org" [class]="inputClass('organizacionNombre') + (orgMode() === 'crear' ? ' auth-overlay__input--crear' : '')"
+                   type="text" [(ngModel)]="regForm.organizacionNombre" name="organizacionNombre"
+                   placeholder="Federación Deportiva de Cádiz" (blur)="onOrgBlur()" />
+            @if (checkingOrg()) {
+              <span class="auth-overlay__field-hint">Verificando organización...</span>
+            } @else if (orgExiste() === true && orgMode() === 'unirse') {
+              <span class="auth-overlay__field-ok">✓ Organización encontrada</span>
+            } @else if (regErrors()['organizacionNombre']) {
+              <span class="auth-overlay__field-error">{{ regErrors()['organizacionNombre'] }}</span>
+            }
+            @if (orgMode() === 'unirse') {
+              <button type="button" class="auth-overlay__org-toggle" (click)="setOrgMode('crear', $event)">
+                ¿Tu organización no está registrada? Créala aquí
+              </button>
+            } @else {
+              <span class="auth-overlay__org-crear-badge">Creando organización nueva</span>
+              <button type="button" class="auth-overlay__org-toggle auth-overlay__org-toggle--back" (click)="setOrgMode('unirse', $event)">
+                ¿Ya existe tu organización? Únete a ella
+              </button>
+            }
+          </div>
+
+          @if (regError()) {
+            <p class="auth-overlay__error" role="alert">{{ regError() }}</p>
+          }
+
+          <button class="auth-overlay__submit" type="submit" [disabled]="regLoading() || checkingOrg()">
+            {{ regLoading() ? 'Creando cuenta...' : 'Crear cuenta' }}
+          </button>
+        </form>
+      }
+
+    </div>
+  </div>
+}
