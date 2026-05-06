@@ -7,16 +7,31 @@
 }
 
 .publications__banner {
+  position: relative;
   padding: 28px 32px;
-  background-color: var(--color-accent);
+  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
+  overflow: hidden;
+  color: #fff;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    pointer-events: none;
+  }
 }
 
 .publications__title {
   font-size: 1.35rem;
   font-weight: 700;
-  color: var(--text-color);
+  color: #fff;
 }
 
 // ── Table wrapper ──
@@ -24,7 +39,7 @@
   display: flex;
   flex-direction: column;
   background-color: var(--color-accent);
-  border-radius: 8px;
+  border-radius: 2px;
   box-shadow: var(--shadow-md);
   padding: 0;
   gap: 0;
@@ -50,8 +65,10 @@ $col-actions: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
   color: var(--text-title);
   text-align: center;
 }
@@ -119,18 +136,18 @@ $col-actions: 100px;
   box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 
   &--public {
-    background-color: var(--color-correct-green);
-    color: #1a5c1e;
+    background-color: #d4edda;
+    color: #1a5c3a;
   }
 
   &--members {
-    background-color: var(--color-warning);
-    color: #5c4a00;
+    background-color: #dde4f7;
+    color: #2a3f8a;
   }
 
   &--private {
-    background-color: #ffb3b3;
-    color: #7a1010;
+    background-color: #e2e5ea;
+    color: #3a4252;
   }
 }
 
