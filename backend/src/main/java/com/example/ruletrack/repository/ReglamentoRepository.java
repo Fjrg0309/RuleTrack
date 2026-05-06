@@ -35,5 +35,13 @@ public interface ReglamentoRepository extends JpaRepository<Reglamento, Long> {
             @Param("userId") Long userId,
             @Param("orgNombre") String orgNombre
     );
+
+    @Query("""
+        SELECT r FROM Reglamento r
+        LEFT JOIN r.creadoPor creador
+        WHERE creador.organizacionNombre = :orgNombre
+        ORDER BY r.createdAt DESC
+        """)
+    List<Reglamento> findAllByOrganizacionNombre(@Param("orgNombre") String orgNombre);
 }
 

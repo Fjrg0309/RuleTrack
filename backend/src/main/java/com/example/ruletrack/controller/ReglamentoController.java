@@ -31,6 +31,12 @@ public class ReglamentoController {
         return ResponseEntity.ok(reglamentoService.getPublicoView(id));
     }
 
+    /** Endpoint autenticado: todos los reglamentos de la organización del usuario (sin filtro de visibilidad) */
+    @GetMapping("/organizacion")
+    public ResponseEntity<List<ReglamentoResponseDTO>> findTodasDeOrganizacion() {
+        return ResponseEntity.ok(reglamentoService.findTodasDeOrganizacion());
+    }
+
     /** Endpoint autenticado: reglamentos visibles según el usuario actual */
     @GetMapping("/visibles")
     public ResponseEntity<List<ReglamentoResponseDTO>> findVisibles() {

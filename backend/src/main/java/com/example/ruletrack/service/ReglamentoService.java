@@ -153,6 +153,14 @@ public class ReglamentoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Reglamento", id));
     }
 
+    /** Todos los reglamentos de la organización del usuario autenticado (sin filtro de visibilidad) */
+    @Transactional(readOnly = true)
+    public List<ReglamentoResponseDTO> findTodasDeOrganizacion() {
+        Usuario usuario = getCurrentUser();
+        return reglamentoRepository.findAllByOrganizacionNombre(usuario.getOrganizacionNombre())
+                .stream().map(this::toDTO).toList();
+    }
+
     private Optional<Usuario> getCurrentUserOptional() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getName())) {
