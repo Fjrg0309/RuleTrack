@@ -7,17 +7,32 @@
 }
 
 .converting__banner {
+  position: relative;
   padding: 20px 32px;
-  background-color: var(--color-accent);
+  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
+  overflow: hidden;
   text-align: center;
+  color: #fff;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 50%;
+    pointer-events: none;
+  }
 }
 
 .converting__title {
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--button-color);
+  color: #fff;
 }
 
 .converting__body {
