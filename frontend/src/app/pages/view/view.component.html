@@ -1,4 +1,11 @@
 <section class="view">
+  <app-modal
+    [visible]="downloadModalVisible"
+    [titulo]="titulo"
+    (formatSelected)="onDownloadFormat($event)"
+    (cancelled)="onDownloadCancelled()"
+  />
+
   @if (isLoading) {
     <div class="view__loading">
       <div class="view__spinner"></div>
@@ -20,7 +27,7 @@
 
     <div class="view__actions">
       <button class="btn btn--cancel" (click)="goBack()">Volver</button>
-      <button class="btn btn--primary" (click)="download()">Descargar</button>
+      <button class="btn btn--primary" (click)="openDownloadModal()">Descargar</button>
     </div>
   }
 </section>

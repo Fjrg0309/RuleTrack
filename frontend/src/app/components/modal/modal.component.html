@@ -1,0 +1,24 @@
+@if (visible) {
+  <div class="modal__overlay" (click)="cancel()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal__card" (click)="$event.stopPropagation()">
+
+      <h2 id="modal-title" class="modal__title">Descargar documento</h2>
+      <p class="modal__subtitle">{{ titulo }}</p>
+
+      <p class="modal__label">Formato</p>
+
+      <div class="modal__options">
+        <button class="modal__option" (click)="selectFormat('md')">
+          <span class="modal__option-name">Markdown</span>
+          <span class="modal__option-ext">.md</span>
+        </button>
+        <button class="modal__option" (click)="selectFormat('pdf')">
+          <span class="modal__option-name">PDF</span>
+          <span class="modal__option-ext">.pdf</span>
+        </button>
+      </div>
+
+      <button class="modal__cancel" (click)="cancel()">Cancelar</button>
+    </div>
+  </div>
+}

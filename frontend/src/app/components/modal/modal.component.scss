@@ -1,1 +1,126 @@
 // Encapsulado
+
+.modal__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: overlay-in 0.18s ease;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal__card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--color-card);
+  border-radius: 2px;
+  border: 2px solid var(--color-accent);
+  box-shadow: var(--shadow-md);
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  animation: card-in 0.2s ease;
+}
+
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal__title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--button-color);
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.modal__subtitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.75;
+  margin: -6px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal__label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--button-color);
+  margin: 0;
+}
+
+.modal__options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.modal__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius);
+  background-color: var(--color-primary);
+  color: var(--text-color);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    border-color: var(--button-color);
+    box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
+  }
+}
+
+.modal__option-name {
+  font-weight: 700;
+}
+
+.modal__option-ext {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--button-color);
+  opacity: 0.8;
+}
+
+.modal__cancel {
+  margin-top: 2px;
+  padding: 12px;
+  background-color: var(--button-color);
+  color: var(--text-button);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  box-shadow: var(--shadow-btn);
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+
+  &:hover {
+    background-color: var(--button-hover);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+  }
+}

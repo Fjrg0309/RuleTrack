@@ -4,6 +4,7 @@
   background-color: var(--color-card);
   border-radius: var(--border-radius);
   border: 1px solid var(--color-secondary);
+  border-left: 4px solid var(--button-color);
   box-shadow: var(--shadow-card);
   transition: box-shadow 0.2s, transform 0.15s;
 
@@ -30,6 +31,14 @@
   font-weight: 700;
   color: var(--text-title);
   box-shadow: var(--shadow-sm);
+}
+
+.card__icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--button-color);
+  margin-right: 8px;
 }
 
 .card__info {

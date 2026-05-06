@@ -1,10 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ModalComponent } from '../../components/modal/modal.component';
 import { PublicacionesService } from '../../services/publicaciones.service';
 
 @Component({
   selector: 'app-view',
-  imports: [],
+  imports: [ModalComponent],
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss',
 })
@@ -17,6 +18,7 @@ export class ViewComponent implements OnInit {
   contenido = '';
   isLoading = true;
   errorMsg = '';
+  downloadModalVisible = false;
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -38,13 +40,26 @@ export class ViewComponent implements OnInit {
     });
   }
 
-  download(): void {
-    const blob = new Blob([this.contenido], { type: 'text/markdown' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `${this.titulo}.md`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+  openDownloadModal(): void {
+    this.downloadModalVisible = true;
+  }
+
+  onDownloadFormat(format: 'md' | 'pdf'): void {
+    this.downloadModalVisible = false;
+    if (format === 'md') {
+      const blob = new Blob([this.contenido], { type: 'text/markdown' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${this.titulo}.md`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+    } else {
+      PublicacionesService.printAsPdf(this.titulo, this.contenido);
+    }
+  }
+
+  onDownloadCancelled(): void {
+    this.downloadModalVisible = false;
   }
 
   goBack(): void {
