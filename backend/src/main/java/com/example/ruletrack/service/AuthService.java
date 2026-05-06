@@ -1,5 +1,6 @@
 package com.example.ruletrack.service;
 
+import com.example.ruletrack.dto.MiembroDTO;
 import com.example.ruletrack.dto.OrganizacionInfoDTO;
 import com.example.ruletrack.dto.auth.AuthResponseDTO;
 import com.example.ruletrack.dto.auth.LoginRequestDTO;
@@ -115,6 +116,23 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
         String token = tokenProvider.generateToken(usuario.getUsername());
         return toResponse(token, usuario);
+    }
+
+    public List<MiembroDTO> getMiembros(String username) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+        String orgNombre = usuario.getOrganizacionNombre();
+        if (orgNombre == null || orgNombre.isBlank()) {
+            return List.of();
+        }
+        return usuarioRepository.findByOrganizacionNombre(orgNombre.trim()).stream()
+                .map(u -> MiembroDTO.builder()
+                        .username(u.getUsername())
+                        .nombre(u.getNombre())
+                        .apellidos(u.getApellidos())
+                        .rol(u.getRol().name())
+                        .build())
+                .toList();
     }
 
     public OrganizacionInfoDTO getOrganizacionInfo(String nombre) {

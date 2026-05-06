@@ -1,5 +1,6 @@
 package com.example.ruletrack.controller;
 
+import com.example.ruletrack.dto.MiembroDTO;
 import com.example.ruletrack.dto.OrganizacionInfoDTO;
 import com.example.ruletrack.dto.auth.AuthResponseDTO;
 import com.example.ruletrack.dto.auth.LoginRequestDTO;
@@ -41,6 +42,12 @@ public class AuthController {
     @GetMapping("/organizacion/info")
     public ResponseEntity<OrganizacionInfoDTO> getOrganizacionInfo(@RequestParam String nombre) {
         return ResponseEntity.ok(authService.getOrganizacionInfo(nombre));
+    }
+
+    @GetMapping("/organizacion/miembros")
+    public ResponseEntity<java.util.List<MiembroDTO>> getMiembros(
+            @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(authService.getMiembros(userDetails.getUsername()));
     }
 
     @PutMapping("/me")
