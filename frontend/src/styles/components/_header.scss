@@ -7,6 +7,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 70px;
   padding: 10px 40px;
   background-color: var(--color-accent);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
@@ -33,18 +34,22 @@
     display: inline-flex;
     align-items: center;
     padding: 7px 20px;
-    border: 2px solid var(--button-color);
     border-radius: var(--border-radius);
     font-size: 0.875rem;
     font-weight: 700;
-    color: var(--text-button);
-    background: var(--button-color);
-    transition: background-color 0.2s, color 0.2s;
+    color: #1a3a6e;
+    background: #fff;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
     text-decoration: none;
+    letter-spacing: 0.02em;
+    cursor: pointer;
 
     &:hover {
-      background-color: var(--button-hover);
-      border-color: var(--button-hover);
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      color: #0f2a5c;
     }
   }
 
@@ -66,12 +71,53 @@
     align-items: center;
     justify-content: center;
     padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
   }
 
   &__user-icon {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
+    display: block;
+    transition: transform 0.15s;
+
+    &:hover {
+      transform: scale(1.08);
+    }
+  }
+
+  &__user-wrapper {
+    position: relative;
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--color-card);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    border: 1.5px solid var(--color-secondary);
+    min-width: 148px;
+    z-index: 200;
+    overflow: hidden;
+    animation: dropdown-in 0.15s ease;
+  }
+
+  &__dropdown-item {
+    display: block;
+    padding: 11px 18px;
+    font-size: 0.875rem;
+    font-weight: 500;
     color: var(--text-color);
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover {
+      background: var(--color-secondary);
+      color: var(--button-color);
+    }
   }
 }
 
@@ -88,12 +134,13 @@
     gap: 8px;
   }
 
-  .header__settings-link {
-    font-size: 0.8rem;
-  }
-
   .header__user-icon {
     width: 34px;
     height: 34px;
   }
+}
+
+@keyframes dropdown-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
