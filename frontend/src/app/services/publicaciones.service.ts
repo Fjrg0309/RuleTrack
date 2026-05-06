@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import jsPDF from 'jspdf';
 
 export interface ReglamentoDTO {
   id: number;
@@ -59,6 +60,10 @@ export class PublicacionesService {
     return this.http.get<ReglamentoDTO[]>('/api/reglamentos/publicos');
   }
 
+  getTodasDeOrganizacion(): Observable<ReglamentoDTO[]> {
+    return this.http.get<ReglamentoDTO[]>('/api/reglamentos/organizacion');
+  }
+
   getById(id: number): Observable<ReglamentoDTO> {
     return this.http.get<ReglamentoDTO>(`/api/reglamentos/${id}`);
   }
@@ -106,6 +111,234 @@ export class PublicacionesService {
       a.click();
       URL.revokeObjectURL(a.href);
     });
+  }
+
+  downloadAsPdf(pub: ReglamentoDTO): void {
+    this.getVersiones(pub.id).subscribe(versions => {
+      const v = versions.find(ver => ver.estado === 'PUBLICADO') ?? versions[versions.length - 1];
+      if (!v?.contenido) return;
+      PublicacionesService.generatePdf(pub.titulo, v.contenido);
+    });
+  }
+
+  static generatePdf(titulo: string, contenido: string): void {
+    const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+    const margin = 56;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const maxWidth = pageWidth - margin * 2;
+    let y = margin;
+
+    const checkPage = (needed: number) => {
+      if (y + needed > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+    };
+
+    // Strip inline markdown markers (bold, italic, code, links)
+    const stripInline = (text: string) =>
+      text
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/__(.+?)__/g, '$1')
+        .replace(/\*(.+?)\*/g, '$1')
+        .replace(/_(.+?)_/g, '$1')
+        .replace(/`(.+?)`/g, '$1')
+        .replace(/\[(.+?)\]\(.+?\)/g, '$1');
+
+    // Document title
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(20);
+    doc.setTextColor(31, 58, 110);
+    checkPage(28);
+    doc.text(titulo, margin, y);
+    y += 10;
+    doc.setDrawColor(91, 141, 239);
+    doc.setLineWidth(1.5);
+    doc.line(margin, y, pageWidth - margin, y);
+    y += 22;
+
+    const rawLines = contenido.split('\n');
+    let i = 0;
+
+    while (i < rawLines.length) {
+      const raw = rawLines[i];
+      const trimmed = raw.trim();
+
+      // Empty line
+      if (trimmed === '') {
+        y += 5;
+        i++;
+        continue;
+      }
+
+      // Heading 1 (#)
+      if (/^# /.test(raw)) {
+        const text = stripInline(raw.replace(/^# /, ''));
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(15);
+        doc.setTextColor(31, 58, 110);
+        const wrapped = doc.splitTextToSize(text, maxWidth);
+        for (const line of wrapped) {
+          checkPage(20);
+          doc.text(line, margin, y);
+          y += 20;
+        }
+        doc.setDrawColor(186, 210, 254);
+        doc.setLineWidth(0.7);
+        checkPage(8);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 10;
+        i++;
+        continue;
+      }
+
+      // Heading 2 (##)
+      if (/^## /.test(raw)) {
+        const text = stripInline(raw.replace(/^## /, ''));
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(12);
+        doc.setTextColor(40, 40, 40);
+        const wrapped = doc.splitTextToSize(text, maxWidth);
+        for (const line of wrapped) {
+          checkPage(18);
+          doc.text(line, margin, y);
+          y += 18;
+        }
+        y += 3;
+        i++;
+        continue;
+      }
+
+      // Heading 3 (###)
+      if (/^### /.test(raw)) {
+        const text = stripInline(raw.replace(/^### /, ''));
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(11);
+        doc.setTextColor(60, 60, 60);
+        const wrapped = doc.splitTextToSize(text, maxWidth);
+        for (const line of wrapped) {
+          checkPage(16);
+          doc.text(line, margin, y);
+          y += 16;
+        }
+        y += 2;
+        i++;
+        continue;
+      }
+
+      // Heading 4–6 (####+)
+      if (/^#{4,} /.test(raw)) {
+        const text = stripInline(raw.replace(/^#{4,} /, ''));
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(80, 80, 80);
+        const wrapped = doc.splitTextToSize(text, maxWidth);
+        for (const line of wrapped) {
+          checkPage(14);
+          doc.text(line, margin, y);
+          y += 14;
+        }
+        i++;
+        continue;
+      }
+
+      // Horizontal rule (--- or ***)
+      if (/^[-*]{3,}$/.test(trimmed)) {
+        checkPage(10);
+        doc.setDrawColor(180, 180, 180);
+        doc.setLineWidth(0.5);
+        doc.line(margin, y, pageWidth - margin, y);
+        y += 10;
+        i++;
+        continue;
+      }
+
+      // Unordered list item
+      if (/^[\-*+] /.test(raw)) {
+        const text = stripInline(raw.replace(/^[\-*+] /, ''));
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(10);
+        doc.setTextColor(40, 40, 40);
+        const indent = margin + 14;
+        const wrapped = doc.splitTextToSize(text, maxWidth - 14);
+        checkPage(14);
+        doc.text('\u2022', margin + 2, y);
+        for (const line of wrapped) {
+          checkPage(14);
+          doc.text(line, indent, y);
+          y += 14;
+        }
+        i++;
+        continue;
+      }
+
+      // Ordered list item (1. 2. ...)
+      if (/^\d+\.\s/.test(raw)) {
+        const match = raw.match(/^(\d+)\.\s(.*)/);
+        if (match) {
+          const num = match[1];
+          const text = stripInline(match[2]);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(10);
+          doc.setTextColor(40, 40, 40);
+          const indent = margin + 20;
+          const wrapped = doc.splitTextToSize(text, maxWidth - 20);
+          checkPage(14);
+          doc.text(`${num}.`, margin, y);
+          for (const line of wrapped) {
+            checkPage(14);
+            doc.text(line, indent, y);
+            y += 14;
+          }
+        }
+        i++;
+        continue;
+      }
+
+      // Blockquote (> text)
+      if (/^> /.test(raw)) {
+        const text = stripInline(raw.replace(/^> /, ''));
+        doc.setFont('helvetica', 'italic');
+        doc.setFontSize(10);
+        doc.setTextColor(90, 90, 90);
+        const qIndent = margin + 12;
+        const wrapped = doc.splitTextToSize(text, maxWidth - 12);
+        checkPage(14);
+        doc.setDrawColor(91, 141, 239);
+        doc.setLineWidth(2);
+        doc.line(margin + 2, y - 10, margin + 2, y + (wrapped.length - 1) * 14);
+        for (const line of wrapped) {
+          checkPage(14);
+          doc.text(line, qIndent, y);
+          y += 14;
+        }
+        y += 2;
+        i++;
+        continue;
+      }
+
+      // Normal paragraph
+      const text = stripInline(raw);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(40, 40, 40);
+      const wrapped = doc.splitTextToSize(text, maxWidth);
+      for (const line of wrapped) {
+        checkPage(14);
+        doc.text(line, margin, y);
+        y += 14;
+      }
+      y += 3;
+      i++;
+    }
+
+    doc.save(`${titulo}.pdf`);
+  }
+
+  /** @deprecated use generatePdf */
+  static printAsPdf(titulo: string, contenido: string): void {
+    PublicacionesService.generatePdf(titulo, contenido);
   }
 }
 

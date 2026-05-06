@@ -1,4 +1,11 @@
 <section class="home-org">
+  <app-modal
+    [visible]="downloadModalVisible()"
+    [titulo]="pendingDownload()?.titulo ?? ''"
+    (formatSelected)="onDownloadFormat($event)"
+    (cancelled)="onDownloadCancelled()"
+  />
+
   <section class="home-org__welcome" aria-labelledby="welcome-org-title">
     <h1 id="welcome-org-title" class="home-org__welcome-title">¡Bienvenido a RuleTrack, {{ auth.currentUser()?.nombre ?? 'Organizador' }}!</h1>
     <p class="home-org__welcome-info">Sube tus archivos y hazlos más óptimos para el mundo</p>
@@ -10,6 +17,7 @@
       <nav class="home-org__options-nav">
         <a class="btn btn--primary home-org__option-btn" routerLink="/organizacion">Mi organización</a>
         <a class="btn btn--primary home-org__option-btn" routerLink="/publicaciones">Mis publicaciones</a>
+        <a class="btn btn--primary home-org__option-btn" routerLink="/miembros-organizacion">Usuarios de mi organización</a>
       </nav>
     </section>
 

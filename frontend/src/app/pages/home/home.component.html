@@ -1,9 +1,10 @@
 <section class="home">
-  @if (toastMessage()) {
-    <div class="home__toast" role="alert" aria-live="assertive">
-      <span>{{ toastMessage() }}</span>
-    </div>
-  }
+  <app-modal
+    [visible]="downloadModalVisible()"
+    [titulo]="pendingDownload()?.titulo ?? ''"
+    (formatSelected)="onDownloadFormat($event)"
+    (cancelled)="onDownloadCancelled()"
+  />
 
   <section class="home__welcome" aria-labelledby="welcome-title">
     @if (auth.currentUser()) {
@@ -11,7 +12,7 @@
       <p class="home__welcome-info">¡Consulta las normas optimizadas por los organizadores que necesites!</p>
     } @else {
       <h1 id="welcome-title" class="home__welcome-title">Bienvenido a RuleTrack</h1>
-      <p class="home__welcome-info">⚠ Inicia sesión para acceder a todas las funciones. Sin sesión solo podrás consultar y descargar documentos públicos.</p>
+      <p class="home__welcome-info">Inicia sesión para acceder a todas las funciones</p>
     }
   </section>
 
@@ -22,13 +23,12 @@
         @if (auth.currentUser()?.rol === 'ORGANIZADOR') {
           <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mi organización</a>
           <a class="btn btn--primary home__option-btn" routerLink="/organizer">Mis publicaciones</a>
+          <a class="btn btn--primary home__option-btn" routerLink="/miembros-organizacion">Usuarios de mi organización</a>
         } @else if (auth.currentUser()) {
-          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Esta sección es solo para organizadores')">Mi organización</button>
           <a class="btn btn--primary home__option-btn" routerLink="/publicaciones">Mis publicaciones</a>
           <p class="home__options-hint">Solo los organizadores pueden gestionar documentos</p>
         } @else {
-          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Inicia sesión para acceder a tu organización')">Mi organización</button>
-          <button class="btn btn--primary home__option-btn" (click)="showLoginToast('Inicia sesión para ver tus publicaciones')">Mis publicaciones</button>
+          <button class="btn btn--primary home__option-btn" (click)="showPermissionToast('Inicia sesión para ver tus publicaciones')">Mis publicaciones</button>
           <p class="home__options-hint">Inicia sesión para usar todas las opciones</p>
         }
       </nav>
