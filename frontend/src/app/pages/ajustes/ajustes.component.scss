@@ -51,8 +51,8 @@
   }
 
   &--danger {
-    border-color: var(--color-warning);
-    background-color: rgba(255, 243, 19, 0.15);
+    border-color: #FECACA;
+    background-color: #FEF2F2;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -60,21 +60,21 @@
 }
 
 .settings__card-label {
-  display: inline-flex;
-  align-items: center;
-  padding: 7px 18px;
-  background-color: var(--color-title);
-  color: var(--text-title);
-  border-radius: var(--border-radius);
-  font-size: 1rem;
+  font-size: 0.75rem;
   font-weight: 700;
-  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-color);
+  opacity: 0.75;
   align-self: flex-start;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 
   &--danger {
-    background-color: var(--color-warning);
-    color: #5c4a00;
+    opacity: 1;
+    color: #b91c1c;
+    font-size: 0.75rem;
+    align-self: center;
+    margin-bottom: 0;
   }
 }
 
@@ -107,16 +107,11 @@
 }
 
 .settings__field-label {
-  display: inline-flex;
-  padding: 5px 14px;
-  background-color: var(--color-title);
-  color: var(--text-title);
-  border-radius: var(--border-radius);
-  font-size: 0.875rem;
-  font-weight: 700;
-  box-shadow: var(--shadow-sm);
-  align-self: flex-start;
-  margin-bottom: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.7;
+  margin-bottom: 2px;
 }
 
 .settings__input {
