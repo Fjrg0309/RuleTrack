@@ -14,9 +14,22 @@
   --text-color: #333333;
   --color-card: #FFFFFF;
   --color-title: #7CBDE5;
+  --color-label: #5B8DEF;
   --color-correct: #FF0000;
   --color-correct-green: #98FF9D;
   --color-warning: #FFF313;
+
+  // Badge colors
+  --badge-public-bg:    #d4edda;
+  --badge-public-color: #1a5c3a;
+  --badge-members-bg:    #dde4f7;
+  --badge-members-color: #2a3f8a;
+  --badge-private-bg:    #e2e5ea;
+  --badge-private-color: #3a4252;
+
+  // Banner gradient (banners de página)
+  --banner-gradient: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  --banner-circle: rgba(255, 255, 255, 0.12);
 
   // Shared
   --border-radius: 2px;
@@ -30,23 +43,44 @@
 }
 
 [data-theme="dark"] {
-  --button-color: #B1B1B1;
-  --text-button: #383232;
+  // Accent & buttons — azul contenido, sin brillar en oscuro
+  --button-color: #3A6BC8;
+  --button-hover: #2A53A8;
+  --text-button: #FFFFFF;
   --text-title: #FFFFFF;
-  --button-hover: #212481;
-  --color-primary: #39444B;
-  --color-secondary: #132A38;
-  --color-accent: #132A38;
-  --text-color: #D3C4C4;
-  --color-card: #1B2F3A;
-  --color-title: #7B7272;
-  --color-correct: #BA2C2C;
-  --color-correct-green: #4EBB55;
-  --color-warning: #FFF313;
 
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.42);
-  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.48);
-  --shadow-btn: 0 3px 10px rgba(177, 177, 177, 0.4), 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.22);
+  // Backgrounds — true dark, layered
+  --color-primary: #0F1117;       // page bg
+  --color-card:    #1A1D27;       // card / input bg
+  --color-accent:  #1E2235;       // section bg, banners bg tint
+  --color-secondary: #2A2F45;     // borders, dividers, hover
+
+  // Text
+  --text-color: #C8D0E0;          // texto principal — ligeramente bajado de brillo
+  --color-label: #5A80C8;         // títulos de sección — azul acento discreto
+
+  // Semantic
+  --color-title:         #4A7DE0;
+  --color-correct:       #F87171;
+  --color-correct-green: #34D399;
+  --color-warning:       #FBBF24;
+
+  // Badge colors
+  --badge-public-bg:    rgba(52, 211, 153, 0.12);
+  --badge-public-color: #34D399;
+  --badge-members-bg:    rgba(107, 158, 245, 0.12);
+  --badge-members-color: #7BA8E8;
+  --badge-private-bg:    rgba(100, 116, 139, 0.12);
+  --badge-private-color: #8899AA;
+
+  // Banner gradient — azul muy oscuro, discreto
+  --banner-gradient: linear-gradient(135deg, #0A1929 0%, #0D2247 100%);
+  --banner-circle: rgba(255, 255, 255, 0.03);
+
+  // Shadows — deeper on dark
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.5);
+  --shadow-md:   0 4px 16px rgba(0, 0, 0, 0.6);
+  --shadow-lg:   0 8px 28px rgba(0, 0, 0, 0.7);
+  --shadow-btn:  0 3px 10px rgba(74, 125, 224, 0.25), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.3);
 }
