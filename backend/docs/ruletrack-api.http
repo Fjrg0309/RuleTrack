@@ -1,0 +1,232 @@
+### ============================================================
+### RuleTrack API – Peticiones de prueba
+### Requiere el plugin "REST Client" de VS Code o IntelliJ HTTP Client.
+### Variables: ajusta @base y @token según tu entorno.
+### ============================================================
+
+@base = http://localhost:8080/api
+@contentType = application/json
+
+### ─── VARIABLE: sustituir por el token obtenido en /login ───────────
+@token = Bearer COLOCA_AQUI_EL_TOKEN_JWT
+
+
+# ================================================================
+#  AUTENTICACIÓN  (/api/auth)
+# ================================================================
+
+### 1. Registrar nuevo usuario (unirse a organización existente)
+POST {{base}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "usuario_prueba",
+  "nombre": "Carlos",
+  "apellidos": "Martínez López",
+  "fechaNacimiento": "1992-04-15",
+  "email": "carlos@ejemplo.com",
+  "dni": "87654321B",
+  "password": "clave1234",
+  "rol": "USUARIO",
+  "organizacionNombre": "MiOrganizacion",
+  "crearOrganizacion": false
+}
+
+### 2. Registrar organizador y crear organización nueva
+POST {{base}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "username": "organizador1",
+  "nombre": "Ana",
+  "apellidos": "García Ruiz",
+  "fechaNacimiento": "1988-11-20",
+  "email": "ana@ejemplo.com",
+  "dni": "11223344C",
+  "password": "clave1234",
+  "rol": "ORGANIZADOR",
+  "organizacionNombre": "MiOrganizacion",
+  "crearOrganizacion": true
+}
+
+### 3. Iniciar sesión
+POST {{base}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "username": "organizador1",
+  "password": "clave1234"
+}
+
+### 4. Obtener datos del usuario autenticado
+GET {{base}}/auth/me
+Authorization: {{token}}
+
+### 5. Actualizar perfil
+PUT {{base}}/auth/me
+Authorization: {{token}}
+Content-Type: {{contentType}}
+
+{
+  "nombre": "Ana Actualizada",
+  "email": "ana_new@ejemplo.com"
+}
+
+### 6. Comprobar si existe una organización
+GET {{base}}/auth/organizacion/existe?nombre=MiOrganizacion
+
+### 7. Información pública de una organización
+GET {{base}}/auth/organizacion/info?nombre=MiOrganizacion
+
+### 8. Listar miembros de la organización del usuario autenticado
+GET {{base}}/auth/organizacion/miembros
+Authorization: {{token}}
+
+
+# ================================================================
+#  REGLAMENTOS  (/api/reglamentos)
+# ================================================================
+
+### 9. Listar reglamentos públicos (sin autenticación)
+GET {{base}}/reglamentos/publicos
+
+### 10. Vista pública de un reglamento (sin autenticación)
+GET {{base}}/reglamentos/publico/1
+
+### 11. Crear nuevo reglamento con versión inicial
+POST {{base}}/reglamentos
+Authorization: {{token}}
+Content-Type: {{contentType}}
+
+{
+  "titulo": "Reglamento de Fútbol Sala 2025",
+  "descripcion": "Normas oficiales del torneo interno de fútbol sala.",
+  "visibilidad": "PUBLICO",
+  "contenido": "# Artículo 1 – Objetivo\nSe establece el torneo de fútbol sala.\n\n# Artículo 2 – Participantes\nPodrán participar todos los socios.",
+  "versionEtiqueta": "1.0"
+}
+
+### 12. Listar todos los reglamentos de la organización (autenticado)
+GET {{base}}/reglamentos/organizacion
+Authorization: {{token}}
+
+### 13. Listar reglamentos visibles para el usuario autenticado
+GET {{base}}/reglamentos/visibles
+Authorization: {{token}}
+
+### 14. Obtener reglamento por ID
+GET {{base}}/reglamentos/1
+Authorization: {{token}}
+
+### 15. Actualizar un reglamento
+PUT {{base}}/reglamentos/1
+Authorization: {{token}}
+Content-Type: {{contentType}}
+
+{
+  "titulo": "Reglamento de Fútbol Sala 2025 (revisado)",
+  "descripcion": "Normas revisadas.",
+  "visibilidad": "SOLO_MIEMBROS"
+}
+
+### 16. Eliminar un reglamento
+DELETE {{base}}/reglamentos/1
+Authorization: {{token}}
+
+
+# ================================================================
+#  VERSIONES  (/api/reglamentos/{id}/versiones)
+# ================================================================
+
+### 17. Listar versiones de un reglamento
+GET {{base}}/reglamentos/1/versiones
+Authorization: {{token}}
+
+### 18. Obtener siguiente etiqueta sugerida
+GET {{base}}/reglamentos/1/versiones/siguiente-etiqueta
+Authorization: {{token}}
+
+### 19. Crear nueva versión de un reglamento
+POST {{base}}/reglamentos/1/versiones
+Authorization: {{token}}
+Content-Type: {{contentType}}
+
+{
+  "versionEtiqueta": "1.1",
+  "contenido": "# Artículo 1 – Objetivo\nSe establece el torneo de fútbol sala.\n\n# Artículo 2 – Participantes\nPodrán participar todos los socios activos."
+}
+
+### 20. Obtener una versión por ID
+GET {{base}}/versiones/1
+Authorization: {{token}}
+
+### 21. Activar una versión (publica y archiva las demás)
+PATCH {{base}}/versiones/1/activar
+Authorization: {{token}}
+
+### 22. Cambiar estado de una versión a ARCHIVADO
+PATCH {{base}}/versiones/2/estado?estado=ARCHIVADO
+Authorization: {{token}}
+
+
+# ================================================================
+#  SUGERENCIAS IA  (/api/versiones/{id}/sugerencias)
+# ================================================================
+
+### 23. Listar sugerencias de una versión
+GET {{base}}/versiones/1/sugerencias
+Authorization: {{token}}
+
+### 24. Generar revisión de calidad con IA
+POST {{base}}/versiones/1/sugerencias/revision
+Authorization: {{token}}
+
+### 25. Generar resumen del reglamento con IA
+POST {{base}}/versiones/1/sugerencias/resumen
+Authorization: {{token}}
+
+### 26. Detectar incoherencias con IA
+POST {{base}}/versiones/1/sugerencias/incoherencias
+Authorization: {{token}}
+
+### 27. Marcar sugerencia como aplicada
+PATCH {{base}}/sugerencias/1/aplicada?aplicada=true
+Authorization: {{token}}
+
+
+# ================================================================
+#  HISTORIAL DE CAMBIOS  (/api/versiones/{id}/historial)
+# ================================================================
+
+### 28. Obtener historial de cambios de una versión
+GET {{base}}/versiones/1/historial
+Authorization: {{token}}
+
+
+# ================================================================
+#  CORRECCIONES IA  (/api/corrections)
+# ================================================================
+
+### 29. Analizar documento y obtener correcciones
+POST {{base}}/corrections/analyze
+Content-Type: {{contentType}}
+
+{
+  "content": "# Reglamento\n\nEl jugador devera tener una edad minima de 16 años. Los jugadores deberan respetar al arbitro."
+}
+
+
+# ================================================================
+#  CONVERSIÓN DE DOCUMENTOS  (/api/documents)
+# ================================================================
+
+### 30. Convertir PDF a Markdown (reemplaza ruta con un fichero real)
+# POST {{base}}/documents/convert
+# Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+#
+# ------WebKitFormBoundary
+# Content-Disposition: form-data; name="file"; filename="reglamento.pdf"
+# Content-Type: application/pdf
+#
+# < ./reglamento.pdf
+# ------WebKitFormBoundary--
