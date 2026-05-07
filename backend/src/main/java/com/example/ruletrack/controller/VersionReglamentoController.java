@@ -96,10 +96,6 @@ public class VersionReglamentoController {
         return ResponseEntity.ok(versionService.activar(id));
     }
 }
-
-    private final VersionReglamentoService versionService;
-
-    @GetMapping("/reglamentos/{reglamentoId}/versiones")
     public ResponseEntity<List<VersionReglamentoResponseDTO>> findByReglamento(@PathVariable Long reglamentoId) {
         return ResponseEntity.ok(versionService.findByReglamento(reglamentoId));
     }

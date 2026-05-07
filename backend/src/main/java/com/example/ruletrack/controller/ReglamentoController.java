@@ -125,11 +125,6 @@ public class ReglamentoController {
         return ResponseEntity.noContent().build();
     }
 }
-
-    private final ReglamentoService reglamentoService;
-
-    /** Endpoint público: solo reglamentos PUBLICO */
-    @GetMapping("/publicos")
     public ResponseEntity<List<ReglamentoResponseDTO>> findPublicos() {
         return ResponseEntity.ok(reglamentoService.findPublicos());
     }

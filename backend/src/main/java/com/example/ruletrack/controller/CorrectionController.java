@@ -58,10 +58,6 @@ public class CorrectionController {
         }
     }
 }
-
-    private final LlmService llmService;
-
-    @PostMapping("/analyze")
     public ResponseEntity<CorrectionResponseDTO> analyze(@RequestBody CorrectionRequestDTO request) {
         if (!llmService.isApiKeyConfigured()) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)

@@ -79,10 +79,6 @@ public class SugerenciaIAController {
         return ResponseEntity.ok(sugerenciaService.marcarAplicada(id, aplicada));
     }
 }
-
-    private final SugerenciaIAService sugerenciaService;
-
-    @GetMapping("/versiones/{versionId}/sugerencias")
     public ResponseEntity<List<SugerenciaIAResponseDTO>> findByVersion(@PathVariable Long versionId) {
         return ResponseEntity.ok(sugerenciaService.findByVersion(versionId));
     }
