@@ -44,11 +44,20 @@ export interface PublicoViewDTO {
   contenido: string;
 }
 
+/**
+ * Servicio de acceso a la API de reglamentos y versiones.
+ * Gestiona las operaciones CRUD sobre publicaciones y su descarga en PDF/MD.
+ */
 @Injectable({ providedIn: 'root' })
 export class PublicacionesService {
   private http = inject(HttpClient);
   private auth = inject(AuthService);
 
+  /**
+   * Devuelve los reglamentos visibles según el rol del usuario.
+   * Los usuarios autenticados ven los visibles para su organización;
+   * los anónimos sólo ven los públicos.
+   */
   getVisibles(): Observable<ReglamentoDTO[]> {
     if (this.auth.currentUser()) {
       return this.http.get<ReglamentoDTO[]>('/api/reglamentos/visibles');
@@ -56,50 +65,95 @@ export class PublicacionesService {
     return this.http.get<ReglamentoDTO[]>('/api/reglamentos/publicos');
   }
 
+  /** Devuelve únicamente los reglamentos con visibilidad PÚBÁLICO. */
   getPublicos(): Observable<ReglamentoDTO[]> {
     return this.http.get<ReglamentoDTO[]>('/api/reglamentos/publicos');
   }
 
+  /** Devuelve todos los reglamentos de la organización del usuario autenticado. */
   getTodasDeOrganizacion(): Observable<ReglamentoDTO[]> {
     return this.http.get<ReglamentoDTO[]>('/api/reglamentos/organizacion');
   }
 
+  /**
+   * Obtiene un reglamento por su ID.
+   * @param id Identificador del reglamento.
+   */
   getById(id: number): Observable<ReglamentoDTO> {
     return this.http.get<ReglamentoDTO>(`/api/reglamentos/${id}`);
   }
 
+  /**
+   * Devuelve la vista pública de un reglamento (sin autenticación).
+   * @param id Identificador del reglamento.
+   */
   getPublicoView(id: number): Observable<PublicoViewDTO> {
     return this.http.get<PublicoViewDTO>(`/api/reglamentos/publico/${id}`);
   }
 
+  /**
+   * Crea un nuevo reglamento con su primera versión.
+   * @param data Datos del reglamento a crear.
+   */
   create(data: ReglamentoCreateDTO): Observable<ReglamentoDTO> {
     return this.http.post<ReglamentoDTO>('/api/reglamentos', data);
   }
 
+  /**
+   * Actualiza los metadatos de un reglamento existente.
+   * @param id Identificador del reglamento.
+   * @param data Campos a actualizar.
+   */
   update(id: number, data: Partial<ReglamentoCreateDTO>): Observable<ReglamentoDTO> {
     return this.http.put<ReglamentoDTO>(`/api/reglamentos/${id}`, data);
   }
 
+  /**
+   * Elimina un reglamento y todas sus versiones.
+   * @param id Identificador del reglamento a eliminar.
+   */
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`/api/reglamentos/${id}`);
   }
 
+  /**
+   * Obtiene todas las versiones de un reglamento ordenadas por fecha.
+   * @param reglamentoId Identificador del reglamento.
+   */
   getVersiones(reglamentoId: number): Observable<VersionDTO[]> {
     return this.http.get<VersionDTO[]>(`/api/reglamentos/${reglamentoId}/versiones`);
   }
 
+  /**
+   * Sugiere la siguiente etiqueta de versión para un reglamento (ej. '1.1').
+   * @param reglamentoId Identificador del reglamento.
+   */
   getSiguienteEtiqueta(reglamentoId: number): Observable<{ versionEtiqueta: string }> {
     return this.http.get<{ versionEtiqueta: string }>(`/api/reglamentos/${reglamentoId}/versiones/siguiente-etiqueta`);
   }
 
+  /**
+   * Añade una nueva versión a un reglamento existente.
+   * @param reglamentoId Identificador del reglamento.
+   * @param data Contenido y etiqueta de la nueva versión.
+   */
   crearVersion(reglamentoId: number, data: VersionCreateDTO): Observable<VersionDTO> {
     return this.http.post<VersionDTO>(`/api/reglamentos/${reglamentoId}/versiones`, data);
   }
 
+  /**
+   * Activa una versión concreta, marcándola como PUBLICADO.
+   * @param versionId Identificador de la versión a activar.
+   */
   activarVersion(versionId: number): Observable<VersionDTO> {
     return this.http.patch<VersionDTO>(`/api/versiones/${versionId}/activar`, {});
   }
 
+  /**
+   * Descarga la última versión publicada del reglamento como fichero Markdown.
+   * Crea un elemento <a> dinámico para disparar la descarga desde el navegador.
+   * @param pub Reglamento a descargar.
+   */
   downloadAsMarkdown(pub: ReglamentoDTO): void {
     this.getVersiones(pub.id).subscribe(versions => {
       const v = versions.find(ver => ver.estado === 'PUBLICADO') ?? versions[versions.length - 1];
@@ -113,6 +167,11 @@ export class PublicacionesService {
     });
   }
 
+  /**
+   * Descarga la última versión publicada del reglamento como fichero PDF
+   * generado con jsPDF directamente en el navegador (sin llamada al servidor).
+   * @param pub Reglamento a descargar.
+   */
   downloadAsPdf(pub: ReglamentoDTO): void {
     this.getVersiones(pub.id).subscribe(versions => {
       const v = versions.find(ver => ver.estado === 'PUBLICADO') ?? versions[versions.length - 1];
@@ -121,6 +180,12 @@ export class PublicacionesService {
     });
   }
 
+  /**
+   * Genera y descarga un PDF a partir del título y el contenido en Markdown.
+   * Parsea los encabezados, listas y párrafos para aplicar estilos con jsPDF.
+   * @param titulo Título del documento a mostrar en el PDF.
+   * @param contenido Contenido del documento en formato Markdown.
+   */
   static generatePdf(titulo: string, contenido: string): void {
     const doc = new jsPDF({ unit: 'pt', format: 'a4' });
     const margin = 56;
