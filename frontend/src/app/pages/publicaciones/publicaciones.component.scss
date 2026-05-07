@@ -9,7 +9,7 @@
 .publications__banner {
   position: relative;
   padding: 28px 32px;
-  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  background: var(--banner-gradient);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -22,7 +22,7 @@
     right: -40px;
     width: 160px;
     height: 160px;
-    background: rgba(255,255,255,0.12);
+    background: var(--banner-circle);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -80,15 +80,15 @@ $col-actions: 100px;
   gap: 12px;
   align-items: center;
   padding: 10px 16px;
-  border-bottom: 1px solid rgba(0,0,0,0.07);
+  border-bottom: 1px solid var(--color-secondary);
   transition: background-color 0.15s;
 
   &:nth-child(even) {
-    background-color: rgba(255,255,255,0.25);
+    background-color: rgba(128,128,128,0.08);
   }
 
   &:hover {
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(128,128,128,0.16);
   }
 
   &:last-child {
@@ -98,12 +98,12 @@ $col-actions: 100px;
 
 .publications__name {
   padding: 8px 14px;
-  background-color: rgba(255,255,255,0.85);
+  background-color: var(--color-card);
   border-radius: 2px;
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #222;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  color: var(--text-color);
+  box-shadow: var(--shadow-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -114,12 +114,12 @@ $col-actions: 100px;
   align-items: center;
   justify-content: center;
   padding: 6px 10px;
-  background-color: rgba(255,255,255,0.85);
+  background-color: var(--color-card);
   border-radius: 2px;
   font-size: 0.8125rem;
   font-weight: 700;
-  color: #222;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  color: var(--text-color);
+  box-shadow: var(--shadow-sm);
   text-align: center;
 }
 
@@ -133,36 +133,35 @@ $col-actions: 100px;
   font-weight: 700;
   text-align: center;
   letter-spacing: 0.02em;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.10);
 
   &--public {
-    background-color: #d4edda;
-    color: #1a5c3a;
+    background-color: var(--badge-public-bg);
+    color: var(--badge-public-color);
   }
 
   &--members {
-    background-color: #dde4f7;
-    color: #2a3f8a;
+    background-color: var(--badge-members-bg);
+    color: var(--badge-members-color);
   }
 
   &--private {
-    background-color: #e2e5ea;
-    color: #3a4252;
+    background-color: var(--badge-private-bg);
+    color: var(--badge-private-color);
   }
 }
 
 .publications__url {
   width: 100%;
   padding: 7px 12px;
-  border: 1.5px solid rgba(0,0,0,0.08);
+  border: 1.5px solid var(--color-secondary);
   border-radius: 2px;
   font-size: 0.72rem;
-  color: #3a5a8a;
-  background-color: rgba(255,255,255,0.9);
+  color: var(--color-label);
+  background-color: var(--color-card);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  box-shadow: var(--shadow-sm);
   text-decoration: none;
   display: block;
   transition: background-color 0.18s, color 0.18s, border-color 0.18s;
@@ -189,7 +188,7 @@ $col-actions: 100px;
   height: 36px;
   background-color: var(--button-color);
   border-radius: 2px;
-  box-shadow: 0 2px 6px rgba(99,82,255,0.25);
+  box-shadow: var(--shadow-btn);
   transition: background-color 0.2s, transform 0.15s, box-shadow 0.15s;
   color: var(--text-button);
 
@@ -202,16 +201,62 @@ $col-actions: 100px;
   &:hover {
     background-color: var(--button-hover);
     transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(99,82,255,0.35);
   }
 
   &:active {
     transform: translateY(0);
-    box-shadow: 0 1px 4px rgba(99,82,255,0.2);
+  }
+}
+
+// ── Pagination ──
+.publications__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 4px 0 2px;
+}
+
+.publications__page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: var(--color-card);
+  border: 1.5px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+
+  &:hover:not(:disabled) {
+    background-color: var(--button-color);
+    border-color: var(--button-color);
+    color: #fff;
   }
 
-  &--copied {
-    background-color: var(--color-correct-green);
-    color: #1a5c1e;
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
   }
+}
+
+.publications__page-info {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+  opacity: 0.75;
+  min-width: 80px;
+  text-align: center;
+}
+
+// ── Empty ──
+.publications__empty {
+  padding: 24px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  opacity: 0.55;
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { PublicacionesService, ReglamentoDTO } from '../../services/publicaciones.service';
@@ -16,11 +16,31 @@ export class PublicacionesComponent implements OnInit {
   protected publications = signal<ReglamentoDTO[]>([]);
   protected copiedId: number | null = null;
 
+  protected readonly pageSize = 8;
+  protected currentPage = signal(0);
+
+  protected totalPages = computed(() =>
+    Math.ceil(this.publications().length / this.pageSize)
+  );
+
+  protected pagedPublications = computed(() => {
+    const start = this.currentPage() * this.pageSize;
+    return this.publications().slice(start, start + this.pageSize);
+  });
+
   ngOnInit(): void {
     this.pubService.getVisibles().subscribe({
       next: (data) => this.publications.set(data),
       error: () => {}
     });
+  }
+
+  protected prevPage(): void {
+    if (this.currentPage() > 0) this.currentPage.set(this.currentPage() - 1);
+  }
+
+  protected nextPage(): void {
+    if (this.currentPage() < this.totalPages() - 1) this.currentPage.set(this.currentPage() + 1);
   }
 
   protected copyUrl(pub: ReglamentoDTO): void {

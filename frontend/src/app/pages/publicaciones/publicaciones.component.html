@@ -16,7 +16,7 @@
       <span class="publications__col-label publications__col-label--sm">Acciones</span>
     </div>
 
-    @for (pub of publications(); track pub.id) {
+    @for (pub of pagedPublications(); track pub.id) {
       <div class="publications__row">
         <span class="publications__name">{{ pub.titulo }}</span>
         <span class="publications__version">{{ pub.ultimaVersion }}</span>
@@ -55,4 +55,12 @@
       <p class="publications__empty">No hay publicaciones disponibles.</p>
     }
   </div>
+
+  @if (totalPages() > 1) {
+    <div class="publications__pagination">
+      <button class="publications__page-btn" (click)="prevPage()" [disabled]="currentPage() === 0" aria-label="Página anterior">&#8592;</button>
+      <span class="publications__page-info">{{ currentPage() + 1 }} / {{ totalPages() }}</span>
+      <button class="publications__page-btn" (click)="nextPage()" [disabled]="currentPage() === totalPages() - 1" aria-label="Página siguiente">&#8594;</button>
+    </div>
+  }
 </section>
