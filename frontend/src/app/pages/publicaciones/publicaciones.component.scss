@@ -38,9 +38,10 @@
 .publications__table-wrapper {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-accent);
-  border-radius: 2px;
+  background-color: var(--color-card);
+  border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
+  border: 1.5px solid var(--color-secondary);
   padding: 0;
   gap: 0;
   overflow: hidden;
@@ -57,7 +58,8 @@ $col-actions: 100px;
   grid-template-columns: $col-name $col-sm $col-sm $col-lg $col-actions;
   gap: 12px;
   align-items: center;
-  background-color: var(--color-title);
+  background-color: rgba(128, 128, 128, 0.06);
+  border-bottom: 1.5px solid var(--color-secondary);
   padding: 10px 16px;
 }
 
@@ -65,11 +67,12 @@ $col-actions: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: var(--text-title);
+  color: var(--color-label);
+  opacity: 0.85;
   text-align: center;
 }
 
@@ -97,13 +100,9 @@ $col-actions: 100px;
 }
 
 .publications__name {
-  padding: 8px 14px;
-  background-color: var(--color-card);
-  border-radius: 2px;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-color);
-  box-shadow: var(--shadow-sm);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -113,13 +112,9 @@ $col-actions: 100px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 10px;
-  background-color: var(--color-card);
-  border-radius: 2px;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-color);
-  box-shadow: var(--shadow-sm);
   text-align: center;
 }
 
