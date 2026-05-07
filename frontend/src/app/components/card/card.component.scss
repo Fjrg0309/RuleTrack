@@ -7,10 +7,15 @@
   border-left: 4px solid var(--button-color);
   box-shadow: var(--shadow-card);
   transition: box-shadow 0.2s, transform 0.15s;
+  min-width: 0;
 
   &:hover {
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
+  }
+
+  @media (max-width: 480px) {
+    padding: 10px 12px;
   }
 }
 
@@ -23,14 +28,14 @@
 }
 
 .card__name {
-  padding: 6px 16px;
   margin: 0;
-  background-color: var(--color-title);
-  border-radius: var(--border-radius);
-  font-size: 0.8125rem;
-  font-weight: 700;
-  color: var(--text-title);
-  box-shadow: var(--shadow-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .card__icon {
@@ -46,6 +51,7 @@
   align-items: center;
   flex: 1;
   min-width: 0;
+  overflow: hidden;
 }
 
 .card__org,
@@ -63,6 +69,12 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
 }
 
 .card__badge {

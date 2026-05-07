@@ -10,7 +10,7 @@
 .org-members__banner {
   position: relative;
   padding: 28px 32px;
-  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  background: var(--banner-gradient);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -123,7 +123,7 @@
   font-size: 0.8rem;
   font-weight: 800;
   color: var(--button-color);
-  background: #fff;
+  background: var(--color-card);
   padding: 2px 10px;
   border-radius: 20px;
   line-height: 1.6;
