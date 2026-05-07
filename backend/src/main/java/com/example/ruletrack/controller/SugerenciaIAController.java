@@ -1,4 +1,4 @@
-package com.example.ruletrack.controller;
+﻿package com.example.ruletrack.controller;
 
 import com.example.ruletrack.dto.SugerenciaIAResponseDTO;
 import com.example.ruletrack.service.SugerenciaIAService;
@@ -16,30 +16,30 @@ import java.util.List;
 
 /**
  * Controlador de sugerencias generadas por IA sobre versiones de reglamentos.
- * Permite generar revisiones, resúmenes y detección de incoherencias,
- * así como marcar sugerencias como aplicadas.
+ * Permite generar revisiones, resÃºmenes y detecciÃ³n de incoherencias,
+ * asÃ­ como marcar sugerencias como aplicadas.
  */
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-@Tag(name = "Sugerencias IA", description = "Generación y gestión de sugerencias de IA sobre versiones de reglamentos")
+@Tag(name = "Sugerencias IA", description = "GeneraciÃ³n y gestiÃ³n de sugerencias de IA sobre versiones de reglamentos")
 @SecurityRequirement(name = "bearerAuth")
 public class SugerenciaIAController {
 
     private final SugerenciaIAService sugerenciaService;
 
-    @Operation(summary = "Listar sugerencias de una versión")
+    @Operation(summary = "Listar sugerencias de una versiÃ³n")
     @ApiResponse(responseCode = "200", description = "Lista de sugerencias almacenadas")
     @GetMapping("/versiones/{versionId}/sugerencias")
     public ResponseEntity<List<SugerenciaIAResponseDTO>> findByVersion(@PathVariable Long versionId) {
         return ResponseEntity.ok(sugerenciaService.findByVersion(versionId));
     }
 
-    @Operation(summary = "Generar revisión de calidad",
-               description = "Llama al LLM para obtener una revisión detallada del contenido del reglamento.")
+    @Operation(summary = "Generar revisiÃ³n de calidad",
+               description = "Llama al LLM para obtener una revisiÃ³n detallada del contenido del reglamento.")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Sugerencia de revisión generada"),
-        @ApiResponse(responseCode = "404", description = "Versión no encontrada")
+        @ApiResponse(responseCode = "201", description = "Sugerencia de revisiÃ³n generada"),
+        @ApiResponse(responseCode = "404", description = "VersiÃ³n no encontrada")
     })
     @PostMapping("/versiones/{versionId}/sugerencias/revision")
     public ResponseEntity<SugerenciaIAResponseDTO> generarRevision(@PathVariable Long versionId) {
@@ -47,10 +47,10 @@ public class SugerenciaIAController {
     }
 
     @Operation(summary = "Generar resumen del reglamento",
-               description = "Genera un resumen ejecutivo del contenido de la versión mediante IA.")
+               description = "Genera un resumen ejecutivo del contenido de la versiÃ³n mediante IA.")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Resumen generado"),
-        @ApiResponse(responseCode = "404", description = "Versión no encontrada")
+        @ApiResponse(responseCode = "404", description = "VersiÃ³n no encontrada")
     })
     @PostMapping("/versiones/{versionId}/sugerencias/resumen")
     public ResponseEntity<SugerenciaIAResponseDTO> generarResumen(@PathVariable Long versionId) {
@@ -58,10 +58,10 @@ public class SugerenciaIAController {
     }
 
     @Operation(summary = "Detectar incoherencias en el reglamento",
-               description = "Analiza el documento con IA para identificar posibles contradicciones o ambiguíedades.")
+               description = "Analiza el documento con IA para identificar posibles contradicciones o ambiguÃ­edades.")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Incoherencias detectadas"),
-        @ApiResponse(responseCode = "404", description = "Versión no encontrada")
+        @ApiResponse(responseCode = "404", description = "VersiÃ³n no encontrada")
     })
     @PostMapping("/versiones/{versionId}/sugerencias/incoherencias")
     public ResponseEntity<SugerenciaIAResponseDTO> detectarIncoherencias(@PathVariable Long versionId) {
@@ -73,31 +73,6 @@ public class SugerenciaIAController {
         @ApiResponse(responseCode = "200", description = "Estado de sugerencia actualizado"),
         @ApiResponse(responseCode = "404", description = "Sugerencia no encontrada")
     })
-    @PatchMapping("/sugerencias/{id}/aplicada")
-    public ResponseEntity<SugerenciaIAResponseDTO> marcarAplicada(@PathVariable Long id,
-                                                                    @RequestParam boolean aplicada) {
-        return ResponseEntity.ok(sugerenciaService.marcarAplicada(id, aplicada));
-    }
-}
-    public ResponseEntity<List<SugerenciaIAResponseDTO>> findByVersion(@PathVariable Long versionId) {
-        return ResponseEntity.ok(sugerenciaService.findByVersion(versionId));
-    }
-
-    @PostMapping("/versiones/{versionId}/sugerencias/revision")
-    public ResponseEntity<SugerenciaIAResponseDTO> generarRevision(@PathVariable Long versionId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(sugerenciaService.generarRevision(versionId));
-    }
-
-    @PostMapping("/versiones/{versionId}/sugerencias/resumen")
-    public ResponseEntity<SugerenciaIAResponseDTO> generarResumen(@PathVariable Long versionId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(sugerenciaService.generarResumen(versionId));
-    }
-
-    @PostMapping("/versiones/{versionId}/sugerencias/incoherencias")
-    public ResponseEntity<SugerenciaIAResponseDTO> detectarIncoherencias(@PathVariable Long versionId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(sugerenciaService.detectarIncoherencias(versionId));
-    }
-
     @PatchMapping("/sugerencias/{id}/aplicada")
     public ResponseEntity<SugerenciaIAResponseDTO> marcarAplicada(@PathVariable Long id,
                                                                     @RequestParam boolean aplicada) {

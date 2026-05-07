@@ -1,4 +1,4 @@
-package com.example.ruletrack.controller;
+﻿package com.example.ruletrack.controller;
 
 import com.example.ruletrack.dto.MiembroDTO;
 import com.example.ruletrack.dto.OrganizacionInfoDTO;
@@ -23,31 +23,31 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * Controlador de autenticación y gestión del perfil de usuario.
- * Expone endpoints públicos de registro/login y endpoints autenticados de perfil.
+ * Controlador de autenticaciÃ³n y gestiÃ³n del perfil de usuario.
+ * Expone endpoints pÃºblicos de registro/login y endpoints autenticados de perfil.
  */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Autenticación", description = "Registro, inicio de sesión y gestión de perfil")
+@Tag(name = "AutenticaciÃ³n", description = "Registro, inicio de sesiÃ³n y gestiÃ³n de perfil")
 public class AuthController {
 
     private final AuthService authService;
 
     @Operation(summary = "Registrar nuevo usuario",
-               description = "Crea un usuario y devuelve un token JWT. Permite crear o unirse a una organización.")
+               description = "Crea un usuario y devuelve un token JWT. Permite crear o unirse a una organizaciÃ³n.")
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Usuario registrado correctamente"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos o usuario/email/DNI ya existente")
+        @ApiResponse(responseCode = "400", description = "Datos invÃ¡lidos o usuario/email/DNI ya existente")
     })
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register(@Valid @RequestBody RegisterRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
     }
 
-    @Operation(summary = "Iniciar sesión", description = "Autentica al usuario y devuelve un token JWT válido 24 h.")
+    @Operation(summary = "Iniciar sesiÃ³n", description = "Autentica al usuario y devuelve un token JWT vÃ¡lido 24 h.")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Autenticación correcta"),
+        @ApiResponse(responseCode = "200", description = "AutenticaciÃ³n correcta"),
         @ApiResponse(responseCode = "401", description = "Credenciales incorrectas")
     })
     @PostMapping("/login")
@@ -55,25 +55,25 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @Operation(summary = "Comprobar si existe una organización")
-    @ApiResponse(responseCode = "200", description = "Resultado de la búsqueda")
+    @Operation(summary = "Comprobar si existe una organizaciÃ³n")
+    @ApiResponse(responseCode = "200", description = "Resultado de la bÃºsqueda")
     @GetMapping("/organizacion/existe")
     public ResponseEntity<Map<String, Boolean>> checkOrganizacion(@RequestParam String nombre) {
         return ResponseEntity.ok(Map.of("existe", authService.existeOrganizacion(nombre)));
     }
 
-    @Operation(summary = "Obtener información pública de una organización")
-    @ApiResponse(responseCode = "200", description = "Datos de la organización")
+    @Operation(summary = "Obtener informaciÃ³n pÃºblica de una organizaciÃ³n")
+    @ApiResponse(responseCode = "200", description = "Datos de la organizaciÃ³n")
     @GetMapping("/organizacion/info")
     public ResponseEntity<OrganizacionInfoDTO> getOrganizacionInfo(@RequestParam String nombre) {
         return ResponseEntity.ok(authService.getOrganizacionInfo(nombre));
     }
 
-    @Operation(summary = "Listar miembros de la organización del usuario autenticado",
+    @Operation(summary = "Listar miembros de la organizaciÃ³n del usuario autenticado",
                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Lista de miembros"),
-        @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
+        @ApiResponse(responseCode = "401", description = "Token ausente o invÃ¡lido")
     })
     @GetMapping("/organizacion/miembros")
     public ResponseEntity<java.util.List<MiembroDTO>> getMiembros(
@@ -85,8 +85,8 @@ public class AuthController {
                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Perfil actualizado y nuevo token devuelto"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos"),
-        @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
+        @ApiResponse(responseCode = "400", description = "Datos invÃ¡lidos"),
+        @ApiResponse(responseCode = "401", description = "Token ausente o invÃ¡lido")
     })
     @PutMapping("/me")
     public ResponseEntity<AuthResponseDTO> updateProfile(
@@ -99,42 +99,8 @@ public class AuthController {
                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Datos del usuario actual"),
-        @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
+        @ApiResponse(responseCode = "401", description = "Token ausente o invÃ¡lido")
     })
-    @GetMapping("/me")
-    public ResponseEntity<AuthResponseDTO> getMe(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(authService.getMe(userDetails.getUsername()));
-    }
-}
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
-        return ResponseEntity.ok(authService.login(request));
-    }
-
-    @GetMapping("/organizacion/existe")
-    public ResponseEntity<Map<String, Boolean>> checkOrganizacion(@RequestParam String nombre) {
-        return ResponseEntity.ok(Map.of("existe", authService.existeOrganizacion(nombre)));
-    }
-
-    @GetMapping("/organizacion/info")
-    public ResponseEntity<OrganizacionInfoDTO> getOrganizacionInfo(@RequestParam String nombre) {
-        return ResponseEntity.ok(authService.getOrganizacionInfo(nombre));
-    }
-
-    @GetMapping("/organizacion/miembros")
-    public ResponseEntity<java.util.List<MiembroDTO>> getMiembros(
-            @AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(authService.getMiembros(userDetails.getUsername()));
-    }
-
-    @PutMapping("/me")
-    public ResponseEntity<AuthResponseDTO> updateProfile(
-            @AuthenticationPrincipal UserDetails userDetails,
-            @Valid @RequestBody UpdateProfileRequestDTO request) {
-        return ResponseEntity.ok(authService.updateProfile(userDetails.getUsername(), request));
-    }
-
     @GetMapping("/me")
     public ResponseEntity<AuthResponseDTO> getMe(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(authService.getMe(userDetails.getUsername()));

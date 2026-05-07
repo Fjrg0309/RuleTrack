@@ -1,4 +1,4 @@
-package com.example.ruletrack.controller;
+﻿package com.example.ruletrack.controller;
 
 import com.example.ruletrack.dto.PublicoViewDTO;
 import com.example.ruletrack.dto.ReglamentoRequestDTO;
@@ -19,27 +19,27 @@ import java.util.List;
 
 /**
  * Controlador de reglamentos.
- * Gestiona el ciclo de vida de los reglamentos: creación, lectura, actualización y borrado,
- * con control de visibilidad (PÚBLICO, SOLO_MIEMBROS, PRIVADO).
+ * Gestiona el ciclo de vida de los reglamentos: creaciÃ³n, lectura, actualizaciÃ³n y borrado,
+ * con control de visibilidad (PÃšBLICO, SOLO_MIEMBROS, PRIVADO).
  */
 @RestController
 @RequestMapping("/api/reglamentos")
 @RequiredArgsConstructor
-@Tag(name = "Reglamentos", description = "Gestión de reglamentos con control de visibilidad")
+@Tag(name = "Reglamentos", description = "GestiÃ³n de reglamentos con control de visibilidad")
 public class ReglamentoController {
 
     private final ReglamentoService reglamentoService;
 
-    @Operation(summary = "Listar reglamentos públicos",
-               description = "Devuelve todos los reglamentos con visibilidad PÚBLICO. No requiere autenticación.")
-    @ApiResponse(responseCode = "200", description = "Lista de reglamentos públicos")
+    @Operation(summary = "Listar reglamentos pÃºblicos",
+               description = "Devuelve todos los reglamentos con visibilidad PÃšBLICO. No requiere autenticaciÃ³n.")
+    @ApiResponse(responseCode = "200", description = "Lista de reglamentos pÃºblicos")
     @GetMapping("/publicos")
     public ResponseEntity<List<ReglamentoResponseDTO>> findPublicos() {
         return ResponseEntity.ok(reglamentoService.findPublicos());
     }
 
-    @Operation(summary = "Vista pública de un reglamento",
-               description = "Devuelve el contenido de la última versión publicada de un reglamento.")
+    @Operation(summary = "Vista pÃºblica de un reglamento",
+               description = "Devuelve el contenido de la Ãºltima versiÃ³n publicada de un reglamento.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Contenido del reglamento"),
         @ApiResponse(responseCode = "404", description = "Reglamento no encontrado o sin acceso")
@@ -49,8 +49,8 @@ public class ReglamentoController {
         return ResponseEntity.ok(reglamentoService.getPublicoView(id));
     }
 
-    @Operation(summary = "Listar todos los reglamentos de la organización",
-               description = "Devuelve todos los reglamentos de la organización del usuario, sin filtro de visibilidad.",
+    @Operation(summary = "Listar todos los reglamentos de la organizaciÃ³n",
+               description = "Devuelve todos los reglamentos de la organizaciÃ³n del usuario, sin filtro de visibilidad.",
                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Lista de reglamentos"),
@@ -69,7 +69,7 @@ public class ReglamentoController {
         return ResponseEntity.ok(reglamentoService.findVisiblesParaUsuarioActual());
     }
 
-    @Operation(summary = "Listar todos los reglamentos (administración)",
+    @Operation(summary = "Listar todos los reglamentos (administraciÃ³n)",
                security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<ReglamentoResponseDTO>> findAll() {
@@ -91,7 +91,7 @@ public class ReglamentoController {
                security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponses({
         @ApiResponse(responseCode = "201", description = "Reglamento creado"),
-        @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+        @ApiResponse(responseCode = "400", description = "Datos invÃ¡lidos"),
         @ApiResponse(responseCode = "403", description = "Solo ORGANIZADOR puede crear reglamentos")
     })
     @PostMapping
@@ -125,53 +125,3 @@ public class ReglamentoController {
         return ResponseEntity.noContent().build();
     }
 }
-    public ResponseEntity<List<ReglamentoResponseDTO>> findPublicos() {
-        return ResponseEntity.ok(reglamentoService.findPublicos());
-    }
-
-    /** Endpoint público: vista de un reglamento PUBLICO (sin autenticación) */
-    @GetMapping("/publico/{id}")
-    public ResponseEntity<PublicoViewDTO> getPublicoView(@PathVariable Long id) {
-        return ResponseEntity.ok(reglamentoService.getPublicoView(id));
-    }
-
-    /** Endpoint autenticado: todos los reglamentos de la organización del usuario (sin filtro de visibilidad) */
-    @GetMapping("/organizacion")
-    public ResponseEntity<List<ReglamentoResponseDTO>> findTodasDeOrganizacion() {
-        return ResponseEntity.ok(reglamentoService.findTodasDeOrganizacion());
-    }
-
-    /** Endpoint autenticado: reglamentos visibles según el usuario actual */
-    @GetMapping("/visibles")
-    public ResponseEntity<List<ReglamentoResponseDTO>> findVisibles() {
-        return ResponseEntity.ok(reglamentoService.findVisiblesParaUsuarioActual());
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ReglamentoResponseDTO>> findAll() {
-        return ResponseEntity.ok(reglamentoService.findAll());
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<ReglamentoResponseDTO> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(reglamentoService.findById(id));
-    }
-
-    @PostMapping
-    public ResponseEntity<ReglamentoResponseDTO> create(@Valid @RequestBody ReglamentoRequestDTO request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reglamentoService.create(request));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<ReglamentoResponseDTO> update(@PathVariable Long id,
-                                                         @Valid @RequestBody ReglamentoRequestDTO request) {
-        return ResponseEntity.ok(reglamentoService.update(id, request));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        reglamentoService.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-}
-
