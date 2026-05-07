@@ -15,7 +15,7 @@
         <label class="settings__field-label" for="email">Email</label>
         <input id="email" class="settings__input" type="email" [value]="email()" (input)="email.set($any($event.target).value)" />
       </div>
-      <button class="btn btn--outline settings__update-btn" (click)="saveProfile()">Actualizar perfil</button>
+      <button class="btn btn--primary settings__update-btn" (click)="saveProfile()">Actualizar perfil</button>
     </div>
     @if (updateError()) {
       <p class="settings__feedback settings__feedback--err">{{ updateError() }}</p>

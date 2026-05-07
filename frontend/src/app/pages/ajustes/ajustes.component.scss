@@ -228,26 +228,26 @@
 
 // ── Outline & danger button variants ──
 .btn--outline {
-  background-color: var(--button-color);
-  color: var(--text-button);
-  border: 2px solid var(--button-color);
+  background-color: #4a5568;
+  color: #fff;
+  border: 2px solid #4a5568;
   box-shadow: var(--shadow-sm);
 
   &:hover {
-    background-color: var(--button-hover);
-    border-color: var(--button-hover);
+    background-color: #2d3748;
+    border-color: #2d3748;
   }
 }
 
 .btn--danger {
-  background-color: transparent;
-  color: #c0392b;
+  background-color: #c0392b;
+  color: #fff;
   border: 2px solid #c0392b;
   box-shadow: var(--shadow-sm);
 
   &:hover {
-    background-color: #c0392b;
-    color: #fff;
+    background-color: #a93226;
+    border-color: #a93226;
   }
 }
 
