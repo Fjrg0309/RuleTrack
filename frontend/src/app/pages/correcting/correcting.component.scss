@@ -8,7 +8,7 @@
   &__banner {
     position: relative;
     padding: 20px 32px;
-    background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+    background: var(--banner-gradient);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-md);
     overflow: hidden;
@@ -21,7 +21,7 @@
       right: -40px;
       width: 160px;
       height: 160px;
-      background: rgba(255,255,255,0.12);
+      background: var(--banner-circle);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -108,14 +108,14 @@
     border-radius: 2px;
 
     &:hover {
-      background-color: rgba(255, 0, 0, 0.08);
+      background-color: rgba(248, 113, 113, 0.15);
     }
   }
 
   &__applied {
-    color: #1a5c1e;
+    color: var(--color-correct-green);
     font-weight: 600;
-    background-color: rgba(152, 255, 157, 0.35);
+    background-color: rgba(52, 211, 153, 0.15);
     border-radius: 2px;
     padding: 0 2px;
   }
@@ -213,7 +213,7 @@
     border-radius: var(--border-radius);
     font-size: 0.9rem;
     color: var(--color-title);
-    background: white;
+    background: var(--color-card);
     resize: none;
     font-family: inherit;
 
@@ -282,7 +282,8 @@
   }
 
   .correcting__content {
-    max-height: 280px;
+    flex: 1;
+    min-height: 180px;
     padding: 14px;
     font-size: 0.85rem;
   }
