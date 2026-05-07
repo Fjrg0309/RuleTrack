@@ -180,7 +180,6 @@ class AuthServiceTest {
         loginRequest.setPassword("clave1234");
 
         Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn("juanito");
         when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                 .thenReturn(auth);
 
