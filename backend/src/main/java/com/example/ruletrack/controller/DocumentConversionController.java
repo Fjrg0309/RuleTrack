@@ -8,6 +8,10 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,10 +25,23 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
+/**
+ * Controlador de conversión de documentos.
+ * Recibe ficheros PDF o DOCX y devuelve el contenido convertido a formato Markdown.
+ * Utiliza Apache PDFBox para PDF y Apache POI para DOCX.
+ */
 @RestController
 @RequestMapping("/api/documents")
+@Tag(name = "Conversión de Documentos", description = "Conversión de PDF y DOCX a Markdown mediante Apache PDFBox y POI")
 public class DocumentConversionController {
 
+    @Operation(summary = "Convertir documento a Markdown",
+               description = "Acepta un fichero PDF o DOCX (multipart/form-data) y devuelve el texto en formato Markdown.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Contenido Markdown extraído correctamente"),
+        @ApiResponse(responseCode = "400", description = "Fichero vacío o formato no soportado"),
+        @ApiResponse(responseCode = "500", description = "Error interno durante la conversión")
+    })
     @PostMapping(
             value = "/convert",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
