@@ -5,6 +5,11 @@ import { FileUploadService } from '../../services/file-upload.service';
 import { PublicacionesService, VersionDTO } from '../../services/publicaciones.service';
 import { AuthService } from '../../services/auth.service';
 
+/**
+ * Componente de publicación del documento corregido.
+ * Permite introducir metadatos (nombre, versión, visibilidad) y publicar
+ * el reglamento como nueva publicación o como nueva versión de una existente.
+ */
 @Component({
   selector: 'app-corrected',
   imports: [FormsModule],
@@ -57,12 +62,38 @@ export class CorrectedComponent implements OnInit {
     }
   }
 
+  /**
+   * Navega a la vista previa del documento corregido tras validar el nombre.
+   * Guarda los metadatos en el servicio de estado para usarlos en la vista previa.
+   */
   consultarDocumento(): void {
+    if (!this.documentName.trim()) {
+      this.versionError.set('El nombre del documento no puede estar vacío.');
+      return;
+    }
+    this.versionError.set('');
     this.fileUploadService.setDocumentMeta(this.documentName, this.documentVersion);
     this.router.navigate(['/preview'], { queryParams: { mode: 'corrected' } });
   }
 
+  /**
+   * Valida los campos y publica el documento como nuevo reglamento o como nueva
+   * versión de uno existente, según el modo de operación (isUpdateMode).
+   */
   crearEnlace(): void {
+    // Validar nombre no vacío
+    if (!this.documentName.trim()) {
+      this.versionError.set('El nombre del documento no puede estar vacío.');
+      return;
+    }
+
+    // Validar formato de versión: X.Y o X.Y.Z (ej. 1.0, 2.3.1)
+    const versionRegex = /^\d+\.\d+(\.\d+)?$/;
+    if (!versionRegex.test(this.documentVersion.trim())) {
+      this.versionError.set('El formato de versión no es válido. Usa X.Y o X.Y.Z (ej. 1.0, 2.3.1).');
+      return;
+    }
+
     const user = this.authService.currentUser();
     if (!user) {
       this.versionError.set('Debes iniciar sesión para publicar. Ve a Ajustes e inicia sesión.');

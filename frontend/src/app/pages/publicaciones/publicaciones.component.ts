@@ -3,6 +3,11 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { PublicacionesService, ReglamentoDTO } from '../../services/publicaciones.service';
 
+/**
+ * Componente de listado de publicaciones.
+ * Muestra los reglamentos accesibles para el usuario con paginación cliente,
+ * opciones de copiar URL y, para los organizadores, acceso a los ajustes de cada publicación.
+ */
 @Component({
   selector: 'app-publicaciones',
   templateUrl: './publicaciones.component.html',

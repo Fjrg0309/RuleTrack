@@ -11,11 +11,17 @@ export interface TextSegment {
   correctionId?: string;
 }
 
+/** Estado de una corrección individual durante la revisión interactiva. */
 export interface CorrectionState {
   item: CorrectionItem;
   status: 'pending' | 'applied' | 'rejected' | 'excluded';
 }
 
+/**
+ * Componente de revisión de correcciones.
+ * Solicita al backend el análisis del documento y muestra las sugerencias
+ * de la IA de forma interactiva, permitiendo aplicar, rechazar o excluir cada una.
+ */
 @Component({
   selector: 'app-correcting',
   imports: [FormsModule],
