@@ -31,4 +31,58 @@
       background-color: var(--button-hover);
     }
   }
+
+  &--secondary {
+    background-color: transparent;
+    color: var(--button-color);
+    border: 2px solid var(--button-color);
+    box-shadow: none;
+
+    &:hover {
+      background-color: rgba(91, 141, 239, 0.08);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+
+  &--danger {
+    background-color: #dc3545;
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(220, 53, 69, 0.3), 0 1px 3px rgba(0, 0, 0, 0.18);
+
+    &:hover {
+      background-color: #b02a37;
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: var(--text-color);
+    box-shadow: none;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.06);
+      box-shadow: none;
+    }
+  }
+
+  // ── Modificadores de tamaño ─────────────────────────────────────────────
+
+  &--sm {
+    padding: 5px 14px;
+    font-size: 0.8125rem;
+  }
+
+  &--lg {
+    padding: 12px 28px;
+    font-size: 1rem;
+  }
+
+  // ── Estado deshabilitado ────────────────────────────────────────────────
+
+  &:disabled,
+  &[aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
 }

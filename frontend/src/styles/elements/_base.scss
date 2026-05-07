@@ -2,6 +2,8 @@
 // Elements – Estilos base para elementos HTML sin clase
 // ==========================================================================
 
+@use '../tools/mixins' as m;
+
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
   color: var(--text-color);
@@ -34,5 +36,44 @@ select {
 
   &:hover {
     border-color: var(--button-color);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background-color: rgba(91, 141, 239, 0.25);
+  color: var(--text-color);
+}
+
+// Accesibilidad: focus ring visible únicamente para navegación por teclado
+:focus-visible {
+  @include m.focus-ring;
+}
+
+// Skip-link: visible al recibir foco por teclado, oculto en reposo
+.skip-link {
+  @include m.sr-only;
+
+  &:focus {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 9999;
+    width: auto;
+    height: auto;
+    padding: 0.75rem 1.5rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background-color: var(--button-color);
+    color: var(--text-button);
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
   }
 }

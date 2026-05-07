@@ -1,3 +1,106 @@
 // ==========================================================================
 // Tools – Mixins y funciones globales (se importa con @use)
 // ==========================================================================
+
+@use 'sass:map';
+
+// ── Breakpoints ───────────────────────────────────────────────────────────
+// Uso: @include respond-to('md') { ... }
+
+$breakpoints: (
+  'xs':  480px,
+  'sm':  576px,
+  'md':  768px,
+  'lg':  1024px,
+  'xl':  1280px,
+  'xxl': 1440px,
+) !default;
+
+@mixin respond-to($bp) {
+  $value: map.get($breakpoints, $bp);
+  @if $value == null {
+    @warn "Breakpoint `#{$bp}` no existe en $breakpoints.";
+  } @else {
+    @media (max-width: #{$value}) {
+      @content;
+    }
+  }
+}
+
+// ── Flexbox ───────────────────────────────────────────────────────────────
+
+@mixin flex-center($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// ── Tipografía ────────────────────────────────────────────────────────────
+// Truncar texto en 1 o más líneas
+
+@mixin text-truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $lines;
+    overflow: hidden;
+  }
+}
+
+// ── Accesibilidad ─────────────────────────────────────────────────────────
+// Ocultar visualmente pero mantener accesible para lectores de pantalla
+
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Focus ring accesible y consistente para navegación por teclado
+@mixin focus-ring($color: var(--button-color)) {
+  outline: 2px solid $color;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+// ── Transiciones ──────────────────────────────────────────────────────────
+
+@mixin transition($props: all, $duration: 0.2s, $easing: ease) {
+  transition: $props $duration $easing;
+}
+
+// ── Tarjetas ──────────────────────────────────────────────────────────────
+// Base visual compartida por todos los elementos tipo card
+
+@mixin card-base {
+  background-color: var(--color-card);
+  border-radius: calc(var(--border-radius) * 3);
+  box-shadow: var(--shadow-card);
+  padding: 1.25rem 1.5rem;
+}
+
+// ── Posicionamiento ───────────────────────────────────────────────────────
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

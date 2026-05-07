@@ -2,6 +2,8 @@
 // Components – Footer (Layout único)
 // ==========================================================================
 
+@use '../tools/mixins' as m;
+
 .footer {
   display: flex;
   flex-direction: column;
@@ -61,7 +63,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@include m.respond-to('md') {
   .footer {
     padding: 16px;
     gap: 8px;
