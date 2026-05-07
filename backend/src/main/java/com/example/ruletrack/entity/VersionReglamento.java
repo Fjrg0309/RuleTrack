@@ -11,6 +11,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entidad que representa una versión concreta de un {@link Reglamento}.
+ * <p>
+ * Cada versión tiene un número secuencial ({@code numeroVersion}), una etiqueta legible
+ * ({@code versionEtiqueta}, p. ej. "1.0", "2.3") y un estado que determina su ciclo de vida:
+ * <ul>
+ *   <li>{@link EstadoVersion#BORRADOR} – en redacción, no publicado.</li>
+ *   <li>{@link EstadoVersion#PUBLICADO} – activo y visible para los usuarios con acceso.</li>
+ *   <li>{@link EstadoVersion#ARCHIVADO} – reemplazado por una versión posterior.</li>
+ * </ul>
+ * El contenido ({@code contenido}) se almacena en formato Markdown.
+ */
 @Entity
 @Table(name = "versiones_reglamento")
 @Data

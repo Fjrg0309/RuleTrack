@@ -9,6 +9,14 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entidad que almacena una sugerencia generada por el modelo de lenguaje (LLM)
+ * sobre una versión concreta de un reglamento.
+ * <p>
+ * Cada sugerencia tiene un tipo ({@link TipoSugerencia}) que indica la naturaleza del análisis:
+ * revisión de calidad, resumen ejecutivo o detección de incoherencias.
+ * El campo {@code aplicada} indica si el usuario ha tenido en cuenta la sugerencia.
+ */
 @Entity
 @Table(name = "sugerencias_ia")
 @Data

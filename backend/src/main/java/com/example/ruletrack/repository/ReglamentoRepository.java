@@ -8,6 +8,17 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * Repositorio JPA para la entidad {@link com.example.ruletrack.entity.Reglamento}.
+ * <p>
+ * Incluye consultas JPQL complejas para el filtrado de visibilidad:
+ * <ul>
+ *   <li>{@link #findVisiblesParaUsuario} – devuelve los reglamentos accesibles
+ *       según el ID y organización del usuario autenticado.</li>
+ *   <li>{@link #findAllByOrganizacionNombre} – devuelve todos los reglamentos
+ *       de una organización independientemente de su visibilidad.</li>
+ * </ul>
+ */
 public interface ReglamentoRepository extends JpaRepository<Reglamento, Long> {
 
     List<Reglamento> findByCreadoPorId(Long usuarioId);

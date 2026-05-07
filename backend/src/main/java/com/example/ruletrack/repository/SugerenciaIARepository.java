@@ -6,6 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * Repositorio JPA para la entidad {@link com.example.ruletrack.entity.SugerenciaIA}.
+ * <p>
+ * Permite recuperar sugerencias filtradas por versión de reglamento,
+ * tipo de sugerencia ({@link com.example.ruletrack.entity.TipoSugerencia})
+ * y estado de aplicación ({@code aplicada}).
+ */
 public interface SugerenciaIARepository extends JpaRepository<SugerenciaIA, Long> {
 
     List<SugerenciaIA> findByVersionReglamentoId(Long versionId);

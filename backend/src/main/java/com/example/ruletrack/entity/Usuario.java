@@ -12,6 +12,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entidad que representa a un usuario del sistema.
+ * <p>
+ * Cada usuario pertenece a exactamente una organización ({@code organizacionNombre})
+ * y tiene un rol que determina sus privilegios:
+ * <ul>
+ *   <li>{@link Rol#ORGANIZADOR} – puede crear y gestionar reglamentos.</li>
+ *   <li>{@link Rol#USUARIO} – solo puede consultar reglamentos accesibles.</li>
+ * </ul>
+ * Los campos {@code username}, {@code email} y {@code dni} son únicos en la base de datos.
+ */
 @Entity
 @Table(name = "usuarios")
 @Data

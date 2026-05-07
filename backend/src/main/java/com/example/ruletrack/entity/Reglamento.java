@@ -12,6 +12,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entidad que representa un reglamento gestionado dentro de RuleTrack.
+ * <p>
+ * Un reglamento contiene metadatos ({@code titulo}, {@code descripcion}, {@code visibilidad})
+ * y un conjunto de versiones ({@link VersionReglamento}) que registran la evolución del documento.
+ * La visibilidad controla quién puede acceder:
+ * <ul>
+ *   <li>{@link VisibilidadReglamento#PUBLICO} – accesible por cualquier persona sin autenticación.</li>
+ *   <li>{@link VisibilidadReglamento#SOLO_MIEMBROS} – visible solo para miembros de la misma organización.</li>
+ *   <li>{@link VisibilidadReglamento#PRIVADO} – visible solo al creador y los {@code usuariosPermitidos}.</li>
+ * </ul>
+ */
 @Entity
 @Table(name = "reglamentos")
 @Data
