@@ -87,6 +87,16 @@
   display: none;
 }
 
+.upload__error {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-correct);
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1.5px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--border-radius);
+  padding: 10px 16px;
+}
+
 @media (max-width: 767px) {
   .upload {
     padding: 16px;
