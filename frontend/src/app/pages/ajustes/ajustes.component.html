@@ -42,6 +42,7 @@
             <button
               class="settings__toggle"
               [class.settings__toggle--active]="darkMode()"
+              [class.settings__toggle--ready]="toggleReady()"
               (click)="toggleDarkMode()"
               [attr.aria-pressed]="darkMode()"
               aria-label="Modo oscuro">

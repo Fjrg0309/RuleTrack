@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { AfterViewInit, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
@@ -8,12 +8,13 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './ajustes.component.html',
   styleUrl: './ajustes.component.scss',
 })
-export class AjustesComponent {
+export class AjustesComponent implements AfterViewInit {
   protected auth = inject(AuthService);
   private router = inject(Router);
   private toast = inject(ToastService);
 
-  protected darkMode = signal(false);
+  protected darkMode = signal(localStorage.getItem('theme') === 'dark');
+  protected toggleReady = signal(false);
   protected language = signal('Español');
   protected notifNews = signal(true);
   protected notifEmails = signal(true);
@@ -23,9 +24,20 @@ export class AjustesComponent {
   protected email = signal(this.auth.currentUser()?.email ?? '');
   protected updateError = signal('');
 
+  ngAfterViewInit(): void {
+    // Habilitar transición solo tras el primer render para evitar animación al cargar
+    requestAnimationFrame(() => this.toggleReady.set(true));
+  }
+
   protected toggleDarkMode(): void {
     this.darkMode.update(v => !v);
-    document.documentElement.setAttribute('data-theme', this.darkMode() ? 'dark' : '');
+    const theme = this.darkMode() ? 'dark' : '';
+    document.documentElement.setAttribute('data-theme', theme);
+    if (this.darkMode()) {
+      localStorage.setItem('theme', 'dark');
+    } else {
+      localStorage.removeItem('theme');
+    }
   }
 
   protected toggleNotifNews(): void {

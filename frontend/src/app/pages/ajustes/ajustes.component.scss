@@ -9,7 +9,7 @@
 .settings__banner {
   position: relative;
   padding: 28px 32px;
-  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  background: var(--banner-gradient);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -22,7 +22,7 @@
     right: -40px;
     width: 160px;
     height: 160px;
-    background: rgba(255,255,255,0.12);
+    background: var(--banner-circle);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -51,8 +51,8 @@
   }
 
   &--danger {
-    border-color: #FECACA;
-    background-color: #FEF2F2;
+    border-color: rgba(239, 68, 68, 0.35);
+    background-color: rgba(239, 68, 68, 0.05);
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -60,21 +60,26 @@
 }
 
 .settings__card-label {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-color);
-  opacity: 0.75;
-  align-self: flex-start;
+  letter-spacing: 0.07em;
+  color: var(--color-label);
+  display: block;
+  padding-bottom: 8px;
+  border-bottom: 3px solid var(--button-color);
   margin-bottom: 4px;
+  width: 100%;
 
   &--danger {
-    opacity: 1;
-    color: #b91c1c;
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.4);
     font-size: 0.75rem;
     align-self: center;
     margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    width: auto;
   }
 }
 
@@ -133,8 +138,8 @@
   font-size: 0.82rem;
   font-weight: 600;
 
-  &--ok  { color: #1a5c1e; }
-  &--err { color: #7a1010; }
+  &--ok  { color: var(--color-correct-green); }
+  &--err { color: var(--color-correct); }
 }
 
 // ── Select ──
@@ -179,6 +184,10 @@
   height: 18px;
   background-color: #fff;
   border-radius: 50%;
+  // Sin transición por defecto — se activa tras el primer render con --ready
+}
+
+.settings__toggle--ready .settings__toggle-knob {
   transition: transform 0.2s;
 }
 
@@ -279,4 +288,51 @@
   justify-content: space-around;
   padding: 28px 32px;
   gap: 24px;
+}
+
+// ── Mobile responsive ──
+@media (max-width: 767px) {
+  .settings {
+    padding: 14px 14px;
+    gap: 14px;
+  }
+
+  .settings__card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .settings__personal-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings__input {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .settings__update-btn {
+    align-self: stretch;
+  }
+
+  .settings__row {
+    flex-direction: column;
+  }
+
+  .settings__card--danger {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .settings__danger-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .btn--outline,
+  .btn--danger {
+    flex: 1;
+  }
 }
