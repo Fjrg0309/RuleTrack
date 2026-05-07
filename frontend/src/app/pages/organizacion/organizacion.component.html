@@ -4,20 +4,20 @@
   </div>
 
   <div class="org__card">
-    <div class="org__row org__row--header">
+    <div class="org__row">
       <span class="org__label">Nombre</span>
-      <span class="org__label">Fecha de fundación</span>
+      <span class="org__value">{{ org()?.nombre }}</span>
     </div>
     <div class="org__row">
-      <span class="org__value">{{ org()?.nombre }}</span>
+      <span class="org__label">Fecha de fundación</span>
       <span class="org__value">{{ org()?.anioFundacion }}</span>
     </div>
-    <div class="org__row org__row--header">
-      <span class="org__label">NºOrganizadores</span>
-      <span class="org__label">NºMiembros</span>
-    </div>
     <div class="org__row">
+      <span class="org__label">Nº Organizadores</span>
       <span class="org__value">{{ org()?.numOrganizadores }}</span>
+    </div>
+    <div class="org__row org__row--last">
+      <span class="org__label">Nº Miembros</span>
       <span class="org__value">{{ org()?.numMiembros }}</span>
     </div>
   </div>
