@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { FileUploadService } from '../../services/file-upload.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { FileUploadService } from '../../services/file-upload.service';
 export class PreviewComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
+  private location = inject(Location);
   private fileUploadService = inject(FileUploadService);
 
   fileName = '';
@@ -43,7 +45,6 @@ export class PreviewComponent implements OnInit {
   }
 
   cancel(): void {
-    this.fileUploadService.clear();
-    this.router.navigate(['/']);
+    this.location.back();
   }
 }
