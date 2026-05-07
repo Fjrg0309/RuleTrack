@@ -9,7 +9,7 @@
 .converting__banner {
   position: relative;
   padding: 20px 32px;
-  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  background: var(--banner-gradient);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -23,7 +23,7 @@
     right: -40px;
     width: 160px;
     height: 160px;
-    background: rgba(255,255,255,0.12);
+    background: var(--banner-circle);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -70,6 +70,31 @@
   svg {
     width: 100%;
     height: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .converting {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .converting__visual {
+    gap: 16px;
+  }
+
+  .converting__icon {
+    width: 72px;
+    height: 84px;
+
+    &--md {
+      width: 84px;
+      height: 56px;
+    }
+  }
+
+  .converting__arrow {
+    width: 56px;
   }
 }
 

@@ -9,7 +9,7 @@
 .preview__banner {
   position: relative;
   padding: 20px 32px;
-  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  background: var(--banner-gradient);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -22,7 +22,7 @@
     right: -40px;
     width: 160px;
     height: 160px;
-    background: rgba(255,255,255,0.12);
+    background: var(--banner-circle);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -32,6 +32,8 @@
   font-size: 1.2rem;
   font-weight: 700;
   color: #fff;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .preview__content {
@@ -88,7 +90,8 @@
   }
 
   .preview__content {
-    max-height: 300px;
+    flex: 1;
+    min-height: 200px;
     padding: 16px;
   }
 }

@@ -9,7 +9,7 @@
 .org__banner {
   position: relative;
   padding: 28px 32px;
-  background: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  background: var(--banner-gradient);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
@@ -22,7 +22,7 @@
     right: -40px;
     width: 160px;
     height: 160px;
-    background: rgba(255,255,255,0.12);
+    background: var(--banner-circle);
     border-radius: 50%;
     pointer-events: none;
   }
@@ -72,8 +72,8 @@
   align-items: center;
   justify-content: center;
   padding: 8px 24px;
-  background-color: #ffffff;
-  color: #222;
+  background-color: var(--color-card);
+  color: var(--text-color);
   border-radius: var(--border-radius);
   font-size: 1rem;
   font-weight: 600;
@@ -84,4 +84,32 @@
 .org__footer {
   display: flex;
   justify-content: flex-end;
+}
+
+@media (max-width: 767px) {
+  .org {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .org__row {
+    padding: 10px 12px;
+  }
+
+  .org__row--header {
+    padding: 8px 12px;
+  }
+
+  .org__label {
+    font-size: 0.7rem;
+    letter-spacing: 0.04em;
+  }
+
+  .org__value {
+    min-width: 0;
+    width: 100%;
+    padding: 8px 10px;
+    font-size: 0.875rem;
+    word-break: break-word;
+  }
 }
