@@ -1,4 +1,4 @@
-﻿package com.example.ruletrack.controller;
+package com.example.ruletrack.controller;
 
 import com.example.ruletrack.dto.VersionReglamentoRequestDTO;
 import com.example.ruletrack.dto.VersionReglamentoResponseDTO;
