@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
     if (this.auth.currentUser()?.rol === 'ORGANIZADOR') {
       this.router.navigate(['/organizer'], { replaceUrl: true });
     }
-    this.pubService.getTodasDeOrganizacion().subscribe({
+    this.pubService.getVisibles().subscribe({
       next: (data) => this.publicaciones.set(data.slice(0, 7)),
       error: () => {}
     });

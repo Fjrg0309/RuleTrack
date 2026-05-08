@@ -20,7 +20,7 @@ export class HomeOrganizerComponent implements OnInit {
   protected pendingDownload = signal<ReglamentoDTO | null>(null);
 
   ngOnInit(): void {
-    this.pubService.getTodasDeOrganizacion().subscribe({
+    this.pubService.getVisibles().subscribe({
       next: (data) => this.publicaciones.set(data.slice(0, 7)),
       error: () => {}
     });
