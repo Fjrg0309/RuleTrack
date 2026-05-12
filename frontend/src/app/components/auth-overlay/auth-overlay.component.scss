@@ -67,23 +67,21 @@
   padding: 9px 0;
   font-size: 0.875rem;
   font-weight: 700;
-  color: var(--text-color);
-  opacity: 0.5;
+  color: #999999;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
   cursor: pointer;
-  transition: opacity 0.18s, border-color 0.18s, color 0.18s;
+  transition: color 0.18s, border-color 0.18s;
   margin-bottom: -2px;
 
   &--active {
-    opacity: 1;
     color: var(--button-color);
     border-bottom-color: var(--button-color);
   }
 
   &:hover:not(&--active) {
-    opacity: 0.8;
+    color: #666666;
   }
 }
 
@@ -134,7 +132,7 @@
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 
-  &::placeholder { color: var(--text-color); opacity: 0.4; }
+  &::placeholder { color: #999999; }
 
   &:focus {
     border-color: var(--button-color);
@@ -142,7 +140,7 @@
   }
 
   &--error {
-    border-color: #e05252;
+    border-color: #C00000;
   }
 
   &--crear {
@@ -153,14 +151,13 @@
 
 .auth-overlay__field-error {
   font-size: 0.75rem;
-  color: #e05252;
+  color: #C00000;
   font-weight: 600;
 }
 
 .auth-overlay__field-hint {
   font-size: 0.75rem;
-  color: var(--text-color);
-  opacity: 0.55;
+  color: #666666;
 }
 
 .auth-overlay__field-ok {
