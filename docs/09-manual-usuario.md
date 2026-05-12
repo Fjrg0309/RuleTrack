@@ -38,12 +38,16 @@ RuleTrack es una aplicación web para gestionar reglamentos con versionado, cont
 4. Pulsar **Crear cuenta**.
 5. Al completarse el registro, se inicia sesión automáticamente.
 
+![Formulario de registro](manual_usuario/registro.png)
+
 ### Iniciar sesión
 
 1. Pulsar el botón **Iniciar sesión** en la cabecera.
 2. Introducir **nombre de usuario** y **contraseña**.
 3. Pulsar **Entrar**.
 4. La aplicación redirige al panel correspondiente al rol del usuario.
+
+![Pantalla de inicio de sesión](manual_usuario/login.png)
 
 ### Cerrar sesión
 
@@ -59,14 +63,20 @@ La pantalla de inicio muestra los **reglamentos visibles** para el usuario auten
 - Reglamentos públicos de cualquier organización.
 - Reglamentos de la propia organización con visibilidad `SOLO_MIEMBROS`.
 
-Cada reglamento aparece en una tarjeta con título, descripción, badge de visibilidad y número de versiones.
+Cada fila muestra el título del reglamento, su badge de visibilidad y un botón **Descargar** para obtener el documento en formato Markdown o PDF.
 
-### Panel de organizador (`/organizer`)
+![Panel de usuario](manual_usuario/home-usuario.png)
 
-El organizador accede a su panel de gestión, con acceso a:
-- Lista de todos los reglamentos de su organización.
-- Botones de acceso rápido a las funcionalidades principales.
-- Indicadores de estado de cada reglamento (versión activa, estado).
+### Panel de organizador (`/`)
+
+El organizador accede al mismo panel de inicio pero con opciones adicionales en la barra lateral:
+- **Mi organización**: información de la organización.
+- **Mis publicaciones**: gestión de reglamentos.
+- **Usuarios de mi organización**: lista de miembros.
+
+El área principal muestra las **subidas recientes** con badges de visibilidad (PÚBLICO, SOLO MIEMBROS, PRIVADO). En la parte inferior aparece el botón **Subir archivo** para iniciar una nueva conversión.
+
+![Panel de organizador](manual_usuario/home-organizador.png)
 
 ---
 
@@ -74,16 +84,17 @@ El organizador accede a su panel de gestión, con acceso a:
 
 ### Ver lista de reglamentos (`/publicaciones`)
 
-Muestra todos los reglamentos de la organización. Para cada uno se puede:
-- **Ver detalle**: acceder a la página de ajustes del reglamento.
-- **Ver versión activa**: abrir el contenido publicado.
-- **Copiar enlace**: generar un enlace directo al reglamento público.
+Muestra todos los reglamentos de la organización en una tabla con columnas: **Nombre**, **Versión**, **Estado**, **URL** y **Acciones**. Por cada reglamento hay dos botones de acción:
+- **Icono de copiar**: copia la URL pública del reglamento al portapapeles.
+- **Icono de ojo**: accede a la página de ajustes de publicación del reglamento.
+
+![Lista de publicaciones](manual_usuario/publicaciones.png)
 
 ### Crear un nuevo reglamento
 
 **Opción A – Desde cero:**
 
-1. Desde el panel de organizador, pulsar **Nuevo reglamento** o acceder a `/upload`.
+1. Desde el panel de organizador, pulsar **Subir archivo** para acceder a `/upload`.
 2. Subir un documento PDF o DOCX existente, o escribir el contenido directamente.
 3. Si se sube un documento, la aplicación lo convierte automáticamente a Markdown.
 4. Revisar el contenido en la pantalla de previsualización (`/preview`).
@@ -93,12 +104,13 @@ Muestra todos los reglamentos de la organización. Para cada uno se puede:
 
 ### Editar un reglamento (`/publicaciones`)
 
-1. Desde la tabla de reglamentos dentro de publicaciones, pulsar el botón de "ver ajustes" en el reglamento deseado.
-2. En la página de ajustes, se pueden realizar las siguientes acciones:
-   - Modificar título, descripción o visibilidad.
-   - Actualizar reglamento con una nueva versión (ver sección 9.6).
-   - Eliminar el reglamento (con confirmación).
-3. Guardar los cambios realizados.
+1. Desde la tabla de reglamentos dentro de publicaciones, pulsar el **icono de ojo** en el reglamento deseado.
+2. En la página de ajustes de publicación, se pueden realizar las siguientes acciones:
+   - Modificar título, descripción o visibilidad y pulsar **Guardar cambios**.
+   - Actualizar el reglamento con una nueva versión (ver sección 9.6).
+   - Eliminar el reglamento pulsando **Borrar publicación** (con confirmación).
+
+![Ajustes de publicación](manual_usuario/ajustes-reglamento.png)
 ### Configurar visibilidad
 
 | Opción | Quién puede ver el reglamento |
@@ -117,6 +129,8 @@ La página de ajustes de publicación muestra todas las versiones del reglamento
 - `BORRADOR`: en redacción, no visible para usuarios.
 - `PUBLICADO`: versión activa y visible.
 - `ARCHIVADO`: versión reemplazada por una posterior.
+
+![Ajustes de publicación - versiones](manual_usuario/ajustes-publicacion.png)
 
 ### Crear una nueva versión
 
@@ -137,9 +151,11 @@ Al activar una versión:
 
 ### Subir un documento (`/upload`)
 
-1. Acceder a la página de subida.
-2. Arrastrar y soltar un fichero **PDF** o **DOCX**, o usar el selector de fichero.
-3. Pulsar **Convertir**.
+1. Acceder a la página de subida (`/upload`).
+2. Arrastrar y soltar un fichero **PDF**, **DOCX** o **Markdown** sobre la zona de carga, o pulsar **Subir desde dispositivo** para usar el explorador de archivos.
+3. La conversión se inicia automáticamente al seleccionar el fichero.
+
+![Página de subida de documento](manual_usuario/upload.png)
 
 ### Conversión (`/converting`)
 
@@ -147,13 +163,17 @@ La aplicación procesa el documento en el servidor:
 - **PDF**: extracción de texto con Apache PDFBox.
 - **DOCX**: extracción de texto con Apache POI.
 
-El proceso muestra un indicador de progreso. Una vez completado, redirige automáticamente a la previsualización.
+La pantalla muestra una animación mientras el servidor convierte el documento a Markdown. Una vez completado, redirige automáticamente a la previsualización.
+
+![Pantalla de conversión](manual_usuario/converting.png)
 
 ### Previsualización (`/preview`)
 
-Muestra el contenido convertido a Markdown con renderizado visual. Desde aquí se puede:
-- Revisar el texto y realizar correcciones manuales.
-- Continuar al flujo de corrección IA.
+Muestra el contenido extraido en texto plano. Desde aquí se puede:
+- Revisar el texto extraído del documento.
+- Pulsar **Corregir documento** para continuar al análisis IA, o **Volver** para cancelar.
+
+![Previsualización del documento](manual_usuario/preview.png)
 
 ---
 
@@ -167,54 +187,49 @@ Muestra el contenido convertido a Markdown con renderizado visual. Desde aquí s
 
 ### Revisar y aplicar sugerencias (`/correcting`)
 
-Cada sugerencia muestra:
-- El **texto original** (fragmento del documento).
-- El **texto sugerido** (corrección propuesta).
-- La **explicación** (categoría y justificación breve).
+La página muestra el documento completo con los fragmentos que el modelo IA sugiere cambiar resaltados en rojo. Al pie de la página hay dos opciones globales:
+- **Aplicar correcciones**: aplica todos los cambios sugeridos al documento.
+- **Ignorar correcciones**: descarta todas las sugerencias y conserva el texto original.
 
-Para cada sugerencia se puede:
-- **Aplicar**: reemplaza el texto original por la sugerencia en el documento.
-- **Ignorar**: descarta la sugerencia sin modificar el documento.
+![Correcciones del documento](manual_usuario/correcting.png)
 
 ### Resultado (`/corrected`)
 
-Tras revisar todas las sugerencias, se muestra el documento con los cambios aplicados. Desde aquí se continúa al flujo de publicación.
+Muestra el documento con los cambios aplicados. Desde aquí se puede:
+- **Volver**: regresar a la pantalla anterior.
+- **Corregir de nuevo**: lanzar un nuevo análisis IA sobre el documento resultante.
+
+![Resultado de la corrección](manual_usuario/corrected.png)
 
 ---
 
-## 9.9 Vista pública de reglamentos (`/view/:id`)
-
-Cualquier persona puede acceder a la URL de un reglamento público sin necesidad de cuenta. La página muestra:
-- Título y descripción del reglamento.
-- Contenido de la versión activa renderizado en Markdown.
-- Información de la organización propietaria.
-- Badge de visibilidad.
-
-Para compartir un reglamento, copiar la URL del navegador o usar el botón **Copiar enlace** del panel de organizador.
-
----
-
-## 9.10 Perfil y organización
+## 9.9 Perfil y organización
 
 ### Ver perfil (`/perfil`)
 
-Muestra los datos del usuario autenticado: nombre, apellidos, email, organización y rol.
+Muestra los datos del usuario autenticado: nombre completo, fecha de nacimiento, organización y nick. Desde esta página se puede acceder a las publicaciones propias mediante el botón **Publicaciones**.
+
+![Perfil de usuario](manual_usuario/perfil.png)
 
 ### Editar perfil
 
-Desde la página de perfil, pulsar **Editar** para actualizar nombre y email.
+La edición de nombre y email se realiza desde la página de **Ajustes** (`/ajustes`), sección "Información personal". Modificar los campos deseados y pulsar **Actualizar perfil**.
 
 ### Ver miembros de la organización (`/miembros-organizacion`)
 
-Lista todos los usuarios registrados en la misma organización, con nombre, apellidos y rol.
+Lista todos los usuarios registrados en la misma organización, separados en dos columnas: **Organizadores** y **Usuarios**, con nombre de usuario, nombre completo y badge de rol.
+
+![Miembros de la organización](manual_usuario/organizadores_y_miembros.png)
 
 ### Información de la organización (`/organizacion`)
 
-Muestra el nombre de la organización, número de miembros y reglamentos gestionados.
+Muestra el nombre de la organización, fecha de fundación, número de organizadores y número total de miembros.
+
+![Información de la organización](manual_usuario/organizacion.png)
 
 ---
 
-## 9.11 Preguntas frecuentes
+## 9.10 Preguntas frecuentes
 
 **¿Puedo acceder a los reglamentos sin registrarme?**
 Sí, los reglamentos con visibilidad PUBLICO son accesibles sin cuenta desde su URL directa o desde la página principal.
