@@ -46,8 +46,7 @@
 .modal__subtitle {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--text-color);
-  opacity: 0.75;
+  color: #666666;
   margin: -6px 0 0;
   white-space: nowrap;
   overflow: hidden;
@@ -97,7 +96,6 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   color: var(--button-color);
-  opacity: 0.8;
 }
 
 .modal__cancel {
