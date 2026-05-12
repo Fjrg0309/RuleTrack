@@ -4,18 +4,18 @@
 
 :root {
   // Colors
-  --button-color: #5B8DEF;
+  --button-color: #2963C5;
   --text-button: #FFFFFF;
   --text-title: #FFFFFF;
-  --button-hover: #3A6BC8;
+  --button-hover: #1848A0;
   --color-primary: #FFFFFF;
   --color-secondary: #BAD2FE;
   --color-accent: #8AD2FE;
   --text-color: #333333;
   --color-card: #FFFFFF;
-  --color-title: #7CBDE5;
-  --color-label: #5B8DEF;
-  --color-correct: #FF0000;
+  --color-title: #1C60B5;
+  --color-label: #2963C5;
+  --color-correct: #C00000;
   --color-correct-green: #1a7a38;
   --color-warning: #FFF313;
 
@@ -28,7 +28,7 @@
   --badge-private-color: #3a4252;
 
   // Banner gradient (banners de página)
-  --banner-gradient: linear-gradient(135deg, #8AD2FE 0%, #5B8DEF 100%);
+  --banner-gradient: linear-gradient(135deg, #3080C0 0%, #1D5BBE 100%);
   --banner-circle: rgba(255, 255, 255, 0.12);
 
   // Shared
@@ -38,7 +38,7 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.18);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.22);
   --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.26);
-  --shadow-btn: 0 3px 10px rgba(91, 141, 239, 0.35), 0 1px 3px rgba(0, 0, 0, 0.18);
+  --shadow-btn: 0 3px 10px rgba(41, 99, 197, 0.35), 0 1px 3px rgba(0, 0, 0, 0.18);
   --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.14), 0 1px 4px rgba(0, 0, 0, 0.10);
 
   // ── Escala tipográfica fluida (fluid type) ────────────────────────────
