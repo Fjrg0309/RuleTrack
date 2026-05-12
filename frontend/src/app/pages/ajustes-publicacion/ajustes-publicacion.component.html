@@ -30,14 +30,14 @@
     <div class="pub-settings__fields">
 
       <div class="pub-settings__field">
-        <span class="pub-settings__field-label">Título</span>
-        <input class="pub-settings__input" type="text" [value]="titulo()" (input)="titulo.set($any($event.target).value)" />
+        <label class="pub-settings__field-label" for="pub-titulo">Título</label>
+        <input id="pub-titulo" class="pub-settings__input" type="text" [value]="titulo()" (input)="titulo.set($any($event.target).value)" />
       </div>
 
       <div class="pub-settings__field">
-        <span class="pub-settings__field-label">Visibilidad</span>
+        <label class="pub-settings__field-label" for="pub-visibilidad">Visibilidad</label>
         <div class="pub-settings__select-wrapper">
-          <select class="pub-settings__select" [value]="visibilidad()" (change)="visibilidad.set($any($event.target).value)">
+          <select id="pub-visibilidad" class="pub-settings__select" [value]="visibilidad()" (change)="visibilidad.set($any($event.target).value)">
             <option value="PUBLICO">Público</option>
             <option value="SOLO_MIEMBROS">Solo para miembros</option>
             <option value="PRIVADO">Privado</option>
@@ -46,9 +46,10 @@
       </div>
 
       <div class="pub-settings__field">
-        <span class="pub-settings__field-label">Versión activa</span>
+        <label class="pub-settings__field-label" for="pub-version">Versión activa</label>
         <div class="pub-settings__select-wrapper">
           <select
+            id="pub-version"
             class="pub-settings__select"
             [value]="selectedVersionId()"
             (change)="onVersionChange(+$any($event.target).value)"

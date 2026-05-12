@@ -104,11 +104,12 @@
     border: none;
 
     &--secondary {
-      background-color: var(--color-accent);
-      color: var(--text-color);
+      background-color: var(--color-secondary);
+      color: #1a3a6e;
 
       &:hover {
-        background-color: var(--color-secondary);
+        background-color: var(--color-label);
+        color: #fff;
       }
     }
   }

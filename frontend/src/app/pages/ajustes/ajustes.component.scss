@@ -41,7 +41,7 @@
   flex-direction: column;
   gap: 16px;
   padding: 20px 24px;
-  background-color: var(--color-accent);
+  background-color: var(--color-card);
   border-radius: var(--border-radius);
   border: 2px solid var(--color-secondary);
   box-shadow: var(--shadow-sm);
@@ -273,7 +273,8 @@
 
 .settings__modal-banner {
   padding: 24px 32px;
-  background-color: var(--color-accent);
+  background-color: var(--banner-gradient);
+  background: var(--banner-gradient);
 }
 
 .settings__modal-question {
