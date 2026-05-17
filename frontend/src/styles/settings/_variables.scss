@@ -34,6 +34,12 @@
   // Shared
   --border-radius: 2px;
 
+  // Semantic extras
+  --color-muted: #666666;
+  --color-code-bg: #f4f6f9;
+  --color-mark-bg: #fff3b0;
+  --color-mark-text: #333333;
+
   // Shadows
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.18);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.22);
@@ -87,6 +93,12 @@
   --color-correct:       #F87171;
   --color-correct-green: #34D399;
   --color-warning:       #FBBF24;
+
+  // Semantic extras
+  --color-muted: #8099AA;
+  --color-code-bg: #12151e;
+  --color-mark-bg: #7b5e00;
+  --color-mark-text: #fde68a;
 
   // Badge colors
   --badge-public-bg:    rgba(52, 211, 153, 0.12);

@@ -17,14 +17,196 @@
       <button class="btn btn--primary" (click)="goBack()">Volver al inicio</button>
     </div>
   } @else {
+    <!-- Banner -->
     <div class="view__banner">
       <h1 class="view__title">{{ titulo }}</h1>
     </div>
 
-    <div class="view__content">
-      <pre class="view__text">{{ contenido }}</pre>
+    <!-- Controls bar: mode tabs -->
+    <div class="view__controls">
+      <div class="view__tabs" role="tablist" aria-label="Modo de visualización">
+        <button
+          class="view__tab"
+          [class.view__tab--active]="mode() === 'normas'"
+          role="tab"
+          [attr.aria-selected]="mode() === 'normas'"
+          (click)="setMode('normas')"
+        >
+          Normas
+        </button>
+        <button
+          class="view__tab"
+          [class.view__tab--active]="mode() === 'resumen'"
+          role="tab"
+          [attr.aria-selected]="mode() === 'resumen'"
+          (click)="setMode('resumen')"
+        >
+          Resumen
+        </button>
+        <button
+          class="view__tab"
+          [class.view__tab--active]="mode() === 'historial'"
+          role="tab"
+          [attr.aria-selected]="mode() === 'historial'"
+          (click)="setMode('historial')"
+        >
+          Historial
+        </button>
+      </div>
     </div>
 
+    <!-- NORMAS MODE -->
+    @if (mode() === 'normas') {
+      <!-- Search bar -->
+      <div class="view__search">
+        <div class="view__search-input-wrap">
+          <svg class="view__search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M9 3a6 6 0 1 0 3.75 10.664l3.293 3.293a1 1 0 0 0 1.414-1.414l-3.293-3.293A6 6 0 0 0 9 3Zm-4 6a4 4 0 1 1 8 0 4 4 0 0 1-8 0Z" clip-rule="evenodd"/>
+          </svg>
+          <input
+            class="view__search-input"
+            type="search"
+            placeholder="Buscar en el documento..."
+            [ngModel]="searchQuery()"
+            (ngModelChange)="onSearchChange($event)"
+            aria-label="Buscar en el documento"
+          />
+          @if (searchQuery()) {
+            <button class="view__search-clear" (click)="clearSearch()" aria-label="Limpiar búsqueda">✕</button>
+          }
+        </div>
+        @if (searchQuery() && searchResultCount() > 0) {
+          <span class="view__search-count">{{ searchResultCount() }} resultado{{ searchResultCount() === 1 ? '' : 's' }}</span>
+        } @else if (searchQuery() && searchResultCount() === 0) {
+          <span class="view__search-count view__search-count--empty">Sin resultados</span>
+        }
+      </div>
+
+      <div class="view__body">
+        <!-- TOC sidebar -->
+        @if (tocItems.length > 0) {
+          <nav class="view__toc" aria-label="Índice del documento">
+            <p class="view__toc-title">Índice</p>
+            <ul class="view__toc-list">
+              @for (item of tocItems; track item.id) {
+                <li class="view__toc-item" [attr.data-level]="item.level">
+                  <a class="view__toc-link" (click)="scrollToHeading(item.id)" href="javascript:void(0)">
+                    {{ item.text }}
+                  </a>
+                </li>
+              }
+            </ul>
+          </nav>
+        }
+
+        <!-- Markdown content -->
+        <article class="view__markdown" [innerHTML]="displayHtml()"></article>
+      </div>
+    }
+
+    <!-- RESUMEN MODE -->
+    @if (mode() === 'resumen') {
+      <div class="view__resumen">
+        @if (isLoadingResumen()) {
+          <div class="view__loading view__loading--inline">
+            <div class="view__spinner"></div>
+            <p>Generando resumen...</p>
+          </div>
+        } @else if (resumenError()) {
+          <div class="view__resumen-error">
+            <p>{{ resumenError() }}</p>
+            <button class="btn btn--primary" (click)="retryResumen()">Reintentar</button>
+          </div>
+        } @else if (resumen()) {
+          <div class="view__resumen-grid">
+            @for (seccion of resumen()!.secciones; track seccion.titulo) {
+              <div class="view__resumen-card">
+                <h3 class="view__resumen-card-title">{{ seccion.titulo }}</h3>
+                <ul class="view__resumen-card-list">
+                  @for (punto of seccion.puntos; track $index) {
+                    <li class="view__resumen-card-item">{{ punto }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- HISTORIAL MODE -->
+    @if (mode() === 'historial') {
+      <div class="view__historial">
+        @if (isLoadingVersiones()) {
+          <div class="view__loading view__loading--inline">
+            <div class="view__spinner"></div>
+            <p>Cargando historial...</p>
+          </div>
+        } @else if (versionesError()) {
+          <div class="view__resumen-error">
+            <p>{{ versionesError() }}</p>
+          </div>
+        } @else if (versiones().length === 0) {
+          <p class="view__historial-empty">No hay versiones publicadas disponibles.</p>
+        } @else {
+          <nav class="view__ver-list" aria-label="Versiones">
+            <p class="view__ver-list-title">Versiones</p>
+            @for (v of versiones(); track v.id; let i = $index) {
+              <button
+                class="view__ver-item"
+                [class.view__ver-item--active]="selectedVersionIdx() === i"
+                (click)="selectVersion(i)"
+              >
+                <span class="view__ver-label">v{{ v.versionEtiqueta }}</span>
+                <span class="view__ver-date">{{ formatDate(v.fechaCreacion) }}</span>
+              </button>
+            }
+          </nav>
+          <div class="view__diff-panel">
+            @if (selectedVersion) {
+              <div class="view__diff-header">
+                @if (prevVersion) {
+                  <span>Cambios en v{{ selectedVersion.versionEtiqueta }} respecto a v{{ prevVersion.versionEtiqueta }}</span>
+                } @else {
+                  <span>Versión inicial v{{ selectedVersion.versionEtiqueta }}</span>
+                }
+              </div>
+            }
+            @if (showFullContent()) {
+              <div class="view__diff-content">
+                @for (line of (selectedVersion?.contenido ?? '').split('\n'); track $index) {
+                  <div class="view__diff-line view__diff-line--unchanged">
+                    <span class="view__diff-sign">&nbsp;</span>
+                    <span class="view__diff-text">{{ line }}</span>
+                  </div>
+                }
+              </div>
+            } @else if (!hasChanges()) {
+              <p class="view__historial-empty">Sin cambios entre estas versiones.</p>
+            } @else {
+              <div class="view__diff-legend">
+                <span class="view__diff-badge view__diff-badge--added">Añadido</span>
+                <span class="view__diff-badge view__diff-badge--removed">Eliminado</span>
+              </div>
+              <div class="view__diff-content">
+                @for (line of diffLines(); track $index) {
+                  @if (line.type === 'separator') {
+                    <div class="view__diff-separator">··· {{ line.text }} ···</div>
+                  } @else {
+                    <div class="view__diff-line" [class]="'view__diff-line--' + line.type">
+                      <span class="view__diff-sign">{{ line.type === 'added' ? '+' : line.type === 'removed' ? '-' : ' ' }}</span>
+                      <span class="view__diff-text">{{ line.text }}</span>
+                    </div>
+                  }
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Actions -->
     <div class="view__actions">
       <button class="btn btn--cancel" (click)="goBack()">Volver</button>
       <button class="btn btn--primary" (click)="openDownloadModal()">Descargar</button>
