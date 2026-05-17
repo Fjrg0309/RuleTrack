@@ -1,6 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FileUploadService } from '../../services/file-upload.service';
 import { CorrectionService, CorrectionItem } from '../../services/correction.service';
@@ -24,7 +23,7 @@ export interface CorrectionState {
  */
 @Component({
   selector: 'app-correcting',
-  imports: [FormsModule],
+  imports: [],
   templateUrl: './correcting.component.html',
   styleUrl: './correcting.component.scss',
 })
@@ -39,9 +38,9 @@ export class CorrectingComponent implements OnInit {
   segments = signal<TextSegment[]>([]);
   activeCorrection = signal<CorrectionState | null>(null);
 
-  modalSuggestion = '';
-  noCorrectMore = false;
-  showJustification = false;
+  tooltipX = signal(0);
+  tooltipY = signal(0);
+  private tooltipCloseTimer: ReturnType<typeof setTimeout> | null = null;
 
   get fileName(): string { return this.fileUploadService.fileName(); }
   get fileContent(): string { return this.fileUploadService.fileContent(); }
@@ -125,40 +124,56 @@ export class CorrectingComponent implements OnInit {
     this.segments.set(segments);
   }
 
-  openModal(correctionId: string): void {
+  onHighlightEnter(correctionId: string, event: MouseEvent): void {
+    if (this.tooltipCloseTimer) {
+      clearTimeout(this.tooltipCloseTimer);
+      this.tooltipCloseTimer = null;
+    }
     const state = this.corrections().find(s => s.item.id === correctionId);
     if (state) {
       this.activeCorrection.set(state);
-      this.modalSuggestion = state.item.suggestion;
-      this.noCorrectMore = false;
-      this.showJustification = false;
+      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      // Position below the word; clamp to viewport width
+      const x = Math.min(rect.left, window.innerWidth - 300);
+      const y = rect.bottom + 8;
+      this.tooltipX.set(x);
+      this.tooltipY.set(y);
     }
   }
 
-  closeModal(): void {
+  onHighlightLeave(): void {
+    this.tooltipCloseTimer = setTimeout(() => this.activeCorrection.set(null), 180);
+  }
+
+  onTooltipEnter(): void {
+    if (this.tooltipCloseTimer) {
+      clearTimeout(this.tooltipCloseTimer);
+      this.tooltipCloseTimer = null;
+    }
+  }
+
+  onTooltipLeave(): void {
+    this.tooltipCloseTimer = setTimeout(() => this.activeCorrection.set(null), 180);
+  }
+
+  applyTooltipCorrection(): void {
+    const state = this.activeCorrection();
+    if (!state) return;
+    this.corrections.update(list =>
+      list.map(s => s.item.id === state.item.id ? { ...s, status: 'applied' as const } : s)
+    );
+    this.buildSegments(this.corrections());
     this.activeCorrection.set(null);
   }
 
-  applyCorrection(): void {
+  rejectTooltipCorrection(): void {
     const state = this.activeCorrection();
     if (!state) return;
-    const updatedItem: CorrectionItem = { ...state.item, suggestion: this.modalSuggestion };
     this.corrections.update(list =>
-      list.map(s => s.item.id === state.item.id ? { item: updatedItem, status: 'applied' as const } : s)
+      list.map(s => s.item.id === state.item.id ? { ...s, status: 'rejected' as const } : s)
     );
     this.buildSegments(this.corrections());
-    this.closeModal();
-  }
-
-  rejectCorrection(): void {
-    const state = this.activeCorrection();
-    if (!state) return;
-    const newStatus = this.noCorrectMore ? 'excluded' as const : 'rejected' as const;
-    this.corrections.update(list =>
-      list.map(s => s.item.id === state.item.id ? { ...s, status: newStatus } : s)
-    );
-    this.buildSegments(this.corrections());
-    this.closeModal();
+    this.activeCorrection.set(null);
   }
 
   /**

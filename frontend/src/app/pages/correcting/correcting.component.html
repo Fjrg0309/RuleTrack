@@ -33,8 +33,8 @@
             } @else {
               <span
                 class="correcting__highlight"
-                (click)="openModal(seg.correctionId!)"
-                title="Haz clic para ver la corrección"
+                (mouseenter)="onHighlightEnter(seg.correctionId!, $event)"
+                (mouseleave)="onHighlightLeave()"
               >{{ seg.content }}</span>
             }
           }
@@ -49,33 +49,22 @@
   }
 
   @if (activeCorrection()) {
-    <div class="correcting__modal-backdrop" (click)="closeModal()">
-      <div class="correcting__modal" (click)="$event.stopPropagation()">
-        <button class="correcting__modal-close" (click)="closeModal()" aria-label="Cerrar">✕</button>
-        <button
-          class="correcting__modal-why"
-          (click)="showJustification = !showJustification"
-          [title]="showJustification ? 'Ocultar justificación' : 'Ver justificación de la IA'"
-          aria-label="Justificación"
-        >?</button>
-        <p class="correcting__modal-original">"{{ activeCorrection()!.item.original }}"</p>
-        <textarea
-          class="correcting__modal-input"
-          [(ngModel)]="modalSuggestion"
-          rows="3"
-          aria-label="Texto sugerido"
-        ></textarea>
-        @if (showJustification) {
-          <p class="correcting__modal-explanation">{{ activeCorrection()!.item.explanation }}</p>
-        }
-        <div class="correcting__modal-btns">
-          <button class="btn btn--primary" (click)="applyCorrection()">Aplicar</button>
-          <button class="btn btn--primary" (click)="rejectCorrection()">Borrar</button>
-        </div>
-        <label class="correcting__modal-no-more">
-          <input type="checkbox" [(ngModel)]="noCorrectMore" />
-          No corregir más
-        </label>
+    <div
+      class="correcting__tooltip"
+      [style.left.px]="tooltipX()"
+      [style.top.px]="tooltipY()"
+      (mouseenter)="onTooltipEnter()"
+      (mouseleave)="onTooltipLeave()"
+    >
+      <p class="correcting__tooltip-label">Sugerencia</p>
+      <span class="correcting__tooltip-suggestion" (click)="applyTooltipCorrection()">
+        {{ activeCorrection()!.item.suggestion }}
+      </span>
+      @if (activeCorrection()!.item.explanation) {
+        <p class="correcting__tooltip-explanation">{{ activeCorrection()!.item.explanation }}</p>
+      }
+      <div class="correcting__tooltip-actions">
+        <button class="correcting__tooltip-reject" (click)="rejectTooltipCorrection()">Ignorar</button>
       </div>
     </div>
   }
