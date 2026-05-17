@@ -41,13 +41,16 @@ export class CorrectedComponent implements OnInit {
     const publicacionId = this.fileUploadService.publicacionId();
     this.isUpdateMode = publicacionId !== null;
 
+    const savedName = this.fileUploadService.documentName();
     const original = this.fileUploadService.fileName();
-    this.documentName = original.replace(/\.[^.]+$/, '');
+    this.documentName = savedName || original.replace(/\.[^.]+$/, '');
 
     if (this.isUpdateMode && publicacionId) {
       // Pre-cargar nombre y siguiente versión por defecto
       this.pubService.getById(publicacionId).subscribe(pub => {
-        this.documentName = pub.titulo;
+        if (!savedName) {
+          this.documentName = pub.titulo;
+        }
         this.documentDescripcion = pub.descripcion ?? '';
         this.documentVisibilidad = pub.visibilidad;
       });
