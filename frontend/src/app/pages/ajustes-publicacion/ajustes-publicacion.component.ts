@@ -64,7 +64,7 @@ export class AjustesPublicacionComponent implements OnInit {
       this.versiones.set(versions);
       const active = versions.find(v => v.estado === 'PUBLICADO');
       if (active) this.selectedVersionId.set(active.id);
-      else if (versions.length > 0) this.selectedVersionId.set(versions[versions.length - 1].id);
+      else if (versions.length > 0) this.selectedVersionId.set(versions[0].id);
     });
   }
 
