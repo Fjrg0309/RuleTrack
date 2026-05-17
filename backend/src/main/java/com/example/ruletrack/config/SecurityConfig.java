@@ -44,6 +44,8 @@ public class SecurityConfig {
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                // Actuator health (para healthcheck de Docker)
+                .requestMatchers("/actuator/health").permitAll()
                 // Swagger / OpenAPI (sin autenticación)
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**",
                                  "/v3/api-docs", "/v3/api-docs/**",

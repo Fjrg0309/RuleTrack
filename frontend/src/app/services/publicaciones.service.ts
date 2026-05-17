@@ -44,6 +44,24 @@ export interface PublicoViewDTO {
   contenido: string;
 }
 
+export interface ResumenSeccionDTO {
+  titulo: string;
+  puntos: string[];
+}
+
+export interface ResumenEstructuradoDTO {
+  tituloReglamento: string;
+  secciones: ResumenSeccionDTO[];
+}
+
+export interface VersionPublicaDTO {
+  id: number;
+  numeroVersion: number;
+  versionEtiqueta: string;
+  contenido: string;
+  fechaCreacion: string;
+}
+
 /**
  * Servicio de acceso a la API de reglamentos y versiones.
  * Gestiona las operaciones CRUD sobre publicaciones y su descarga en PDF/MD.
@@ -89,6 +107,14 @@ export class PublicacionesService {
    */
   getPublicoView(id: number): Observable<PublicoViewDTO> {
     return this.http.get<PublicoViewDTO>(`/api/reglamentos/publico/${id}`);
+  }
+
+  getResumenPublico(id: number): Observable<ResumenEstructuradoDTO> {
+    return this.http.get<ResumenEstructuradoDTO>(`/api/reglamentos/publico/${id}/resumen`);
+  }
+
+  getVersionesPublicas(id: number): Observable<VersionPublicaDTO[]> {
+    return this.http.get<VersionPublicaDTO[]>(`/api/reglamentos/publico/${id}/versiones`);
   }
 
   /**

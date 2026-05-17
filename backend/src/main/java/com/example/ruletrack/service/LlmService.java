@@ -1,6 +1,8 @@
 package com.example.ruletrack.service;
 
 import com.example.ruletrack.dto.CorrectionItemDTO;
+import com.example.ruletrack.dto.ResumenEstructuradoDTO;
+import com.example.ruletrack.dto.ResumenSeccionDTO;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -132,6 +134,81 @@ public class LlmService {
                 %s
                 """.formatted(contenido);
         return completar(prompt);
+    }
+
+    public ResumenEstructuradoDTO generarResumenEstructurado(String titulo, String contenido) {
+        String contenidoTruncado = contenido.length() > 3000
+                ? contenido.substring(0, 3000) + "\n...[documento truncado]"
+                : contenido;
+
+        String systemPrompt = """
+                Eres un experto en síntesis de reglamentos deportivos y oficiales. \
+                Tu única función es devolver un objeto JSON con el resumen estructurado. \
+                NUNCA envuelvas la respuesta en bloques markdown ni añadas texto fuera del JSON. \
+                Tu respuesta DEBE comenzar con { y terminar con }.
+                """;
+
+        String userPrompt = """
+                Analiza el siguiente reglamento y devuelve un resumen estructurado en JSON. \
+                Detecta las secciones relevantes presentes en el documento (por ejemplo: \
+                "Formato de competición", "Inscripciones", "Sanciones", "Reglas de juego", \
+                "Árbitros y jueces", "Premios y reconocimientos", "Disposiciones generales"). \
+                Incluye solo las secciones que tengan contenido real en el documento. \
+                Cada sección debe tener entre 3 y 6 puntos clave, concisos y en español.
+
+                Devuelve ÚNICAMENTE este JSON:
+                {
+                  "secciones": [
+                    {
+                      "titulo": "Nombre de la sección",
+                      "puntos": ["punto clave 1", "punto clave 2", "punto clave 3"]
+                    }
+                  ]
+                }
+
+                Reglamento "%s":
+                %s
+                """.formatted(titulo, contenidoTruncado);
+
+        String response = completar(systemPrompt, userPrompt);
+        log.debug("Respuesta resumen estructurado del LLM: {}", response);
+
+        try {
+            int start = response.indexOf('{');
+            int end = response.lastIndexOf('}');
+            if (start < 0 || end <= start) {
+                log.error("No se encontró JSON en la respuesta del LLM: {}", response);
+                return fallbackResumen(titulo);
+            }
+            String json = response.substring(start, end + 1);
+            ObjectMapper mapper = new ObjectMapper();
+            java.util.Map<?, ?> parsed = mapper.readValue(json, java.util.Map.class);
+            java.util.List<?> rawSecciones = (java.util.List<?>) parsed.get("secciones");
+            if (rawSecciones == null) return fallbackResumen(titulo);
+
+            java.util.List<ResumenSeccionDTO> secciones = rawSecciones.stream()
+                    .map(s -> {
+                        java.util.Map<?, ?> secMap = (java.util.Map<?, ?>) s;
+                        String secTitulo = (String) secMap.get("titulo");
+                        java.util.List<?> rawPuntos = (java.util.List<?>) secMap.get("puntos");
+                        java.util.List<String> puntos = rawPuntos == null ? java.util.List.of()
+                                : rawPuntos.stream().map(Object::toString).toList();
+                        return new ResumenSeccionDTO(secTitulo, puntos);
+                    })
+                    .toList();
+
+            return new ResumenEstructuradoDTO(titulo, secciones);
+        } catch (Exception e) {
+            log.error("Error al parsear resumen estructurado del LLM: {}", e.getMessage());
+            return fallbackResumen(titulo);
+        }
+    }
+
+    private ResumenEstructuradoDTO fallbackResumen(String titulo) {
+        return new ResumenEstructuradoDTO(titulo, java.util.List.of(
+                new ResumenSeccionDTO("Resumen no disponible",
+                        java.util.List.of("No se pudo generar el resumen automático. Por favor, consulte el documento completo."))
+        ));
     }
 
     private String completar(String userPrompt) {

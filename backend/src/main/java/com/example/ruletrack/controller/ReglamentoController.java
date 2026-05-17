@@ -3,6 +3,8 @@ package com.example.ruletrack.controller;
 import com.example.ruletrack.dto.PublicoViewDTO;
 import com.example.ruletrack.dto.ReglamentoRequestDTO;
 import com.example.ruletrack.dto.ReglamentoResponseDTO;
+import com.example.ruletrack.dto.ResumenEstructuradoDTO;
+import com.example.ruletrack.dto.VersionPublicaDTO;
 import com.example.ruletrack.service.ReglamentoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -49,6 +51,27 @@ public class ReglamentoController {
         return ResponseEntity.ok(reglamentoService.getPublicoView(id));
     }
 
+    @Operation(summary = "Resumen estructurado de un reglamento",
+               description = "Genera un resumen automático organizado por secciones usando IA.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Resumen generado"),
+        @ApiResponse(responseCode = "404", description = "Reglamento no encontrado o sin acceso")
+    })
+    @GetMapping("/publico/{id}/resumen")
+    public ResponseEntity<ResumenEstructuradoDTO> getResumenEstructurado(@PathVariable Long id) {
+        return ResponseEntity.ok(reglamentoService.getResumenEstructurado(id));
+    }
+
+    @Operation(summary = "Historial de versiones públicas",
+               description = "Devuelve todas las versiones publicadas de un reglamento público, ordenadas de más reciente a más antigua.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de versiones"),
+        @ApiResponse(responseCode = "404", description = "Reglamento no encontrado")
+    })
+    @GetMapping("/publico/{id}/versiones")
+    public ResponseEntity<List<VersionPublicaDTO>> getVersionesPublicas(@PathVariable Long id) {
+        return ResponseEntity.ok(reglamentoService.getVersionesPublicas(id));
+    }
     @Operation(summary = "Listar todos los reglamentos de la organizaciÃ³n",
                description = "Devuelve todos los reglamentos de la organizaciÃ³n del usuario, sin filtro de visibilidad.",
                security = @SecurityRequirement(name = "bearerAuth"))
