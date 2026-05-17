@@ -16,8 +16,9 @@ FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 
-# Usuario sin privilegios para mayor seguridad
-RUN addgroup --system appgroup && adduser --system --ingroup appgroup appuser
+# Instala curl para healthcheck y crea usuario sin privilegios
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/* \
+    && addgroup --system appgroup && adduser --system --ingroup appgroup appuser
 USER appuser
 
 COPY --from=builder /app/target/*.jar app.jar
