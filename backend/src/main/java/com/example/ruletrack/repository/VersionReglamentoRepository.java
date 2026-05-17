@@ -20,4 +20,6 @@ public interface VersionReglamentoRepository extends JpaRepository<VersionReglam
     Optional<VersionReglamento> findTopByReglamentoIdOrderByNumeroVersionDesc(Long reglamentoId);
 
     List<VersionReglamento> findByReglamentoIdAndEstado(Long reglamentoId, EstadoVersion estado);
+
+    List<VersionReglamento> findByReglamentoIdAndEstadoNot(Long reglamentoId, EstadoVersion estado);
 }

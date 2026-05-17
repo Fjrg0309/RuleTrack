@@ -3,6 +3,8 @@ package com.example.ruletrack.service;
 import com.example.ruletrack.dto.PublicoViewDTO;
 import com.example.ruletrack.dto.ReglamentoRequestDTO;
 import com.example.ruletrack.dto.ReglamentoResponseDTO;
+import com.example.ruletrack.dto.ResumenEstructuradoDTO;
+import com.example.ruletrack.dto.VersionPublicaDTO;
 import com.example.ruletrack.entity.*;
 import com.example.ruletrack.exception.ResourceNotFoundException;
 import com.example.ruletrack.repository.ReglamentoRepository;
@@ -26,6 +28,7 @@ public class ReglamentoService {
     private final UsuarioRepository usuarioRepository;
     private final VersionReglamentoRepository versionRepository;
     private final HistorialCambiosService historialService;
+    private final LlmService llmService;
 
     /** Todos los reglamentos (uso interno / admin) */
     @Transactional(readOnly = true)
@@ -76,12 +79,59 @@ public class ReglamentoService {
             throw new ResourceNotFoundException("Reglamento", id);
         }
 
-        String contenido = r.getVersiones().stream()
+        String contenido = versionRepository.findByReglamentoIdOrderByNumeroVersionDesc(r.getId()).stream()
                 .filter(v -> v.getEstado() == EstadoVersion.PUBLICADO)
                 .findFirst()
                 .map(VersionReglamento::getContenido)
                 .orElse("");
         return new PublicoViewDTO(r.getTitulo(), contenido);
+    }
+
+    @Transactional(readOnly = true)
+    public List<VersionPublicaDTO> getVersionesPublicas(Long id) {
+        Reglamento r = getReglamentoOrThrow(id);
+        if (r.getVisibilidad() != VisibilidadReglamento.PUBLICO) {
+            throw new ResourceNotFoundException("Reglamento", id);
+        }
+        return versionRepository.findByReglamentoIdAndEstadoNot(id, EstadoVersion.BORRADOR)
+                .stream()
+                .sorted(java.util.Comparator.comparingInt(VersionReglamento::getNumeroVersion).reversed())
+                .map(v -> new VersionPublicaDTO(
+                        v.getId(),
+                        v.getNumeroVersion(),
+                        v.getVersionEtiqueta(),
+                        v.getContenido(),
+                        v.getFechaCreacion()
+                ))
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public ResumenEstructuradoDTO getResumenEstructurado(Long id) {
+        Reglamento r = getReglamentoOrThrow(id);
+        Optional<Usuario> currentUser = getCurrentUserOptional();
+
+        boolean canAccess = switch (r.getVisibilidad()) {
+            case PUBLICO -> true;
+            case SOLO_MIEMBROS -> currentUser.isPresent() && (
+                r.getCreadoPor().getOrganizacionNombre().equals(currentUser.get().getOrganizacionNombre())
+                || r.getCreadoPor().getId().equals(currentUser.get().getId())
+            );
+            case PRIVADO -> currentUser.isPresent()
+                && r.getCreadoPor().getId().equals(currentUser.get().getId());
+        };
+
+        if (!canAccess) {
+            throw new ResourceNotFoundException("Reglamento", id);
+        }
+
+        String contenido = r.getVersiones().stream()
+                .filter(v -> v.getEstado() == EstadoVersion.PUBLICADO)
+                .findFirst()
+                .map(VersionReglamento::getContenido)
+                .orElse("");
+
+        return llmService.generarResumenEstructurado(r.getTitulo(), contenido);
     }
 
     @Transactional
