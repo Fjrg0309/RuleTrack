@@ -152,7 +152,7 @@ Al activar una versión:
 ### Subir un documento (`/upload`)
 
 1. Acceder a la página de subida (`/upload`).
-2. Arrastrar y soltar un fichero **PDF**, **DOCX** o **Markdown** sobre la zona de carga, o pulsar **Subir desde dispositivo** para usar el explorador de archivos.
+2. Arrastrar y soltar un fichero **PDF**, **DOCX**, **TXT** o **Markdown** sobre la zona de carga, o pulsar **Subir desde dispositivo** para usar el explorador de archivos.
 3. La conversión se inicia automáticamente al seleccionar el fichero.
 
 ![Página de subida de documento](manual_usuario/upload.png)
@@ -187,23 +187,84 @@ Muestra el contenido extraido en texto plano. Desde aquí se puede:
 
 ### Revisar y aplicar sugerencias (`/correcting`)
 
-La página muestra el documento completo con los fragmentos que el modelo IA sugiere cambiar resaltados en rojo. Al pie de la página hay dos opciones globales:
-- **Aplicar correcciones**: aplica todos los cambios sugeridos al documento.
+La página muestra el documento completo con los fragmentos que el modelo IA sugiere cambiar resaltados. Cada fragmento marcado se puede revisar de dos formas:
+
+**Corrección individual (tooltip):**
+- Pasar el cursor sobre cualquier fragmento resaltado abre un tooltip con:
+  - El texto original y la sugerencia propuesta.
+  - El botón **Aplicar** para aceptar esa corrección concreta.
+  - El botón **Rechazar** para descartar esa corrección concreta.
+- Una vez aplicada, la palabra se muestra en verde; una vez rechazada, deja de estar marcada.
+
+**Opciones globales (pie de página):**
+- **Aplicar correcciones**: acepta todas las sugerencias pendientes de una vez.
 - **Ignorar correcciones**: descarta todas las sugerencias y conserva el texto original.
+
+Un contador en la parte superior indica cuántas correcciones quedan pendientes de revisar.
+
+Si el servicio IA no está disponible se muestra un mensaje de error descriptivo con instrucciones para el administrador.
 
 ![Correcciones del documento](manual_usuario/correcting.png)
 
-### Resultado (`/corrected`)
+### Publicar el documento (`/corrected`)
 
-Muestra el documento con los cambios aplicados. Desde aquí se puede:
-- **Volver**: regresar a la pantalla anterior.
-- **Corregir de nuevo**: lanzar un nuevo análisis IA sobre el documento resultante.
+Tras revisar las correcciones, la aplicación muestra el formulario de publicación:
+
+- **Nombre del documento**: título que recibirá el reglamento (por defecto, el nombre del fichero original).
+- **Versión**: etiqueta semántica de la versión (por defecto `1.0`; formato `X.Y` o `X.Y.Z`). En modo actualización se sugiere automáticamente la siguiente etiqueta.
+- **Descripción**: texto libre que describe el contenido del reglamento.
+- **Visibilidad**: `PUBLICO`, `SOLO_MIEMBROS` o `PRIVADO`.
+
+Desde esta pantalla se puede:
+- Pulsar **Consultar documento** para previsualizar el resultado corregido antes de publicar.
+- Pulsar **Publicar** para crear el reglamento (nuevo) o añadir una versión a uno existente.
+
+En modo actualización (accedido desde *Ajustes de publicación*), el nombre y la visibilidad se precargan con los valores actuales del reglamento y solo se crea una nueva versión.
 
 ![Resultado de la corrección](manual_usuario/corrected.png)
 
 ---
 
-## 9.9 Perfil y organización
+### Enlace creado (`/link-created`)
+
+Al completar la publicación, la aplicación muestra una pantalla de confirmación con:
+
+- La **URL pública** del reglamento, lista para copiar y compartir.
+- El botón **Ver documento** para abrir directamente la vista de lectura del reglamento.
+- El botón **Ajustar acceso** para ir a la página de ajustes de publicación y modificar visibilidad o versiones.
+- El botón **Volver a inicio** para regresar al panel principal y limpiar el estado de la subida.
+
+---
+
+## 9.9 Vista de lectura de un reglamento (`/view/:id`)
+
+La página de vista es accesible para cualquier usuario (sin necesidad de cuenta) cuando el reglamento es PUBLICO, y para los miembros autorizados en los demás casos. Se accede desde el enlace compartido o pulsando el título de un reglamento en cualquier listado.
+
+La pantalla se organiza en tres pestañas:
+
+### Pestaña Normas
+
+Muestra el contenido del reglamento en formato Markdown renderizado. Incluye:
+
+- **Tabla de contenidos**: generada automáticamente a partir de los encabezados del documento. Al pulsar un elemento de la tabla se desplaza suavemente hasta la sección correspondiente.
+- **Buscador**: campo de texto que resalta en tiempo real todas las coincidencias en el documento e indica el número total de resultados encontrados. Pulsar la `×` limpia la búsqueda.
+- **Botón de descarga**: abre un modal para descargar el reglamento en formato **Markdown** o **PDF** (generado en el navegador con jsPDF).
+
+### Pestaña Resumen
+
+Genera y muestra un resumen estructurado del reglamento usando el modelo LLM configurado. El resumen se carga de forma diferida la primera vez que se accede a la pestaña y se organiza en secciones con puntos clave. Si la generación falla, se muestra un botón **Reintentar**.
+
+### Pestaña Historial
+
+Muestra el historial de versiones publicadas del reglamento. Al seleccionar una versión del desplegable se presenta un **visor de diferencias** línea a línea respecto a la versión anterior:
+
+- Las líneas **añadidas** aparecen en verde con el prefijo `+`.
+- Las líneas **eliminadas** aparecen en rojo con el prefijo `−`.
+- Las líneas sin cambios se condensan. Si no hay versión anterior disponible, o se activa **Mostrar contenido completo**, se muestra el documento íntegro de esa versión.
+
+---
+
+## 9.10 Perfil y organización
 
 ### Ver perfil (`/perfil`)
 
@@ -214,6 +275,27 @@ Muestra los datos del usuario autenticado: nombre completo, fecha de nacimiento,
 ### Editar perfil
 
 La edición de nombre y email se realiza desde la página de **Ajustes** (`/ajustes`), sección "Información personal". Modificar los campos deseados y pulsar **Actualizar perfil**.
+
+### Preferencias (`/ajustes`)
+
+La sección **Preferencias** de la página de ajustes permite:
+
+- **Modo oscuro**: activa o desactiva el tema oscuro de la interfaz. La preferencia se guarda en el navegador y se aplica automáticamente en futuras visitas.
+- **Idioma**: muestra el idioma actual de la aplicación (actualmente solo Español).
+
+### Notificaciones (`/ajustes`)
+
+La sección **Notificaciones** permite activar o desactivar de forma independiente:
+
+- **Novedades**: alertas sobre actualizaciones de la plataforma.
+- **Emails**: notificaciones por correo electrónico.
+
+### Zona de peligro (`/ajustes`)
+
+Al pie de la página de ajustes se encuentra la sección de acciones irreversibles:
+
+- **Cerrar sesión**: finaliza la sesión del usuario y redirige a la página principal.
+- **Eliminar cuenta**: muestra un diálogo de confirmación antes de proceder. La acción cierra la sesión inmediatamente.
 
 ### Ver miembros de la organización (`/miembros-organizacion`)
 
@@ -229,13 +311,13 @@ Muestra el nombre de la organización, fecha de fundación, número de organizad
 
 ---
 
-## 9.10 Preguntas frecuentes
+## 9.11 Preguntas frecuentes
 
 **¿Puedo acceder a los reglamentos sin registrarme?**
 Sí, los reglamentos con visibilidad PUBLICO son accesibles sin cuenta desde su URL directa o desde la página principal.
 
 **¿Qué formatos de documento puedo subir?**
-PDF y DOCX. El tamaño máximo es 500 MB.
+PDF, DOCX, TXT y Markdown (.md). El tamaño máximo es 10 MB.
 
 **¿Por qué no funciona el análisis IA?**
 La funcionalidad IA requiere que el administrador del sistema haya configurado una `LLM_API_KEY` válida. Si el análisis falla, contacta con el administrador.

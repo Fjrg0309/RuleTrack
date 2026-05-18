@@ -28,6 +28,7 @@
 | TypeScript | ~5.9 | Lenguaje principal |
 | SCSS | (incluido en Angular) | Estilos con preprocesador |
 | RxJS | ~7.8 | Programación reactiva, gestión de streams |
+| marked | ^18.0 | Renderizado de Markdown a HTML en el navegador |
 | jsPDF | ^4.2 | Exportación a PDF desde el navegador |
 | pdf.js | ^5.6 | Renderizado de PDF en el navegador |
 | Nginx | 1.27 Alpine | Servidor web y reverse proxy en contenedor |

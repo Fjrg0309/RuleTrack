@@ -24,6 +24,10 @@ RuleTrack es una aplicacion web para gestionar reglamentos con un flujo completo
   - SOLO_MIEMBROS: visible para miembros de la organizacion.
   - PRIVADO: visible solo al creador o usuarios permitidos.
 - Vista publica de reglamentos para compartir contenido.
+- Tabla de contenidos generada automaticamente a partir de los encabezados del reglamento.
+- Busqueda en tiempo real con resaltado de resultados y contador de coincidencias.
+- Visor de diferencias entre versiones con lineas añadidas (verde) y eliminadas (rojo).
+- Resumen estructurado generado por IA con secciones y puntos clave.
 
 ### C. Versionado
 - Crear versiones asociadas a un reglamento.
@@ -39,7 +43,7 @@ RuleTrack es una aplicacion web para gestionar reglamentos con un flujo completo
 - Marcar sugerencias como aplicadas.
 
 ### E. Conversion documental
-- Carga de documentos PDF o DOCX.
+- Carga de documentos PDF, DOCX, TXT o Markdown.
 - Extraccion y conversion a Markdown.
 - Uso del contenido convertido en el flujo de publicacion/revision.
 
