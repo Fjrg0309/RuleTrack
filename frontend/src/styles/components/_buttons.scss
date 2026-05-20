@@ -65,6 +65,19 @@
     }
   }
 
+  &--cancel {
+    background-color: transparent;
+    color: var(--button-color);
+    border: 2px solid var(--button-color);
+    box-shadow: var(--shadow-sm);
+
+    &:hover {
+      background-color: var(--button-color);
+      color: var(--text-button);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+
   // ── Modificadores de tamaño ─────────────────────────────────────────────
 
   &--sm {
