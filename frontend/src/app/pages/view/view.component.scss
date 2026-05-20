@@ -217,11 +217,18 @@
   padding: 3px 4px;
   border-radius: 3px;
   line-height: 1.4;
-  transition: background 0.12s;
+  transition: background 0.12s, color 0.12s, font-weight 0.12s;
 
   &:hover {
     background: color-mix(in srgb, var(--button-color) 10%, transparent);
     text-decoration: underline;
+  }
+
+  &--active {
+    background: color-mix(in srgb, var(--button-color) 14%, transparent);
+    font-weight: 700;
+    border-left: 2px solid var(--button-color);
+    padding-left: 6px;
   }
 }
 

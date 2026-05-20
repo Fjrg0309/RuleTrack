@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ModalComponent } from '../../components/modal/modal.component';
@@ -25,7 +25,7 @@ export type ViewMode = 'normas' | 'resumen' | 'historial';
   templateUrl: './view.component.html',
   styleUrl: './view.component.scss',
 })
-export class ViewComponent implements OnInit {
+export class ViewComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private pubService = inject(PublicacionesService);
@@ -42,6 +42,8 @@ export class ViewComponent implements OnInit {
 
   // TOC
   tocItems: TocItem[] = [];
+  activeTocId = signal('');
+  private scrollCleanup: (() => void) | null = null;
 
   // Rendered HTML
   private baseHtml = '';
@@ -89,22 +91,28 @@ export class ViewComponent implements OnInit {
   // ── Markdown processing ───────────────────────────────────────────────
 
   private processMarkdown(): void {
-    let html = marked.parse(this.contenido, { async: false }) as string;
+    const html = marked.parse(this.contenido, { async: false }) as string;
     this.buildToc();
-    html = this.injectHeadingIds(html);
     this.baseHtml = html;
     this.displayHtml.set(html);
+    // Wait one tick for Angular to render [innerHTML], then fix IDs and wire scroll
+    setTimeout(() => {
+      this.injectHeadingIdsToDom();
+      this.setupTocScrollListener();
+    }, 50);
   }
 
   private buildToc(): void {
-    const regex = /^(#{1,3})\s+(.+)$/gm;
+    const regex = /^(#{1,6})\s+(.+)$/gm;
     this.tocItems = [];
+    const idCount = new Map<string, number>();
     let match;
     while ((match = regex.exec(this.contenido)) !== null) {
       const level = match[1].length;
+      if (level > 3) continue; // only h1-h3 in TOC
       const text = match[2].trim().replace(/\*\*|__|\[|\]|~~|`/g, '');
-      const id =
-        'h-' +
+      const baseId =
+        'rt-' +
         text
           .toLowerCase()
           .normalize('NFD')
@@ -112,25 +120,65 @@ export class ViewComponent implements OnInit {
           .replace(/[^a-z0-9\s-]/g, '')
           .trim()
           .replace(/\s+/g, '-')
-          .substring(0, 50);
+          .substring(0, 60);
+      const count = idCount.get(baseId) ?? 0;
+      idCount.set(baseId, count + 1);
+      const id = count === 0 ? baseId : `${baseId}-${count + 1}`;
       this.tocItems.push({ id, level, text });
     }
   }
 
-  private injectHeadingIds(html: string): string {
-    for (const item of this.tocItems) {
-      const escaped = item.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      html = html.replace(
-        new RegExp(`<h${item.level}>([^<]*${escaped}[^<]*)</h${item.level}>`, 'i'),
-        `<h${item.level} id="${item.id}">$1</h${item.level}>`,
-      );
-    }
-    return html;
+  /**
+   * Assigns our IDs directly to DOM heading elements in document order.
+   * This is robust against any IDs that `marked` may already have injected.
+   */
+  private injectHeadingIdsToDom(): void {
+    const article = document.querySelector('.view__markdown') as HTMLElement | null;
+    if (!article || !this.tocItems.length) return;
+    const domHeadings = Array.from(article.querySelectorAll('h1, h2, h3'));
+    // tocItems and DOM headings are produced from the same source in the same order
+    domHeadings.forEach((el, i) => {
+      if (this.tocItems[i]) el.id = this.tocItems[i].id;
+    });
   }
 
   scrollToHeading(id: string): void {
+    this.activeTocId.set(id);
     const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!el) return;
+    const article = document.querySelector('.view__markdown') as HTMLElement | null;
+    if (article) {
+      const elTop = el.getBoundingClientRect().top - article.getBoundingClientRect().top + article.scrollTop;
+      article.scrollTo({ top: elTop - 16, behavior: 'smooth' });
+    } else {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  private setupTocScrollListener(): void {
+    this.scrollCleanup?.();
+    this.scrollCleanup = null;
+    const article = document.querySelector('.view__markdown') as HTMLElement | null;
+    if (!article || !this.tocItems.length) return;
+    const headingEls = this.tocItems
+      .map(item => document.getElementById(item.id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!headingEls.length) return;
+    this.activeTocId.set(headingEls[0].id);
+    const onScroll = () => {
+      const articleTop = article.getBoundingClientRect().top;
+      let activeId = headingEls[0].id;
+      for (const el of headingEls) {
+        if (el.getBoundingClientRect().top - articleTop <= 60) {
+          activeId = el.id;
+        } else {
+          break;
+        }
+      }
+      this.activeTocId.set(activeId);
+    };
+    article.addEventListener('scroll', onScroll, { passive: true });
+    this.scrollCleanup = () => article.removeEventListener('scroll', onScroll);
   }
 
   // ── Mode ──────────────────────────────────────────────────────────────
@@ -152,6 +200,7 @@ export class ViewComponent implements OnInit {
     if (!query.trim()) {
       this.displayHtml.set(this.baseHtml);
       this.searchResultCount.set(0);
+      setTimeout(() => this.injectHeadingIdsToDom(), 0);
       return;
     }
     const escaped = query.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -165,12 +214,14 @@ export class ViewComponent implements OnInit {
     );
     this.searchResultCount.set(count);
     this.displayHtml.set(highlighted);
+    setTimeout(() => this.injectHeadingIdsToDom(), 0);
   }
 
   clearSearch(): void {
     this.searchQuery.set('');
     this.searchResultCount.set(0);
     this.displayHtml.set(this.baseHtml);
+    setTimeout(() => this.injectHeadingIdsToDom(), 0);
   }
 
   // ── Resumen ───────────────────────────────────────────────────────────
@@ -336,5 +387,9 @@ export class ViewComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/']);
+  }
+
+  ngOnDestroy(): void {
+    this.scrollCleanup?.();
   }
 }

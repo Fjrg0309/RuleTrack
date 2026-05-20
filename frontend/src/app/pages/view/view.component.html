@@ -90,7 +90,12 @@
             <ul class="view__toc-list">
               @for (item of tocItems; track item.id) {
                 <li class="view__toc-item" [attr.data-level]="item.level">
-                  <a class="view__toc-link" (click)="scrollToHeading(item.id)" href="javascript:void(0)">
+                  <a
+                    class="view__toc-link"
+                    [class.view__toc-link--active]="activeTocId() === item.id"
+                    (click)="scrollToHeading(item.id)"
+                    href="javascript:void(0)"
+                  >
                     {{ item.text }}
                   </a>
                 </li>
