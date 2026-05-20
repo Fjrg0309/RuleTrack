@@ -6,7 +6,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const token = localStorage.getItem('rt_token');
-  if (token && req.url.includes('/api/') && !req.url.includes('/api/auth/')) {
+  if (token && req.url.includes('/api/')) {
     const cloned = req.clone({
       setHeaders: { Authorization: `Bearer ${token}` }
     });
