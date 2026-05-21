@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { FileUploadService } from '../../services/file-upload.service';
 import { PublicacionesService, VersionDTO } from '../../services/publicaciones.service';
 import { AuthService } from '../../services/auth.service';
@@ -128,8 +129,11 @@ export class CorrectedComponent implements OnInit {
     const publicacionId = this.fileUploadService.publicacionId();
 
     if (this.isUpdateMode && publicacionId) {
-      // Añadir nueva versión a publicación existente
-      this.pubService.crearVersion(publicacionId, { contenido, versionEtiqueta: etiqueta }).subscribe({
+      // Añadir nueva versión y actualizar el título del reglamento
+      forkJoin({
+        version: this.pubService.crearVersion(publicacionId, { contenido, versionEtiqueta: etiqueta }),
+        meta: this.pubService.update(publicacionId, { titulo: this.documentName })
+      }).subscribe({
         next: () => {
           this.isSubmitting.set(false);
           this.router.navigate(['/link-created']);
