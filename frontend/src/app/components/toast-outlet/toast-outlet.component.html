@@ -1,9 +1,10 @@
 <div class="toast-stack" aria-live="assertive" aria-atomic="false">
   @for (toast of toastService.toasts(); track toast.id) {
-    <div class="toast" [class]="'toast toast--' + toast.type" role="alert">
+    <div class="toast" [class]="'toast toast--' + toast.type" [class.toast--clickable]="!!toast.link" role="alert"
+         (click)="navigate(toast.link, toast.id)">
       <span class="toast__bar"></span>
       <span class="toast__message">{{ toast.message }}</span>
-      <button class="toast__close" aria-label="Cerrar" (click)="toastService.dismiss(toast.id)">&#10005;</button>
+      <button class="toast__close" aria-label="Cerrar" (click)="$event.stopPropagation(); toastService.dismiss(toast.id)">&#10005;</button>
     </div>
   }
 </div>

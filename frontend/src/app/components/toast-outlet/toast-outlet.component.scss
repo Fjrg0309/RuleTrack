@@ -26,6 +26,13 @@
   &--error   .toast__bar { background: #e05252; }
   &--warning .toast__bar { background: #f0a500; }
   &--info    .toast__bar { background: var(--button-color); }
+
+  &--clickable {
+    cursor: pointer;
+    &:hover {
+      filter: brightness(1.06);
+    }
+  }
 }
 
 @keyframes toast-slide-in {

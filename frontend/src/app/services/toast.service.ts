@@ -5,6 +5,8 @@ export interface Toast {
   id: number;
   message: string;
   type: 'error' | 'warning' | 'info';
+  /** Ruta opcional de navegación al hacer clic en el toast. */
+  link?: string;
 }
 
 /** Servicio global para mostrar notificaciones toast al usuario. */
@@ -18,10 +20,11 @@ export class ToastService {
    * @param message Texto a mostrar al usuario.
    * @param type Tipo de mensaje: 'error', 'warning' o 'info'.
    * @param duration Tiempo en ms antes de que el toast desaparezca (por defecto 3500).
+   * @param link Ruta de navegación opcional al hacer clic en el toast.
    */
-  show(message: string, type: Toast['type'] = 'error', duration = 3500): void {
+  show(message: string, type: Toast['type'] = 'error', duration = 3500, link?: string): void {
     const id = ++this.counter;
-    this.toasts.update(list => [...list, { id, message, type }]);
+    this.toasts.update(list => [...list, { id, message, type, link }]);
     setTimeout(() => this.dismiss(id), duration);
   }
 
