@@ -58,6 +58,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/reglamentos/**").authenticated()
                 .requestMatchers("/api/reglamentos/**").hasRole("ORGANIZADOR")
                 .requestMatchers("/api/versiones/**").hasRole("ORGANIZADOR")
+                .requestMatchers("/api/notificaciones/**").hasRole("ORGANIZADOR")
                 .requestMatchers("/api/sugerencias/**").authenticated()
                 .requestMatchers("/api/historial/**").authenticated()
                 .anyRequest().authenticated()
