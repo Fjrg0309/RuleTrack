@@ -159,7 +159,10 @@ class ReglamentoServiceTest {
     @Test
     @DisplayName("delete – elimina correctamente un reglamento existente")
     void delete_existingId_callsDeleteById() {
-        when(reglamentoRepository.existsById(3L)).thenReturn(true);
+        Reglamento reg = buildReglamento(3L, "Reglamento Test", VisibilidadReglamento.PUBLICO);
+        when(reglamentoRepository.findById(3L)).thenReturn(Optional.of(reg));
+        mockSecurityContext("admin");
+        when(usuarioRepository.findByUsername("admin")).thenReturn(Optional.of(organizador));
 
         reglamentoService.delete(3L);
 
@@ -169,7 +172,7 @@ class ReglamentoServiceTest {
     @Test
     @DisplayName("delete – lanza ResourceNotFoundException si el reglamento no existe")
     void delete_notFound_throwsResourceNotFoundException() {
-        when(reglamentoRepository.existsById(99L)).thenReturn(false);
+        when(reglamentoRepository.findById(99L)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> reglamentoService.delete(99L))
                 .isInstanceOf(ResourceNotFoundException.class);
