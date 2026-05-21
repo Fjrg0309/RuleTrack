@@ -178,6 +178,11 @@ public class ReglamentoService {
     @Transactional
     public ReglamentoResponseDTO update(Long id, ReglamentoRequestDTO request) {
         Reglamento reglamento = getReglamentoOrThrow(id);
+        Usuario currentUser = getCurrentUser();
+        if (!reglamento.getCreadoPor().getId().equals(currentUser.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                "Solo el creador de la publicación puede editarla.");
+        }
         reglamento.setTitulo(request.getTitulo());
         reglamento.setDescripcion(request.getDescripcion());
         if (request.getVisibilidad() != null) {
@@ -192,8 +197,11 @@ public class ReglamentoService {
 
     @Transactional
     public void delete(Long id) {
-        if (!reglamentoRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Reglamento", id);
+        Reglamento reglamento = getReglamentoOrThrow(id);
+        Usuario currentUser = getCurrentUser();
+        if (!reglamento.getCreadoPor().getId().equals(currentUser.getId())) {
+            throw new org.springframework.security.access.AccessDeniedException(
+                "Solo el creador de la publicación puede eliminarla.");
         }
         reglamentoRepository.deleteById(id);
     }
