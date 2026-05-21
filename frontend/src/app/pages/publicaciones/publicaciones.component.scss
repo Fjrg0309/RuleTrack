@@ -201,6 +201,30 @@ $col-actions: 100px;
   &:active {
     transform: translateY(0);
   }
+
+  &--notify {
+    background-color: var(--color-card);
+    border: 1.5px solid var(--color-secondary);
+    color: var(--color-label);
+
+    &:hover {
+      background-color: #f0a500;
+      border-color: #f0a500;
+      color: #fff;
+    }
+  }
+
+  &--notified {
+    background-color: #4caf50 !important;
+    border-color: #4caf50 !important;
+    color: #fff !important;
+    pointer-events: none;
+  }
+
+  &--copied {
+    background-color: #4caf50 !important;
+    color: #fff;
+  }
 }
 
 // ── Pagination ──

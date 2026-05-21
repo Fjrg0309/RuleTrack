@@ -39,15 +39,28 @@
             </svg>
           </button>
           @if (auth.currentUser()?.rol === 'ORGANIZADOR') {
-            <button
-              class="publications__action-btn"
-              (click)="editPublication(pub)"
-              title="Ver ajustes"
-              aria-label="Ver ajustes de publicación">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-              </svg>
-            </button>
+            @if (isOwner(pub)) {
+              <button
+                class="publications__action-btn"
+                (click)="editPublication(pub)"
+                title="Ver ajustes"
+                aria-label="Ver ajustes de publicación">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+              </button>
+            } @else if (isSameOrg(pub)) {
+              <button
+                class="publications__action-btn publications__action-btn--notify"
+                [class.publications__action-btn--notified]="notifiedId === pub.id"
+                (click)="notifyCreator(pub)"
+                title="Notificar al creador para que actualice"
+                aria-label="Solicitar actualización al creador">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 9h-2V5h2v6zm0 4h-2v-2h2v2z"/>
+                </svg>
+              </button>
+            }
           }
         </div>
       </div>

@@ -55,6 +55,12 @@ export class AjustesPublicacionComponent implements OnInit {
 
   private loadData(id: number): void {
     this.pubService.getById(id).subscribe(pub => {
+      // Solo el creador puede acceder a los ajustes de esta publicación
+      if (pub.creadoPorUsername !== this.auth.currentUser()?.username) {
+        this.toast.show('No tienes permiso para acceder a los ajustes de esta publicación.', 'error', 4000);
+        this.router.navigate(['/publicaciones']);
+        return;
+      }
       this.titulo.set(pub.titulo);
       this.descripcion.set(pub.descripcion ?? '');
       this.visibilidad.set(pub.visibilidad);

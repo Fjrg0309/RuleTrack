@@ -11,6 +11,7 @@ export interface ReglamentoDTO {
   ultimaVersion: string;
   organizacionNombre: string;
   creadoPorNombre: string;
+  creadoPorUsername: string;
   descripcion?: string;
 }
 
