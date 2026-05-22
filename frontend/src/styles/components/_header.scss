@@ -1,6 +1,9 @@
 // ==========================================================================
-// Components – Header (Layout único)
+// Components – Header (layout único, fijo en la parte superior)
 // ==========================================================================
+
+@use '../tools/mixins'    as m;
+@use '../tools/functions' as f;
 
 .header {
   display: flex;
@@ -10,9 +13,9 @@
   height: 66px;
   padding: 0 36px;
   background: var(--banner-gradient);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
   position: relative;
-  z-index: 10;
+  z-index: f.z('sticky');
 
   &__logo {
     display: flex;
@@ -22,7 +25,7 @@
   &__logo-img {
     height: 48px;
     width: auto;
-    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.18));
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.18));
   }
 
   &__actions {
@@ -36,19 +39,19 @@
     align-items: center;
     padding: 7px 20px;
     border-radius: var(--border-radius);
-    font-size: 0.875rem;
+    font-size: var(--fs-sm);
     font-weight: 700;
     color: #1a3a6e;
-    background: rgba(255,255,255,0.92);
+    background: rgba(255, 255, 255, 0.92);
     border: none;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    box-shadow: var(--shadow-sm);
     transition: background 0.2s, box-shadow 0.2s;
     letter-spacing: 0.02em;
     cursor: pointer;
 
     &:hover {
       background: #fff;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.22);
+      box-shadow: var(--shadow-md);
     }
   }
 
@@ -67,7 +70,7 @@
     height: 44px;
     display: block;
     transition: transform 0.15s;
-    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.22));
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.22));
 
     &:hover {
       transform: scale(1.08);
@@ -85,18 +88,17 @@
     background: var(--color-card);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-md);
-    border: none;
     border-top: 3px solid var(--button-color);
     min-width: 156px;
-    z-index: 200;
+    z-index: f.z('dropdown');
     overflow: hidden;
-    animation: dropdown-in 0.15s ease;
+    animation: dropdown-in 0.15s f.ease('ease-out');
   }
 
   &__dropdown-item {
     display: block;
     padding: 11px 18px;
-    font-size: 0.875rem;
+    font-size: var(--fs-sm);
     font-weight: 600;
     color: var(--text-color);
     text-decoration: none;
@@ -107,25 +109,18 @@
       color: var(--button-color);
     }
   }
-}
 
-@media (max-width: 767px) {
-  .header {
+  @include m.respond-to('md') {
     padding: 0 16px;
     height: 58px;
-  }
 
-  .header__logo-img {
-    height: 38px;
-  }
+    &__logo-img {
+      height: 38px;
+    }
 
-  .header__user-icon {
-    width: 34px;
-    height: 34px;
+    &__user-icon {
+      width: 34px;
+      height: 34px;
+    }
   }
-}
-
-@keyframes dropdown-in {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
 }

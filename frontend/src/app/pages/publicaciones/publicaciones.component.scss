@@ -6,34 +6,6 @@
   padding: 28px 36px;
 }
 
-.publications__banner {
-  position: relative;
-  padding: 28px 32px;
-  background: var(--banner-gradient);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  color: #fff;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: var(--banner-circle);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-}
-
-.publications__title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #fff;
-}
-
 // ── Table wrapper ──
 .publications__table-wrapper {
   display: flex;
@@ -215,14 +187,14 @@ $col-actions: 100px;
   }
 
   &--notified {
-    background-color: #4caf50 !important;
-    border-color: #4caf50 !important;
-    color: #fff !important;
+    background-color: #4caf50;
+    border-color: #4caf50;
+    color: #fff;
     pointer-events: none;
   }
 
   &--copied {
-    background-color: #4caf50 !important;
+    background-color: #4caf50;
     color: #fff;
   }
 }
@@ -307,21 +279,6 @@ $col-actions: 100px;
   .publications {
     padding: 14px 12px;
     gap: 14px;
-  }
-
-  .publications__banner {
-    padding: 18px 16px;
-
-    &::after {
-      width: 100px;
-      height: 100px;
-      top: -20px;
-      right: -20px;
-    }
-  }
-
-  .publications__title {
-    font-size: 1.05rem;
   }
 
   // Ocultar cabecera de columnas (las cards son autoexplicativas)

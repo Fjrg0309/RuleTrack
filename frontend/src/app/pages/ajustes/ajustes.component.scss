@@ -6,34 +6,6 @@
   padding: 28px 36px;
 }
 
-.settings__banner {
-  position: relative;
-  padding: 28px 32px;
-  background: var(--banner-gradient);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  color: #fff;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: var(--banner-circle);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-}
-
-.settings__title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #fff;
-}
-
 // ── Card sections ──
 .settings__card {
   position: relative;
@@ -249,46 +221,6 @@
     background-color: #a93226;
     border-color: #a93226;
   }
-}
-
-// ── Modal overlay ──
-.settings__overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.settings__modal {
-  background-color: var(--color-card);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  width: 480px;
-  max-width: 90vw;
-}
-
-.settings__modal-banner {
-  padding: 24px 32px;
-  background-color: var(--banner-gradient);
-  background: var(--banner-gradient);
-}
-
-.settings__modal-question {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-color);
-  text-align: center;
-}
-
-.settings__modal-actions {
-  display: flex;
-  justify-content: space-around;
-  padding: 28px 32px;
-  gap: 24px;
 }
 
 // ── Mobile responsive ──

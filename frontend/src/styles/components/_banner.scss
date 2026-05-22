@@ -1,0 +1,63 @@
+// ==========================================================================
+// Component: Page Banner
+// Block: .page-banner
+// ==========================================================================
+// Gradient strip that appears at the top of every content page.
+// Reusable regardless of the page hosting it — named after its visual role,
+// not after the page context (ITCSS/BEM principle).
+//
+// Usage:
+//   <div class="page-banner">
+//     <h1 class="page-banner__title">Title</h1>
+//     <p class="page-banner__subtitle">Optional subtitle</p>  <!-- optional -->
+//   </div>
+//
+// Modifiers:
+//   .page-banner--centered  →  centers all text (e.g. success/status pages)
+// ==========================================================================
+
+.page-banner {
+  position: relative;
+  padding: 24px 32px;
+  background: var(--banner-gradient);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  color: #fff;
+
+  // Decorative circle (purely presentational)
+  &::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 160px;
+    height: 160px;
+    background: var(--banner-circle);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  // Modifier: center-aligned variant (status / success pages)
+  &--centered {
+    text-align: center;
+  }
+}
+
+.page-banner__title {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+
+  // Modifier: error state (e.g. correcting failed page)
+  &--error {
+    color: var(--color-correct);
+  }
+}
+
+.page-banner__subtitle {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.85);
+  margin: 4px 0 0;
+}

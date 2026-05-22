@@ -6,34 +6,6 @@
   padding: 28px 36px;
 }
 
-.pub-settings__banner {
-  position: relative;
-  padding: 28px 32px;
-  background: var(--banner-gradient);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  color: #fff;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: var(--banner-circle);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-}
-
-.pub-settings__title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #fff;
-}
-
 // ── Top row: URL + buttons ──
 .pub-settings__top-row {
   display: flex;
@@ -145,76 +117,6 @@
   resize: vertical;
   font-family: inherit;
   line-height: 1.5;
-}
-
-// ── Modal ──
-.pub-settings__overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-.pub-settings__modal {
-  background-color: var(--color-card);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-lg);
-  overflow: hidden;
-  width: 420px;
-  max-width: 92vw;
-}
-
-.pub-settings__modal-banner {
-  padding: 28px 32px;
-  background: var(--banner-gradient);
-  position: relative;
-  overflow: hidden;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -30px;
-    right: -30px;
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    pointer-events: none;
-  }
-}
-
-.pub-settings__modal-question {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-  position: relative;
-}
-
-.pub-settings__modal-actions {
-  display: flex;
-  justify-content: center;
-  padding: 24px 32px;
-  gap: 16px;
-
-  .btn {
-    flex: 1;
-    max-width: 140px;
-  }
-}
-
-.btn--modal-danger {
-  background-color: transparent;
-  color: #c0392b;
-  border: 2px solid #c0392b;
-
-  &:hover {
-    background-color: #c0392b;
-    color: #fff;
-  }
 }
 
 // ── Mobile responsive ──

@@ -17,35 +17,6 @@
   padding: 28px 36px;
 }
 
-// ── Banner ─────────────────────────────────────────────────────────────────
-.view__banner {
-  position: relative;
-  padding: 20px 32px;
-  background: var(--banner-gradient);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  color: #fff;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: var(--banner-circle);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-}
-
-.view__title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #fff;
-}
-
 // ── Controls bar ───────────────────────────────────────────────────────────
 .view__controls {
   display: flex;
@@ -609,21 +580,6 @@
     overflow-x: hidden;
   }
 
-  .view__banner {
-    padding: 14px 16px;
-
-    &::after {
-      width: 100px;
-      height: 100px;
-      top: -20px;
-      right: -20px;
-    }
-  }
-
-  .view__title {
-    font-size: 1rem;
-  }
-
   // Controls: full width para que los tabs se estiren
   .view__controls {
     width: 100%;
@@ -761,15 +717,6 @@
   .view {
     padding: 12px 12px;
     gap: 12px;
-  }
-
-  .view__banner {
-    padding: 12px 14px;
-
-    // Ocultar círculo decorativo en pantallas muy pequeñas
-    &::after {
-      display: none;
-    }
   }
 
   .view__tab {

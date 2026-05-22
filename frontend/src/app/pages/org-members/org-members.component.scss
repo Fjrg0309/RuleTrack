@@ -6,42 +6,6 @@
   padding: 28px 36px;
 }
 
-// ── Banner ──
-.org-members__banner {
-  position: relative;
-  padding: 28px 32px;
-  background: var(--banner-gradient);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  color: #fff;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-}
-
-.org-members__banner-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin: 0 0 4px;
-  color: #fff;
-}
-
-.org-members__banner-sub {
-  font-size: 0.9rem;
-  opacity: 0.85;
-  margin: 0;
-}
-
 // ── Loading / error ──
 .org-members__loading {
   display: flex;

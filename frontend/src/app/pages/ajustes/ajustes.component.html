@@ -1,6 +1,6 @@
 <section class="settings">
-  <div class="settings__banner">
-    <h1 class="settings__title">Ajustes</h1>
+  <div class="page-banner">
+    <h1 class="page-banner__title">Ajustes</h1>
   </div>
 
   <!-- Personal info -->
@@ -80,14 +80,12 @@
 
   <!-- Delete confirm modal -->
   @if (showDeleteConfirm()) {
-    <div class="settings__overlay" role="dialog" aria-modal="true" aria-labelledby="delete-confirm-title">
-      <div class="settings__modal">
-        <div class="settings__modal-banner">
-          <p id="delete-confirm-title" class="settings__modal-question">¿Estás seguro de que quieres borrar tu cuenta?</p>
-        </div>
-        <div class="settings__modal-actions">
-          <button class="btn btn--primary" (click)="deleteAccount()">Sí</button>
-          <button class="btn btn--primary" (click)="cancelDelete()">No</button>
+    <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-confirm-title">
+      <div class="confirm-modal">
+        <h2 id="delete-confirm-title" class="confirm-modal__title">¿Estás seguro de que quieres borrar tu cuenta?</h2>
+        <div class="confirm-modal__actions">
+          <button class="btn btn--danger" (click)="deleteAccount()">Sí</button>
+          <button class="btn btn--secondary" (click)="cancelDelete()">No</button>
         </div>
       </div>
     </div>

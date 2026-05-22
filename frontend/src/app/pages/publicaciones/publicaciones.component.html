@@ -1,9 +1,9 @@
 <section class="publications">
-  <div class="publications__banner">
+  <div class="page-banner">
     @if (auth.currentUser()?.rol === 'ORGANIZADOR') {
-      <h1 class="publications__title">Tus publicaciones con su última versión</h1>
+      <h1 class="page-banner__title">Tus publicaciones con su última versión</h1>
     } @else {
-      <h1 class="publications__title">Publicaciones</h1>
+      <h1 class="page-banner__title">Publicaciones</h1>
     }
   </div>
 

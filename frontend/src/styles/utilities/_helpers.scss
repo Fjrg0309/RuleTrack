@@ -1,84 +1,80 @@
 // ==========================================================================
-// Utilities – Clases de ayuda y overrides
+// Utilities – Clases de un solo propósito
+// ─────────────────────────────────────────────────────────────────────────
+// Cada clase modifica UNA propiedad o un bloque mínimo.
+// La especificidad se gestiona por orden de cascada (capa 7, la última):
+// no se usa !important; si hay conflicto, revisar la capa del componente.
 // ==========================================================================
 
 @use '../tools/mixins' as m;
 
-// Usando el mixin sr-only para mantener DRY
-.visually-hidden {
-  @include m.sr-only;
-}
+// ── Accesibilidad ─────────────────────────────────────────────────────────
 
-// Mini-title con línea azul inferior (usado en secciones de toda la app)
-.section-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--color-label);
-  background: transparent;
-  padding: 8px 4px;
-  border-bottom: 3px solid var(--button-color);
-  display: block;
-}
+.visually-hidden { @include m.sr-only; }
 
-// ── Utilidades de texto ───────────────────────────────────────────────────
+// ── Texto ─────────────────────────────────────────────────────────────────
 
-.text-truncate     { @include m.text-truncate(1); }
-.text-truncate-2   { @include m.text-truncate(2); }
-.text-truncate-3   { @include m.text-truncate(3); }
+.text-truncate   { @include m.text-truncate(1); }
+.text-truncate-2 { @include m.text-truncate(2); }
+.text-truncate-3 { @include m.text-truncate(3); }
 
-.text-center  { text-align: center; }
-.text-left    { text-align: left; }
-.text-right   { text-align: right; }
+.text-center { text-align: center; }
+.text-left   { text-align: left;   }
+.text-right  { text-align: right;  }
 
-.text-xs   { font-size: var(--fs-xs); }
-.text-sm   { font-size: var(--fs-sm); }
+.text-xs   { font-size: var(--fs-xs);   }
+.text-sm   { font-size: var(--fs-sm);   }
 .text-base { font-size: var(--fs-base); }
-.text-md   { font-size: var(--fs-md); }
-.text-lg   { font-size: var(--fs-lg); }
-.text-xl   { font-size: var(--fs-xl); }
-.text-2xl  { font-size: var(--fs-2xl); }
+.text-md   { font-size: var(--fs-md);   }
+.text-lg   { font-size: var(--fs-lg);   }
+.text-xl   { font-size: var(--fs-xl);   }
+.text-2xl  { font-size: var(--fs-2xl);  }
 
-.font-normal  { font-weight: 400; }
-.font-medium  { font-weight: 500; }
-.font-bold    { font-weight: 700; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-bold   { font-weight: 700; }
 
-// ── Utilidades de espaciado ───────────────────────────────────────────────
+// ── Colores ───────────────────────────────────────────────────────────────
 
-.mt-auto  { margin-top: auto; }
-.mb-auto  { margin-bottom: auto; }
-.mx-auto  { margin-inline: auto; }
+.text-primary { color: var(--button-color);        }
+.text-muted   { color: var(--color-muted);         }
+.text-danger  { color: var(--color-correct);       }
+.text-success { color: var(--color-correct-green); }
 
-.gap-xs   { gap: var(--space-xs); }
-.gap-sm   { gap: var(--space-sm); }
-.gap-md   { gap: var(--space-md); }
-.gap-lg   { gap: var(--space-lg); }
+// ── Espaciado ─────────────────────────────────────────────────────────────
 
-// ── Utilidades de display / flex ─────────────────────────────────────────
+.mt-auto { margin-top: auto;    }
+.mb-auto { margin-bottom: auto; }
+.mx-auto { margin-inline: auto; }
 
-.d-flex          { display: flex; }
-.d-grid          { display: grid; }
-.d-none          { display: none; }
-.flex-col        { flex-direction: column; }
-.align-center    { align-items: center; }
-.justify-center  { justify-content: center; }
-.justify-between { justify-content: space-between; }
-.flex-wrap       { flex-wrap: wrap; }
-.flex-1          { flex: 1; }
+.gap-xs { gap: var(--space-xs); }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
 
-// ── Utilidades de color ───────────────────────────────────────────────────
+// ── Display / Flex ────────────────────────────────────────────────────────
 
-.text-primary  { color: var(--button-color); }
-.text-muted    { color: var(--color-secondary); }
-.text-danger   { color: var(--color-correct); }
-.text-success  { color: var(--color-correct-green); }
+.d-flex          { display: flex;                    }
+.d-grid          { display: grid;                    }
+.d-none          { display: none;                    }
+.flex-col        { flex-direction: column;           }
+.align-center    { align-items: center;              }
+.justify-center  { justify-content: center;          }
+.justify-between { justify-content: space-between;   }
+.flex-wrap       { flex-wrap: wrap;                  }
+.flex-1          { flex: 1;                          }
 
-// ── Utilidades responsive ─────────────────────────────────────────────────
+// ── Responsive ───────────────────────────────────────────────────────────
+// Visibilidad controlada por breakpoint.
+// Al estar en la última capa del cascade (Utilities), las reglas prevalecen
+// sobre las capas anteriores sin necesidad de !important.
 
 @include m.respond-to('md') {
-  .hidden-mobile   { display: none !important; }
+  .hidden-mobile      { display: none; }
   .text-center-mobile { text-align: center; }
 }
 
-@media (min-width: 769px) {
-  .hidden-desktop { display: none !important; }
+@include m.respond-from('md') {
+  .hidden-desktop { display: none; }
 }
+

@@ -1,0 +1,76 @@
+// ==========================================================================
+// Tools – Funciones Sass puras
+// Sin salida CSS: sólo se usan en tiempo de compilación
+// ==========================================================================
+
+@use 'sass:map';
+@use 'sass:math';
+@use '../settings/variables' as vars;
+
+// ── Z-index ───────────────────────────────────────────────────────────────
+/// Recupera un valor del mapa $z-layers definido en Settings.
+/// @param  {String} $layer - Clave del mapa (e.g. 'dropdown', 'modal')
+/// @return {Number} Valor entero de z-index
+/// @example scss
+///   z-index: z('modal');  // → 400
+@function z($layer) {
+  @if not map.has-key(vars.$z-layers, $layer) {
+    @warn "La capa `#{$layer}` no existe en $z-layers. Capas disponibles: #{map.keys(vars.$z-layers)}";
+    @return null;
+  }
+  @return map.get(vars.$z-layers, $layer);
+}
+
+// ── Easing ────────────────────────────────────────────────────────────────
+/// Recupera un cubic-bezier del mapa $easings definido en Settings.
+/// @param  {String} $name - Clave del mapa (e.g. 'bounce', 'ease-out')
+/// @return {String} Valor cubic-bezier listo para usar en transition/animation
+/// @example scss
+///   transition: transform 0.3s ease(bounce);
+@function ease($name) {
+  @if not map.has-key(vars.$easings, $name) {
+    @warn "El easing `#{$name}` no existe en $easings. Disponibles: #{map.keys(vars.$easings)}";
+    @return ease;
+  }
+  @return map.get(vars.$easings, $name);
+}
+
+// ── Conversión px → rem ───────────────────────────────────────────────────
+/// Convierte píxeles a rem usando una base de 16 px.
+/// @param  {Number} $px - Valor numérico en px (sin unidad o con px)
+/// @return {Number} Valor equivalente en rem
+/// @example scss
+///   font-size: rem(14);   // → 0.875rem
+///   padding:   rem(24px); // → 1.5rem
+@function rem($px) {
+  @if math.unit($px) == 'px' {
+    @return math.div($px, 16px) * 1rem;
+  }
+  @return math.div($px, 16) * 1rem;
+}
+
+// ── Ratio de contraste (helper numérico) ──────────────────────────────────
+/// Devuelve el valor de luminancia relativa de un color (WCAG 2.x).
+/// Útil para decidir texto claro/oscuro sobre un fondo.
+/// @param  {Color} $color - Color a evaluar
+/// @return {Number} Luminancia relativa (0–1)
+@function luminance($color) {
+  $r: math.div(red($color),   255);
+  $g: math.div(green($color), 255);
+  $b: math.div(blue($color),  255);
+
+  $r: if($r <= 0.04045, math.div($r, 12.92), math.pow(math.div($r + 0.055, 1.055), 2.4));
+  $g: if($g <= 0.04045, math.div($g, 12.92), math.pow(math.div($g + 0.055, 1.055), 2.4));
+  $b: if($b <= 0.04045, math.div($b, 12.92), math.pow(math.div($b + 0.055, 1.055), 2.4));
+
+  @return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+}
+
+/// Elige blanco o negro según el contraste sobre un fondo dado.
+/// @param  {Color} $bg      - Color de fondo
+/// @param  {Color} $light   - Color claro a devolver (default: white)
+/// @param  {Color} $dark    - Color oscuro a devolver (default: #333)
+/// @return {Color}
+@function contrast-color($bg, $light: #ffffff, $dark: #333333) {
+  @return if(luminance($bg) > 0.35, $dark, $light);
+}

@@ -1,6 +1,6 @@
 <section class="pub-settings">
-  <div class="pub-settings__banner">
-    <h1 class="pub-settings__title">Ajustes de publicación</h1>
+  <div class="page-banner">
+    <h1 class="page-banner__title">Ajustes de publicación</h1>
   </div>
 
   @if (errorMsg()) {
@@ -80,14 +80,12 @@
 
   <!-- Delete confirm modal -->
   @if (showDeleteConfirm()) {
-    <div class="pub-settings__overlay" role="dialog" aria-modal="true" aria-labelledby="delete-pub-title">
-      <div class="pub-settings__modal">
-        <div class="pub-settings__modal-banner">
-          <p id="delete-pub-title" class="pub-settings__modal-question">¿Estás seguro de que quieres borrar la publicación?</p>
-        </div>
-        <div class="pub-settings__modal-actions">
-          <button class="btn btn--modal-danger" (click)="deletePublication()">Sí, borrar</button>
-          <button class="btn btn--primary" (click)="cancelDelete()">No, cancelar</button>
+    <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-pub-title">
+      <div class="confirm-modal">
+        <h2 id="delete-pub-title" class="confirm-modal__title">¿Estás seguro de que quieres borrar la publicación?</h2>
+        <div class="confirm-modal__actions">
+          <button class="btn btn--danger" (click)="deletePublication()">Sí, borrar</button>
+          <button class="btn btn--secondary" (click)="cancelDelete()">No, cancelar</button>
         </div>
       </div>
     </div>

@@ -2,7 +2,8 @@
 // Components – Footer (Layout único)
 // ==========================================================================
 
-@use '../tools/mixins' as m;
+@use '../tools/mixins'    as m;
+@use '../tools/functions' as f;
 
 .footer {
   display: flex;
@@ -13,8 +14,8 @@
   width: 100%;
   padding: 20px 40px;
   background: #1B4E7A;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-  z-index: 10;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  z-index: f.z('sticky');
 
   &__brand {
     font-size: 0.8rem;

@@ -1,26 +1,42 @@
 // ==========================================================================
 // Main – Punto de entrada ITCSS
+// ─────────────────────────────────────────────────────────────────────────
+// El orden de las capas define la especificidad por cascada.
+// Nunca reordenar sin revisar el impacto en toda la aplicación.
+//
+//  1. Settings  → Variables y mapas Sass (sin salida CSS)
+//  2. Tools     → Funciones y mixins   (sin salida CSS)
+//  3. Generic   → Reset / Normalize / @keyframes
+//  4. Elements  → Estilos base HTML sin clase
+//  5. Objects   → Patrones de layout abstractos (sin color)
+//  6. Components→ Bloques UI con identidad visual propia
+//  7. Utilities → Clases de un solo propósito (mayor especificidad por posición)
 // ==========================================================================
 
-// 1. Settings – Variables y custom properties
+// 1. Settings
 @use 'settings/variables';
 
-// 2. Tools – Mixins y funciones
+// 2. Tools
+@use 'tools/functions';
 @use 'tools/mixins';
 
-// 3. Generic – Reset / Normalize
+// 3. Generic
 @use 'generic/reset';
+@use 'generic/animations';
 
-// 4. Elements – Estilos base HTML
+// 4. Elements
 @use 'elements/base';
 
-// 5. Objects – Layouts estructurales
+// 5. Objects
 @use 'objects/layouts';
 
-// 6. Components – Componentes globales
+// 6. Components
 @use 'components/header';
 @use 'components/footer';
 @use 'components/buttons';
+@use 'components/banner';
+@use 'components/modal';
+@use 'components/ui';
 
-// 7. Utilities – Helpers y overrides
+// 7. Utilities
 @use 'utilities/helpers';

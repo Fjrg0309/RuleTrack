@@ -1,0 +1,48 @@
+// ==========================================================================
+// Components – Patrones UI transversales
+// Pequeños bloques con presentación propia que se repiten en toda la app.
+// ==========================================================================
+
+// ── Título de sección ─────────────────────────────────────────────────────
+// Cabecera de bloque con línea inferior de acento.
+// Uso: <h2 class="section-title">...</h2>
+
+.section-title {
+  display: block;
+  padding: 8px 4px;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--color-label);
+  background: transparent;
+  border-bottom: 3px solid var(--button-color);
+}
+
+// ── Badge de visibilidad ──────────────────────────────────────────────────
+// Etiqueta de estado: público / miembros / privado.
+// Uso: <span class="badge badge--public">Público</span>
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.4;
+
+  &--public {
+    background-color: var(--badge-public-bg);
+    color: var(--badge-public-color);
+  }
+
+  &--members {
+    background-color: var(--badge-members-bg);
+    color: var(--badge-members-color);
+  }
+
+  &--private {
+    background-color: var(--badge-private-bg);
+    color: var(--badge-private-color);
+  }
+}

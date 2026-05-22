@@ -119,3 +119,52 @@
   --shadow-btn:  0 3px 10px rgba(74, 125, 224, 0.25), 0 1px 3px rgba(0, 0, 0, 0.4);
   --shadow-card: 0 4px 18px rgba(0, 0, 0, 0.45), 0 1px 4px rgba(0, 0, 0, 0.3);
 }
+
+// ==========================================================================
+// Sass compile-time maps — No generan CSS, sólo para uso en funciones/mixins
+// ==========================================================================
+
+// ── Breakpoints ───────────────────────────────────────────────────────────
+// Uso: @include respond-to('md')  /  @include respond-from('lg')
+$breakpoints: (
+  'xs':  480px,
+  'sm':  576px,
+  'md':  768px,
+  'lg':  1024px,
+  'xl':  1280px,
+  'xxl': 1440px,
+) !default;
+
+// ── Z-index scale ─────────────────────────────────────────────────────────
+// Uso: z('dropdown') → 100
+$z-layers: (
+  'below':    -1,
+  'base':      0,
+  'raised':    1,
+  'sidebar':   5,
+  'dropdown':  100,
+  'sticky':    200,
+  'overlay':   300,
+  'modal':     400,
+  'toast':     500,
+  'tooltip':   600,
+) !default;
+
+// ── Easing functions ──────────────────────────────────────────────────────
+// Uso: ease('bounce') → cubic-bezier(...)
+$easings: (
+  'linear':      cubic-bezier(0.0, 0.0, 1.0, 1.0),
+  'ease-in':     cubic-bezier(0.4, 0.0, 1.0, 1.0),
+  'ease-out':    cubic-bezier(0.0, 0.0, 0.2, 1.0),
+  'ease-in-out': cubic-bezier(0.4, 0.0, 0.2, 1.0),
+  'bounce':      cubic-bezier(0.34, 1.56, 0.64, 1.0),
+  'snap':        cubic-bezier(0.0, 0.0, 0.2, 1.4),
+) !default;
+
+// ── Font stacks ───────────────────────────────────────────────────────────
+// Uso: font-family: map.get(vars.$font-stacks, 'sans')
+$font-stacks: (
+  'sans':  ('Inter', 'Segoe UI', system-ui, sans-serif),
+  'mono':  ('JetBrains Mono', 'Fira Code', 'Consolas', monospace),
+  'serif': (Georgia, 'Times New Roman', serif),
+) !default;

@@ -1,0 +1,48 @@
+// ==========================================================================
+// Component: Confirm Modal
+// Matches the project's flat card modal style (border accent, no gradient header)
+// ==========================================================================
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: overlay-in 0.18s ease;
+}
+
+.confirm-modal {
+  width: 100%;
+  max-width: 400px;
+  background: var(--color-card);
+  border-radius: 2px;
+  border: 2px solid var(--color-accent);
+  box-shadow: var(--shadow-md);
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: card-in 0.2s ease;
+}
+
+.confirm-modal__title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--button-color);
+  text-align: center;
+  margin: 0;
+}
+
+.confirm-modal__actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+
+  .btn {
+    flex: 1;
+    max-width: 140px;
+  }
+}

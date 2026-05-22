@@ -1,27 +1,32 @@
 // ==========================================================================
-// Tools – Mixins y funciones globales (se importa con @use)
+// Tools – Mixins globales (se importa con @use)
+// Los breakpoints viven en settings/_variables.scss
 // ==========================================================================
 
 @use 'sass:map';
+@use '../settings/variables' as vars;
 
 // ── Breakpoints ───────────────────────────────────────────────────────────
-// Uso: @include respond-to('md') { ... }
-
-$breakpoints: (
-  'xs':  480px,
-  'sm':  576px,
-  'md':  768px,
-  'lg':  1024px,
-  'xl':  1280px,
-  'xxl': 1440px,
-) !default;
+// Desktop-first (max-width):  @include respond-to('md')  { ... }
+// Mobile-first  (min-width):  @include respond-from('lg') { ... }
 
 @mixin respond-to($bp) {
-  $value: map.get($breakpoints, $bp);
+  $value: map.get(vars.$breakpoints, $bp);
   @if $value == null {
     @warn "Breakpoint `#{$bp}` no existe en $breakpoints.";
   } @else {
     @media (max-width: #{$value}) {
+      @content;
+    }
+  }
+}
+
+@mixin respond-from($bp) {
+  $value: map.get(vars.$breakpoints, $bp);
+  @if $value == null {
+    @warn "Breakpoint `#{$bp}` no existe en $breakpoints.";
+  } @else {
+    @media (min-width: calc(#{$value} + 1px)) {
       @content;
     }
   }

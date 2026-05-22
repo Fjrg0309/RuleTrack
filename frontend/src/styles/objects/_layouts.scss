@@ -1,8 +1,39 @@
 // ==========================================================================
-// Objects – Layouts y patrones estructurales
+// Objects – Patrones de layout estructurales (sin estilos visuales)
+// ─────────────────────────────────────────────────────────────────────────
+// Los objetos son ABSTRACCIONES REUTILIZABLES.
+// No tienen color, shadow ni tipografía: sólo estructura y espaciado.
+// Los componentes añaden el estilo visual encima.
 // ==========================================================================
 
-@use '../tools/mixins' as m;
+@use '../tools/mixins'    as m;
+@use '../tools/functions' as f;
+
+// ── Objetos abstractos ────────────────────────────────────────────────────
+
+// Contenedor centrado con ancho máximo
+.o-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+
+  @include m.respond-to('md') {
+    padding-inline: var(--space-md);
+  }
+}
+
+// Grid genérico de columnas dinámicas
+.o-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-lg);
+
+  &--tight { gap: var(--space-sm); }
+  &--wide  { gap: var(--space-xl); }
+}
+
+// ── App shell ─────────────────────────────────────────────────────────────
 
 .app-shell {
   display: flex;
@@ -27,7 +58,7 @@ app-sidebar {
   padding: 28px 20px;
   box-shadow: 3px 0 8px rgba(0, 0, 0, 0.15);
   position: relative;
-  z-index: 5;
+  z-index: f.z('sidebar');
 }
 
 .sidebar__nav {
@@ -38,7 +69,7 @@ app-sidebar {
   .btn {
     width: 100%;
     font-size: 0.72rem;
-    padding: 10px 10px;
+    padding: 10px;
     white-space: nowrap;
   }
 }
@@ -58,7 +89,8 @@ app-sidebar {
   flex-direction: column;
 }
 
-// ── Responsive ──
+// ── Responsive ────────────────────────────────────────────────────────────
+
 @include m.respond-to('md') {
   .app-body {
     flex-direction: column;

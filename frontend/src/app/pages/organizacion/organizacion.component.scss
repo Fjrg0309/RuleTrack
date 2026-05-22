@@ -6,34 +6,6 @@
   padding: 28px 36px;
 }
 
-.org__banner {
-  position: relative;
-  padding: 28px 32px;
-  background: var(--banner-gradient);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  color: #fff;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: var(--banner-circle);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-}
-
-.org__title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #fff;
-}
-
 .org__card {
   background-color: var(--color-card);
   border-radius: var(--border-radius);

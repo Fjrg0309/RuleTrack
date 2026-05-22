@@ -6,36 +6,6 @@
   padding: 28px 36px;
 }
 
-.preview__banner {
-  position: relative;
-  padding: 20px 32px;
-  background: var(--banner-gradient);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-  color: #fff;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 160px;
-    height: 160px;
-    background: var(--banner-circle);
-    border-radius: 50%;
-    pointer-events: none;
-  }
-}
-
-.preview__title {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #fff;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
 .preview__content {
   flex: 1;
   min-height: 0;
