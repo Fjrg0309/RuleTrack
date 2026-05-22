@@ -11,6 +11,10 @@ Permite redactar, versionar y publicar reglamentos con control de visibilidad, c
 
 ---
 
+## Enlace a prototipo de Figma
+
+https://www.figma.com/design/1DtEo5WNx6bmPFJybIgcCL/RuleTrack?node-id=4-3&t=tCVN9hIpZNGx6vIO-1
+
 ## Arquitectura
 
 La aplicación sigue una arquitectura de **tres capas** desplegada como servicios Docker independientes comunicados mediante una red interna (`ruletrack-net`). El exterior solo accede a través de Nginx, que actúa como único punto de entrada.
